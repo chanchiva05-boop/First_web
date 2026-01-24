@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>App Trailer</title>
     
-    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
@@ -663,7 +662,7 @@
     
     <div class="center-container">
         <div class="author">
-            <div class="author-text"> CODE By : <span>CHAN CHIVĀ</span></div>
+            <div class="author-text">By <span>CHAN CHIVA</span></div>
         </div>
         
         <div class="app">
@@ -751,7 +750,17 @@
         
         const telegramBtn = document.getElementById('telegramBtn');
         telegramBtn.addEventListener('click', function() {
-            window.open('https://t.me/TEVAAAA', '_blank');
+            const telegramLink = 'https://t.me/TEVAAAA';
+            
+            try {
+                const newWindow = window.open(telegramLink, '_blank');
+                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                    window.location.href = telegramLink;
+                }
+            } catch (e) {
+                window.location.href = telegramLink;
+            }
+            
             document.getElementById('clickSound').play();
         });
         
@@ -779,7 +788,17 @@
         createParticles(50, false);
         
         function openLink() {
-            window.open('https://sg.docworkspace.com/d/sbPauu5Jj2ZCuLeA_y3shub05yrodqrkhqv?sa=601.1074', '_blank');
+            const link = 'https://sg.docworkspace.com/d/sbPauu5Jj2ZCuLeA_y3shub05yrodqrkhqv?sa=601.1074';
+            
+            try {
+                const newWindow = window.open(link, '_blank');
+                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                    window.location.href = link;
+                }
+            } catch (e) {
+                window.location.href = link;
+            }
+            
             document.getElementById('clickSound').play();
         }
         
@@ -804,24 +823,7 @@
         });
     </script>
 </body>
-</html>0, false);
-            }
-        });
-        
-        // ===== SOUND TOGGLE =====
-        const soundToggle = document.getElementById('soundToggle');
-        const soundIcon = soundToggle.querySelector('i');
-        let soundEnabled = true;
-        
-        soundToggle.addEventListener('click', function() {
-            soundEnabled = !soundEnabled;
-            soundIcon.className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
-        });
-        
-        // ===== INTERACTIVE BACKGROUND =====
-        const interactiveToggle = document.getElementById('interactiveToggle');
-        const interactiveSky = document.getElementById('interactiveSky');
-        const mountainBack = document.querySelector('.mountain.back');
+</html>Back = document.querySelector('.mountain.back');
         const mountainFront = document.querySelector('.mountain.front');
         let interactiveMode = false;
         
