@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>App Trailer</title>
     
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
@@ -662,7 +663,7 @@
     
     <div class="center-container">
         <div class="author">
-            <div class="author-text">By <span>CHAN CHIVA</span></div>
+            <div class="author-text"> CODE By : <span>CHAN CHIVĀ</span></div>
         </div>
         
         <div class="app">
@@ -750,17 +751,7 @@
         
         const telegramBtn = document.getElementById('telegramBtn');
         telegramBtn.addEventListener('click', function() {
-            const telegramLink = 'https://t.me/TEVAAAA';
-            
-            try {
-                const newWindow = window.open(telegramLink, '_blank');
-                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                    window.location.href = telegramLink;
-                }
-            } catch (e) {
-                window.location.href = telegramLink;
-            }
-            
+            window.open('https://t.me/TEVAAAA', '_blank');
             document.getElementById('clickSound').play();
         });
         
@@ -788,22 +779,32 @@
         createParticles(50, false);
         
         function openLink() {
-            const link = 'https://sg.docworkspace.com/d/sbPauu5Jj2ZCuLeA_y3shub05yrodqrkhqv?sa=601.1074';
-            
-            try {
-                const newWindow = window.open(link, '_blank');
-                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                    window.location.href = link;
-                }
-            } catch (e) {
-                window.location.href = link;
-            }
-            
+            window.open('https://sg.docworkspace.com/d/sbPauu5Jj2ZCuLeA_y3shub05yrodqrkhqv?sa=601.1074', '_blank');
             document.getElementById('clickSound').play();
         }
         
         const mainButton = document.getElementById('mainButton');
         
+        mainButton.addEventListener('mouseenter', function() {
+            this.style.animation = 'pulse 1.5s infinite';
+        });
+        
+        mainButton.addEventListener('mouseleave', function() {
+            this.style.animation = 'none';
+        });
+        
+        telegramBtn.addEventListener('mouseenter', function() {
+            const logo = this.querySelector('.telegram-logo');
+            logo.style.transform = 'scale(1.1)';
+        });
+        
+        telegramBtn.addEventListener('mouseleave', function() {
+            const logo = this.querySelector('.telegram-logo');
+            logo.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>    
         mainButton.addEventListener('mouseenter', function() {
             this.style.animation = 'pulse 1.5s infinite';
         });
