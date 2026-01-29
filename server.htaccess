@@ -1,0 +1,29 @@
+# Protect JavaScript files
+<Files "script.js">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Protect CSS files (optional)
+<Files "style.css">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Allow access only from the HTML file
+<FilesMatch "\.(js|css)$">
+    SetEnvIf Referer "index\.html$" allowed_referer
+    Order Deny,Allow
+    Deny from all
+    Allow from env=allowed_referer
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Prevent caching of sensitive files
+<FilesMatch "\.(js|css)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
