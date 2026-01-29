@@ -44,9 +44,9 @@ const passwordObscure = (function() {
 
 const configData = (function() {
     const encoded = {
-        vless1: '',
-        vless2: '',
-        hidden: ''
+        vless1: '11',
+        vless2: '22',
+        hidden: '33'
     };
     
     return {
