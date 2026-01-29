@@ -56,9 +56,9 @@ const passwordObscure = (function() {
 const configData = (function() {
     // Base64 encoded data that will be decoded at runtime
     const encoded = {
-        vless1: '', // Put your base64 encoded VLESS 1 config here
-        vless2: '', // Put your base64 encoded VLESS 2 config here
-        hidden: ''  // Put your base64 encoded hidden data here
+        vless1: '11', // Put your base64 encoded VLESS 1 config here
+        vless2: '22', // Put your base64 encoded VLESS 2 config here
+        hidden: '33'  // Put your base64 encoded hidden data here
     };
     
     return {
