@@ -525,7 +525,169 @@
     <!-- កន្លែងសម្រាប់កែអត្ថបទដែលត្រូវ copy -->
     <!-- អ្នកអាចកែអត្ថបទនៅទីនេះ -->
     <div class="text-to-copy" id="textToCopy">
-កាកម៉េសហ្អា
+Sub CreateECommerceLawSlides()
+    Dim pptApp As PowerPoint.Application
+    Dim pptPres As PowerPoint.Presentation
+    Dim pptSlide As PowerPoint.Slide
+    Dim i As Integer
+    
+    ' ចាប់ផ្តើម PowerPoint
+    Set pptApp = New PowerPoint.Application
+    pptApp.Visible = True
+    
+    ' បង្កើតបទបង្ហាញថ្មី
+    Set pptPres = pptApp.Presentations.Add
+    
+    ' កំណត់ប្រភេទប្លង់ទូទៅ
+    pptPres.PageSetup.SlideSize = ppSlideSizeOnScreen
+    
+    ' ស្លាយទី 1៖ ប្រវត្តិនិងសារៈសំខាន់
+    Set pptSlide = pptPres.Slides.Add(1, ppLayoutTitleOnly)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "ច្បាប់ស្តីពីពាណិជ្ជកម្មតាមប្រព័ន្ធអេឡិចត្រូនិក"
+        .Shapes.AddTextbox(msoTextOrientationHorizontal, 50, 100, 600, 300).TextFrame.TextRange.Text = _
+            "ប្រវត្តិនិងសារៈសំខាន់នៃច្បាប់អេឡិចត្រូនិក" & vbNewLine & vbNewLine & _
+            "• ការអភិវឌ្ឍន៍បច្ចេកវិទ្យា ឌីជីថល" & vbNewLine & _
+            "• តម្រូវការការពារភស្តុតាងអេឡិចត្រូនិក" & vbNewLine & _
+            "• ការទទួលស្គាល់តាមផ្លូវច្បាប់"
+    End With
+    
+    ' ស្លាយទី 2៖ ភស្តុតាងអេឡិចត្រូនិក (មាត្រា ៣៨)
+    Set pptSlide = pptPres.Slides.Add(2, ppLayoutTwoObjects)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៣៨៖ ភស្តុតាងអេឡិចត្រូនិក"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "ឯកសារដែលបានបោះពុម្ពចេញ" & vbNewLine & vbNewLine & _
+            "• ភស្តុតាងអេឡិចត្រូនិកជាកំណត់ត្រាដែលបានបោះពុម្ព" & vbNewLine & _
+            "• ត្រូវតែស្របនឹងខ្លឹមសារដើម" & vbNewLine & _
+            "• អាចយកមកប្រើជាភស្តុតាងតាមផ្លូវច្បាប់"
+        ' បន្ថែមរូបភាព (ប្រសិនបើមានឯកសាររូប)
+        ' .Shapes.AddPicture "path\to\image.jpg", msoFalse, msoTrue, 400, 100, 300, 200
+    End With
+    
+    ' ស្លាយទី 3៖ បន្ទុកក្នុងការបង្ហាញ (មាត្រា ៣៩)
+    Set pptSlide = pptPres.Slides.Add(3, ppLayoutText)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៣៩៖ បន្ទុកក្នុងការបង្ហាញ"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "១- អ្នកស្នើសុំត្រូវមានបន្ទុកបង្ហាញពីយថាភូតភាព" & vbNewLine & _
+            "   • ភស្តុតាងគាំទ្រនៃកំណត់ត្រា" & vbNewLine & vbNewLine & _
+            "២- អាទិភាពការពារបុគ្គលងាយរងគ្រោះ" & vbNewLine & _
+            "   • អ្នកប្រើប្រាស់ និងកុមារ" & vbNewLine & _
+            "   • បទប្បញ្ញត្តិមានអាទិភាពជាង"
+    End With
+    
+    ' ស្លាយទី 4៖ បទដ្ឋាននៃការកត់ត្រា (មាត្រា ៤០)
+    Set pptSlide = pptPres.Slides.Add(4, ppLayoutTitleAndContent)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៤០៖ បទដ្ឋាននៃការកត់ត្រា"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "សុក្រឹតភាពនៃកំណត់ត្រាអេឡិចត្រូនិក" & vbNewLine & vbNewLine & _
+            "• ទទួលយកបាន ឬមិនអាចទទួលយកបាន" & vbNewLine & _
+            "• ត្រូវពិនិត្យពីបទដ្ឋាន និងនីតិវិធី" & vbNewLine & _
+            "• ពិចារណាអំពីប្រភេទអាជីវកម្ម" & vbNewLine & _
+            "• ពិចារណាអំពីចរិកលក្ខណៈ និងគោលបំណង"
+    End With
+    
+    ' ស្លាយទី 5៖ សេចក្តីបញ្ជាក់ពីអ្នកជំនាញ (មាត្រា ៤១)
+    Set pptSlide = pptPres.Slides.Add(5, ppLayoutTwoColumns)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៤១៖ សេចក្តីបញ្ជាក់"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "ក- ក្រសួង/ស្ថាប័ន" & vbNewLine & _
+            "   • ស្ថាប័នមានសមត្ថកិច្ច" & vbNewLine & _
+            "   • បុគ្គលដែលមានតួនាទី" & vbNewLine & _
+            "   • ទទួលស្គាល់ដោយតុលាការ"
+        .Shapes(3).TextFrame.TextRange.Text = _
+            "ខ- អ្នកជំនាញ" & vbNewLine & _
+            "   • តែងតាំងដោយតុលាការ" & vbNewLine & _
+            "   • ទទួលស្គាល់ដោយតុលាការ" & vbNewLine & vbNewLine & _
+            "សេចក្តីបញ្ជាក់ត្រូវបង្កើតក្រោមទម្រង់ដែលរៀបចំ"
+    End With
+    
+    ' ស្លាយទី 6៖ នីតិវិធីផ្សេងទៀត (មាត្រា ៤២)
+    Set pptSlide = pptPres.Slides.Add(6, ppLayoutContentWithCaption)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៤២៖ នីតិវិធីផ្សេងទៀត"
+        .Shapes(2).TextFrame.TextRange.Text = "ការបង្កើតភស្តុតាងអេឡិចត្រូនិក"
+        .Shapes(3).TextFrame.TextRange.Text = _
+            "• ការបញ្ជាក់ដោយសារការី/ស្ថាប័ន" & vbNewLine & _
+            "• កំណត់ត្រាដែលមិនអនុញ្ញាតឱ្យមានការកែប្រែ" & vbNewLine & _
+            "• លទ្ធផលកោសល្យវិច័យលើប្រព័ន្ធ" & vbNewLine & _
+            "• តាមការរកឃើញរបស់យុត្តាធិការ"
+    End With
+    
+    ' ស្លាយទី 7៖ ការបំពានលើកូដនីយកម្ម (មាត្រា ៤៣)
+    Set pptSlide = pptPres.Slides.Add(7, ppLayoutSectionHeader)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៤៣៖ ការបំពានលើកូដនីយកម្ម"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "បុគ្គលមិនត្រូវដាក់កូដក្នុងទំនាក់ទំនងពាណិជ្ជកម្មអេឡិចត្រូនិក៖" & vbNewLine & vbNewLine & _
+            "• ដែលជាភស្តុតាងនាំទៅចោទប្រកាន់" & vbNewLine & _
+            "• ដាក់កូដលើទិន្នន័យ/ភស្តុតាង" & vbNewLine & _
+            "• ទាក់ទិននឹងបទល្មើស"
+    End With
+    
+    ' ស្លាយទី 8៖ ការទទួលយកពីបរទេស (មាត្រា ៤៤,៤៥)
+    Set pptSlide = pptPres.Slides.Add(8, ppLayoutComparison)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "មាត្រា ៤៤-៤៥៖ ការទទួលយកពីបរទេស"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "មាត្រា ៤៤៖" & vbNewLine & _
+            "• ទទួលស្គាល់ភស្តុតាងពីបរទេស" & vbNewLine & _
+            "• ត្រូវមានសុក្រឹតភាពស្របនឹងបទដ្ឋានកម្ពុជា" & vbNewLine & _
+            "• ប្រហាក់ប្រហែលទៅនឹងបទដ្ឋានកម្ពុជា"
+        .Shapes(3).TextFrame.TextRange.Text = _
+            "មាត្រា ៤៥៖" & vbNewLine & _
+            "• មិនគិតពីទីតាំងបង្កើត/ប្រើប្រាស់" & vbNewLine & _
+            "• មិនគិតពីទីតាំងអាជីវកម្ម" & vbNewLine & _
+            "• អាចចូលនិងទាញយកបាននៅក្នុងកម្ពុជា"
+    End With
+    
+    ' ស្លាយទី 9៖ សេចក្តីសន្និដ្ឋាន
+    Set pptSlide = pptPres.Slides.Add(9, ppLayoutTitleSlide)
+    With pptSlide
+        .Shapes.Title.TextFrame.TextRange.Text = "សេចក្តីសន្និដ្ឋាន"
+        .Shapes(2).TextFrame.TextRange.Text = _
+            "ចំណុចសំខាន់ៗនៃច្បាប់អេឡិចត្រូនិក៖" & vbNewLine & vbNewLine & _
+            "• ការទទួលស្គាល់ភស្តុតាងអេឡិចត្រូនិក" & vbNewLine & _
+            "• បន្ទុកក្នុងការបង្ហាញយថាភូតភាព" & vbNewLine & _
+            "• បទដ្ឋាននៃការកត់ត្រានិងរក្សាទុក" & vbNewLine & _
+            "• ការទទួលយកភស្តុតាងពីបរទេស" & vbNewLine & vbNewLine & _
+            "ភាពពាក់ព័ន្ធ៖ ការពង្រឹងភាពជឿទុកចិត្តក្នុងពាណិជ្ជកម្មអេឡិចត្រូនិក"
+    End With
+    
+    ' កំណត់ទម្រង់ទូទៅសម្រាប់បទបង្ហាញ
+    With pptPres.Design
+        .ApplyTemplate "C:\Program Files\Microsoft Office\Templates\Presentation Designs\Blend.thmx"
+    End With
+    
+    ' កំណត់ប្រវែងពុម្ពអក្សរនិងពណ៌
+    For Each pptSlide In pptPres.Slides
+        For Each shp In pptSlide.Shapes
+            If shp.HasTextFrame Then
+                With shp.TextFrame.TextRange
+                    .Font.Size = 18
+                    .Font.Name = "Khmer OS"
+                    .Font.Color.RGB = RGB(0, 0, 0)
+                End With
+            End If
+        Next shp
+    Next pptSlide
+    
+    ' រក្សាទុកឯកសារ
+    Dim filePath As String
+    filePath = Environ("USERPROFILE") & "\Desktop\ច្បាប់អេឡិចត្រូនិក.pptx"
+    pptPres.SaveAs filePath
+    
+    ' សារបញ្ចប់
+    MsgBox "បទបង្ហាញត្រូវបានបង្កើតរួច! ឯកសារត្រូវបានរក្សាទុកនៅ៖ " & filePath, vbInformation
+    
+    ' សម្អាត
+    Set pptSlide = Nothing
+    Set pptPres = Nothing
+    Set pptApp = Nothing
+End Sub
     </div>
     
     <div class="birds-container">
