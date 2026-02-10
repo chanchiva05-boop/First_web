@@ -525,135 +525,102 @@
     <!-- កន្លែងសម្រាប់កែអត្ថបទដែលត្រូវ copy -->
     <!-- អ្នកអាចកែអត្ថបទនៅទីនេះ -->
     <div class="text-to-copy" id="textToCopy">
-Sub CreateProfessionalLaborSlides()
+Sub CreateSlidesProfessional()
 
     Dim ppt As Presentation
     Dim sld As Slide
-    Dim shp As Shape
     
     Set ppt = ActivePresentation
-    
-    ' Function to design slide background
-    Dim bgColor1 As Long
-    Dim bgColor2 As Long
-    
-    bgColor1 = RGB(20, 30, 60)
-    bgColor2 = RGB(0, 120, 215)
-    
-    
-    ' ================= COVER SLIDE =================
+
+    ' ===== Cover Slide =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutTitle)
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "LABOR LAW PRESENTATION"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = "Case Study"
+
     
-    sld.FollowMasterBackground = msoFalse
-    sld.Background.Fill.TwoColorGradient msoGradientHorizontal, 1
-    sld.Background.Fill.ForeColor.RGB = bgColor1
-    sld.Background.Fill.BackColor.RGB = bgColor2
-    
-    With sld.Shapes.Title.TextFrame.TextRange
-        .Text = "នីតិការងារ"
-        .Font.Size = 54
-        .Font.Bold = True
-        .Font.Color.RGB = RGB(255, 255, 255)
-        .Font.Name = "Khmer OS Muol"
-    End With
-    
-    With sld.Shapes.Placeholders(2).TextFrame.TextRange
-        .Text = "វិភាគសំណុំរឿងប្រាក់ធនានុគ្រោះ"
-        .Font.Size = 28
-        .Font.Color.RGB = RGB(230, 230, 230)
-        .Font.Name = "Khmer OS Battambang"
-    End With
-    
-    
-    ' ================= AGENDA =================
+    ' ===== Agenda =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutText)
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "AGENDA"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = _
+        "• Facts" & vbCrLf & _
+        "• Decision" & vbCrLf & _
+        "• Legal Reasons" & vbCrLf & _
+        "• Analysis" & vbCrLf & _
+        "• Conclusion"
+
     
-    Call DesignSlide(sld, "មាតិកា", _
-        "• អង្គហេតុ" & vbCrLf & _
-        "• សេចក្ដីសម្រេច និងបង្គាប់" & vbCrLf & _
-        "• ហេតុផលច្បាប់" & vbCrLf & _
-        "• វិភាគ" & vbCrLf & _
-        "• សេចក្ដីសន្និដ្ឋាន")
-    
-    
-    ' ================= FACTS =================
+    ' ===== Facts =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutText)
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "FACTS"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = _
+        "Describe case facts here"
+
     
-    Call DesignSlide(sld, "អង្គហេតុ", _
-        "• ភាគីនិយោជក៖ ក្រុមហ៊ុន ផូគីថរ៉ា រីសត & ស៉្បា" & vbCrLf & _
-        "• ភាគីកម្មករនិយោជិត៖ តំណាងសហជីព" & vbCrLf & _
-        "• វិវាទអំពីការកាត់ប្រាក់ធនានុគ្រោះ 7.5%" & vbCrLf & _
-        "• កម្មករទាមទារឲ្យបើកប្រាក់ 100%")
-    
-    
-    ' ================= DECISION =================
+    ' ===== Decision =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutText)
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "DECISION"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = _
+        "Describe arbitration decision here"
+
     
-    Call DesignSlide(sld, "សេចក្ដីសម្រេច", _
-        "• បញ្ជាឲ្យនិយោជកបើកប្រាក់ធនានុគ្រោះទាំងអស់" & vbCrLf & _
-        "• បញ្ឈប់ការកាត់ប្រាក់ 7.5%" & vbCrLf & _
-        "• អនុវត្តចាប់ពីថ្ងៃចេញសេចក្ដីបង្គាប់")
-    
-    
-    ' ================= LEGAL REASONS =================
+    ' ===== Legal Reasons =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutText)
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "LEGAL REASONS"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = _
+        "Insert legal articles here"
+
     
-    Call DesignSlide(sld, "ហេតុផលច្បាប់", _
-        "• មាត្រា 134៖ ប្រាក់ធនានុគ្រោះត្រូវបើកជូនកម្មករ" & vbCrLf & _
-        "• មាត្រា 136៖ កំណត់របៀបចែកចាយ" & vbCrLf & _
-        "• មាត្រា 127៖ អាចកាត់ប្រាក់បានតែពេលមានកំហុសផ្ទាល់")
-    
-    
-    ' ================= ANALYSIS =================
+    ' ===== Analysis =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutText)
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "ANALYSIS"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = _
+        "Insert your analysis here"
+
     
-    Call DesignSlide(sld, "វិភាគ", _
-        "• ប្រាក់ធនានុគ្រោះជាសិទ្ធិកម្មករ" & vbCrLf & _
-        "• ការកាត់ប្រាក់ដោយគ្មានការយល់ព្រម មិនស្របច្បាប់" & vbCrLf & _
-        "• ការកាត់ប្រាក់ប៉ះពាល់ដល់ជីវភាពកម្មករ")
-    
-    
-    ' ================= CONCLUSION =================
+    ' ===== Conclusion =====
     Set sld = ppt.Slides.Add(ppt.Slides.Count + 1, ppLayoutText)
-    
-    Call DesignSlide(sld, "សេចក្ដីសន្និដ្ឋាន", _
-        "• ប្រាក់ធនានុគ្រោះជាផ្នែកមួយនៃប្រាក់ឈ្នួល" & vbCrLf & _
-        "• និយោជកមិនអាចកាត់ប្រាក់ជាសមាមាត្រទូទៅបាន" & vbCrLf & _
-        "• សេចក្ដីសម្រេចអាជ្ញាកណ្តាល គឺស្របច្បាប់ និងយុត្តិធម៌")
-    
+    Call StyleSlide(sld)
+
+    sld.Shapes.Title.TextFrame.TextRange.Text = "CONCLUSION"
+    sld.Shapes.Placeholders(2).TextFrame.TextRange.Text = _
+        "Insert conclusion here"
+
     
     MsgBox "Slides Created Successfully!", vbInformation
-    
+
 End Sub
 
 
-' ================= DESIGN FUNCTION =================
-Sub DesignSlide(sld As Slide, titleText As String, bodyText As String)
+' ===== Slide Style =====
+Sub StyleSlide(sld As Slide)
 
-    Dim bgColor1 As Long
-    Dim bgColor2 As Long
-    
-    bgColor1 = RGB(20, 30, 60)
-    bgColor2 = RGB(0, 120, 215)
-    
     sld.FollowMasterBackground = msoFalse
+    
     sld.Background.Fill.TwoColorGradient msoGradientHorizontal, 1
-    sld.Background.Fill.ForeColor.RGB = bgColor1
-    sld.Background.Fill.BackColor.RGB = bgColor2
-    
-    With sld.Shapes.Title.TextFrame.TextRange
-        .Text = titleText
-        .Font.Size = 42
-        .Font.Bold = True
-        .Font.Color.RGB = RGB(255, 255, 255)
-        .Font.Name = "Khmer OS Muol"
+    sld.Background.Fill.ForeColor.RGB = RGB(15, 25, 55)
+    sld.Background.Fill.BackColor.RGB = RGB(0, 120, 215)
+
+    With sld.Shapes.Title.TextFrame.TextRange.Font
+        .Size = 44
+        .Bold = True
+        .Color.RGB = RGB(255, 255, 255)
     End With
-    
-    With sld.Shapes.Placeholders(2).TextFrame.TextRange
-        .Text = bodyText
-        .Font.Size = 26
-        .Font.Color.RGB = RGB(240, 240, 240)
-        .Font.Name = "Khmer OS Battambang"
+
+    With sld.Shapes.Placeholders(2).TextFrame.TextRange.Font
+        .Size = 28
+        .Color.RGB = RGB(230, 230, 230)
     End With
 
 End Sub
