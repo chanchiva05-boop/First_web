@@ -2,722 +2,76 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TEVA</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ប៊ូតុងបើកវីដេអូ</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        
         body {
-            height: 100vh;
-            overflow: hidden;
-            background: #000;
-        }
-        
-        .bar {
-            position: absolute;
-            width: 100%;
-            height: 8%;
-            background: #000;
-            z-index: 100;
-        }
-        
-        .bar.bottom {
-            bottom: 0;
-        }
-        
-        .center-container {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 95;
+            font-family: 'Khmer OS', 'MoolBoran', Arial, sans-serif;
             text-align: center;
-            width: 100%;
+            padding: 50px;
+            background-color: #f0f0f0;
         }
         
-        .author {
-            margin-bottom: 25px;
-            opacity: 0;
-            animation: fadeInAuthor 2s ease forwards;
-            animation-delay: 0.8s;
-        }
-        
-        .author-text {
-            display: inline-block;
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            color: #f5e28c;
-            text-transform: uppercase;
-            padding: 10px 30px;
-            background: rgba(20, 20, 20, 0.7);
-            border-radius: 15px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-        }
-        
-        .author-text span {
-            color: #d4af37;
-            font-weight: 700;
-        }
-        
-        .app {
-            width: 320px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            padding: 40px 30px;
-            border-radius: 28px;
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(25px);
-            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.95);
-            opacity: 0;
-            animation: reveal 2.5s ease forwards;
-            animation-delay: 1.2s;
-        }
-        
-        @keyframes fadeInAuthor {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            from {
-                transform: translateY(-20px);
-            }
-        }
-        
-        @keyframes reveal {
-            to {
-                opacity: 1;
-            }
-        }
-        
-        .sky {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top,
-                #020111,
-                #0b1d3a,
-                #1e3c72,
-                #5c7cff
-            );
-            animation: skyPulse 16s ease-in-out infinite alternate;
-        }
-        
-        @keyframes skyPulse {
-            from {
-                filter: brightness(0.8);
-            }
-            to {
-                filter: brightness(1.1);
-            }
-        }
-        
-        .birds-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 50;
-            pointer-events: none;
-        }
-        
-        .bird {
-            position: absolute;
-            width: 40px;
-            height: 25px;
-            background: transparent;
-            opacity: 0.7;
-            z-index: 50;
-            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
-        }
-        
-        .bird-body {
-            position: absolute;
-            width: 30px;
-            height: 15px;
-            background: #ffffff;
-            border-radius: 50%;
-            top: 5px;
-            left: 5px;
-        }
-        
-        .bird-wing {
-            position: absolute;
-            width: 20px;
-            height: 12px;
-            background: #f0f0f0;
-            border-radius: 50%;
-        }
-        
-        .bird-wing.left {
-            top: 8px;
-            left: 0;
-            transform: rotate(-20deg);
-            animation: wingFlapLeft 0.8s infinite alternate;
-        }
-        
-        .bird-wing.right {
-            top: 8px;
-            right: 0;
-            transform: rotate(20deg);
-            animation: wingFlapRight 0.8s infinite alternate;
-        }
-        
-        .bird-tail {
-            position: absolute;
-            width: 15px;
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 50%;
-            top: 10px;
-            left: 25px;
-            transform: rotate(30deg);
-        }
-        
-        .bird-eye {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: #000;
-            border-radius: 50%;
-            top: 8px;
-            left: 25px;
-        }
-        
-        .bird1 {
-            top: 15%;
-            left: -10%;
-            animation: birdFly1 25s linear infinite;
-        }
-        
-        .bird2 {
-            top: 10%;
-            left: -20%;
-            animation: birdFly2 30s linear infinite;
-            animation-delay: 2s;
-        }
-        
-        .bird3 {
-            top: 12%;
-            left: -40%;
-            animation: birdFly3 28s linear infinite;
-            animation-delay: 5s;
-        }
-        
-        .bird4 {
-            top: 8%;
-            left: -60%;
-            animation: birdFly4 32s linear infinite;
-            animation-delay: 7s;
-        }
-        
-        .bird5 {
-            top: 18%;
-            left: -80%;
-            animation: birdFly5 27s linear infinite;
-            animation-delay: 3s;
-        }
-        
-        @keyframes wingFlapLeft {
-            0% {
-                transform: rotate(-20deg) translateY(0);
-            }
-            100% {
-                transform: rotate(-40deg) translateY(2px);
-            }
-        }
-        
-        @keyframes wingFlapRight {
-            0% {
-                transform: rotate(20deg) translateY(0);
-            }
-            100% {
-                transform: rotate(40deg) translateY(2px);
-            }
-        }
-        
-        @keyframes birdFly1 {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(25vw) translateY(5px) rotate(5deg);
-            }
-            50% {
-                transform: translateX(50vw) translateY(-10px) rotate(0deg);
-            }
-            75% {
-                transform: translateX(75vw) translateY(3px) rotate(-5deg);
-            }
-            100% {
-                transform: translateX(100vw) translateY(0) rotate(0deg);
-            }
-        }
-        
-        @keyframes birdFly2 {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(30vw) translateY(-5px) rotate(-5deg);
-            }
-            50% {
-                transform: translateX(60vw) translateY(8px) rotate(0deg);
-            }
-            75% {
-                transform: translateX(90vw) translateY(-3px) rotate(5deg);
-            }
-            100% {
-                transform: translateX(120vw) translateY(0) rotate(0deg);
-            }
-        }
-        
-        @keyframes birdFly3 {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(20vw) translateY(8px) rotate(3deg);
-            }
-            50% {
-                transform: translateX(40vw) translateY(-5px) rotate(0deg);
-            }
-            75% {
-                transform: translateX(60vw) translateY(12px) rotate(-3deg);
-            }
-            100% {
-                transform: translateX(80vw) translateY(0) rotate(0deg);
-            }
-        }
-        
-        @keyframes birdFly4 {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(40vw) translateY(-12px) rotate(-8deg);
-            }
-            50% {
-                transform: translateX(80vw) translateY(5px) rotate(0deg);
-            }
-            75% {
-                transform: translateX(120vw) translateY(-8px) rotate(8deg);
-            }
-            100% {
-                transform: translateX(160vw) translateY(0) rotate(0deg);
-            }
-        }
-        
-        @keyframes birdFly5 {
-            0% {
-                transform: translateX(0) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(15vw) translateY(-3px) rotate(2deg);
-            }
-            50% {
-                transform: translateX(30vw) translateY(12px) rotate(0deg);
-            }
-            75% {
-                transform: translateX(45vw) translateY(-5px) rotate(-2deg);
-            }
-            100% {
-                transform: translateX(60vw) translateY(0) rotate(0deg);
-            }
-        }
-        
-        .cloud {
-            position: absolute;
-            top: 25%;
-            width: 420px;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.25);
-            border-radius: 140px;
-            filter: blur(35px);
-            animation: cloudMove 90s linear infinite;
-        }
-        
-        .cloud.c2 {
-            top: 38%;
-            width: 600px;
-            opacity: 0.25;
-            animation-duration: 140s;
-        }
-        
-        @keyframes cloudMove {
-            from {
-                left: -60%;
-            }
-            to {
-                left: 120%;
-            }
-        }
-        
-        .mountain.back {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60%;
-            background: #060606;
-            opacity: 0.45;
-            clip-path: polygon(
-                0 70%,
-                15% 55%,
-                30% 65%,
-                45% 45%,
-                60% 60%,
-                75% 42%,
-                90% 55%,
-                100% 50%,
-                100% 100%,
-                0 100%
-            );
-        }
-        
-        .mountain.front {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 45%;
-            background: #020202;
-            clip-path: polygon(
-                0 80%,
-                15% 65%,
-                30% 75%,
-                45% 55%,
-                60% 70%,
-                75% 50%,
-                90% 65%,
-                100% 55%,
-                100% 100%,
-                0 100%
-            );
-        }
-        
-        .fog {
-            position: absolute;
-            bottom: 30%;
-            width: 100%;
-            height: 220px;
-            background: linear-gradient(
-                to right,
-                rgba(255, 255, 255, 0.08),
-                rgba(255, 255, 255, 0.02),
-                rgba(255, 255, 255, 0.08)
-            );
-            filter: blur(50px);
-            animation: fogMove 26s ease-in-out infinite alternate;
-        }
-        
-        @keyframes fogMove {
-            from {
-                transform: translateX(-10%);
-            }
-            to {
-                transform: translateX(10%);
-            }
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         
         button {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding: 18px;
-            border-radius: 16px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
             border: none;
-            font-size: 17px;
-            letter-spacing: 2px;
-            font-weight: 600;
+            border-radius: 5px;
             cursor: pointer;
-            color: #000;
-            background: linear-gradient(135deg, #d4af37, #f5e28c);
-            box-shadow: 0 15px 45px rgba(212, 175, 55, 0.6);
-            transition: all 0.3s ease;
+            margin: 20px 0;
         }
         
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.8);
+            background-color: #45a049;
         }
         
-        button::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -120%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255, 255, 255, 1),
-                transparent
-            );
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% {
-                left: -120%;
-            }
-            60% {
-                left: 130%;
-            }
-            100% {
-                left: 130%;
-            }
-        }
-        
-        .toast {
+        #videoContainer {
             margin-top: 20px;
-            font-size: 14px;
-            color: #9affd6;
             display: none;
-            animation: toastFade 0.5s ease;
         }
         
-        @keyframes toastFade {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* ស្តាយសម្រាប់លាក់អត្ថបទដែលត្រូវ copy */
-        .text-to-copy {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-            overflow: hidden;
+        video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 5px;
         }
     </style>
 </head>
-
 <body>
-    <div class="center-container">
-        <div class="author">
-            <div class="author-text">CODE By: <span>CHAN CHIVA</span></div>
-        </div>
+    <div class="container">
+        <h1>សូមចុចប៊ូតុងដើម្បីមើលវីដេអូ</h1>
         
-        <div class="app">
-            <button onclick="copyText()">COPY TEXT</button>
-            <div class="toast" id="toast">✔ Copied Successfully</div>
+        <button onclick="playVideo()">ចុចទីនេះដើម្បីបើកវីដេអូ</button>
+        
+        <div id="videoContainer">
+            <video id="myVideo" controls>
+                <source src="video.mp4" type="video/mp4">
+                កម្មវិធីកំពុងទាញយកវីដេអូ...
+            </video>
         </div>
     </div>
-    
-    <!-- កន្លែងសម្រាប់កែអត្ថបទដែលត្រូវ copy -->
-    <!-- អ្នកអាចកែអត្ថបទនៅទីនេះ -->
-    <div class="text-to-copy" id="textToCopy">
-vless://e4824193-4f54-453b-d037-88368e85ef0e@104.18.36.89:443?mode=gun&security=tls&alpn=h2&encryption=none&type=grpc&sni=pqh30v5.carwashipdir.shop#1.%20Metfone%20-%20YT%20NO%20Ads%20SERVER%20USA%20%F0%9F%87%BA%F0%9F%87%B8
-vless://e4824193-4f54-453b-d037-88368e85ef0e@104.18.36.89:443?mode=gun&security=tls&alpn=h2&encryption=none&type=grpc&sni=pqh30v7.carwashipdir.shop#2.%20Metfone%20-%20YT%20NO%20Ads%20SERVER%20USA%20%F0%9F%87%BA%F0%9F%87%B8
-vless://e4824193-4f54-453b-d037-88368e85ef0e@104.18.36.89:443?mode=gun&security=tls&alpn=h2&encryption=none&type=grpc&sni=pqh30v6.carwashipdir.shop#3.%20Metfone%20-%20YT%20NO%20Ads%20SERVER%20USA%20%F0%9F%87%BA%F0%9F%87%B8
-vless://e4824193-4f54-453b-d037-88368e85ef0e@104.18.36.89:443?mode=gun&security=tls&alpn=h2&encryption=none&type=grpc&sni=pqh30v8.carwashipdir.shop#4.%20Metfone%20-%20YT%20NO%20Ads%20SERVER%20USA%20%F0%9F%87%BA%F0%9F%87%B8
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F47.74.254.191-8900&security=none&encryption=none&host=vless.apsarabot.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F178.128.80.43-443&security=none&encryption=none&host=vless.apsarabot1.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F129.150.58.86-57621&security=none&encryption=none&host=vless.apsarabot2.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៣. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F45.32.100.46-13802&security=none&encryption=none&host=vless.apsarabot3.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៤. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F8.219.1.169-443&security=none&encryption=none&host=v3.lifetime10.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៥. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F51.79.158.58-8443&security=none&encryption=none&host=v3.lifetime11.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៦. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F45.76.183.217-49292&security=none&encryption=none&host=v3.lifetime12.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៧. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F194.36.178.36-8443&security=none&encryption=none&host=v3.lifetime13.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៨. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F104.248.145.216-443&security=none&encryption=none&host=v3.lifetime14.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៩. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F5.34.176.119-81&security=none&encryption=none&host=v3.lifetime15.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១០. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F51.79.158.58-2053&security=none&encryption=none&host=v3.lifetime16.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១១. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.156.116.194-443&security=none&encryption=none&host=v3.lifetime17.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១២. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.156.181.203-443&security=none&encryption=none&host=v3.lifetime21.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៣. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F31.192.238.71-2053&security=none&encryption=none&host=v3.lifetime18.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៤. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F194.36.179.5-2053&security=none&encryption=none&host=v3.lifetime19.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៥. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F185.81.28.95-30503&security=none&encryption=none&host=v3.lifetime20.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៦. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F164.52.2.99-443&security=none&encryption=none&host=v3.lifetime60.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៧. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F143.42.66.91-443&security=none&encryption=none&host=v3.lifetime50.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៨. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F164.52.2.100-443&security=none&encryption=none&host=raspy-frog-8969.hyzzgnbh.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៩. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F91.192.81.154-2053&security=none&encryption=none&host=still-cell-dcbc.pvxlcvn.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២០. មិត្តហ្វ្រូន - ប្រទេសសិង្ហបុរី SG 🇸🇬
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-1443&security=none&encryption=none&host=vless.apsarabot.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F103.6.207.108-8080&security=none&encryption=none&host=vless.apsarabot1.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-443&security=none&encryption=none&host=vless.apsarabot2.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៣. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.95.152.58-12137&security=none&encryption=none&host=vless.apsarabot3.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៤. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-1443&security=none&encryption=none&host=v3.lifetime10.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៥. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F103.6.207.108-8080&security=none&encryption=none&host=v3.lifetime11.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៦. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-443&security=none&encryption=none&host=v3.lifetime12.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៧. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.95.152.58-12137&security=none&encryption=none&host=v3.lifetime13.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៨. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-1443&security=none&encryption=none&host=v3.lifetime14.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៩. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F103.6.207.108-8080&security=none&encryption=none&host=v3.lifetime15.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១០. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-443&security=none&encryption=none&host=v3.lifetime16.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១១. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.95.152.58-12137&security=none&encryption=none&host=v3.lifetime17.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១២. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-1443&security=none&encryption=none&host=v3.lifetime18.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៣. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F103.6.207.108-8080&security=none&encryption=none&host=v3.lifetime19.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៤. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-443&security=none&encryption=none&host=v3.lifetime20.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៥. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.95.152.58-12137&security=none&encryption=none&host=v3.lifetime60.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៦. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-1443&security=none&encryption=none&host=v3.lifetime50.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៧. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F103.6.207.108-8080&security=none&encryption=none&host=raspy-frog-8969.hyzzgnbh.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៨. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.218.77.16-443&security=none&encryption=none&host=still-cell-dcbc.pvxlcvn.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៩. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.95.152.58-12137&security=none&encryption=none&host=v3.lifetime21.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២០. មិត្តហ្វ្រូន - ប្រទេសឥណ្ឌូណេស៊ី ID 🇮🇩
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=vless.apsarabot.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=vless.apsarabot1.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=vless.apsarabot2.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៣. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=vless.apsarabot3.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៤. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime10.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៥. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime11.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៦. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime12.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៧. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime13.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៨. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime14.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៩. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime15.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១០. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime16.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១១. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime17.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១២. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime21.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៣. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime18.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៤. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime19.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៥. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime20.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៦. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=v3.lifetime60.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៧. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=v3.lifetime50.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៨. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-39738&security=none&encryption=none&host=raspy-frog-8969.hyzzgnbh.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៩. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F38.54.4.31-51198&security=none&encryption=none&host=still-cell-dcbc.pvxlcvn.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២០. មិត្តហ្វ្រូន - ប្រទេសកម្ពុជា KH 🇰🇭
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F156.230.12.71-443&security=none&encryption=none&host=vless.apsarabot.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.132.244.52-21415&security=none&encryption=none&host=vless.apsarabot1.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F192.131.142.161-46639&security=none&encryption=none&host=vless.apsarabot2.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៣. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F103.247.28.240-37211&security=none&encryption=none&host=vless.apsarabot3.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៤. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F118.141.64.192-36619&security=none&encryption=none&host=v3.lifetime10.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៥. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F141.11.91.67-8080&security=none&encryption=none&host=v3.lifetime11.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៦. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F154.16.10.34-8080&security=none&encryption=none&host=v3.lifetime12.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៧. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F156.255.90.175-8443&security=none&encryption=none&host=v3.lifetime13.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៨. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F156.255.90.175-2053&security=none&encryption=none&host=v3.lifetime14.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#៩. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F192.252.182.52-7602&security=none&encryption=none&host=v3.lifetime15.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១០. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F2.56.91.89-2053&security=none&encryption=none&host=v3.lifetime16.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១១. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F2.56.91.89-8443&security=none&encryption=none&host=v3.lifetime17.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១២. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F210.6.207.42-18622&security=none&encryption=none&host=v3.lifetime21.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៣. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F221.125.10.8-57537&security=none&encryption=none&host=v3.lifetime18.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៤. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.50.90.241-35951&security=none&encryption=none&host=v3.lifetime19.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៥. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F36.50.90.241-47790&security=none&encryption=none&host=v3.lifetime20.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៦. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.154.124.136-26666&security=none&encryption=none&host=v3.lifetime60.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៧. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F45.149.186.112-8080&security=none&encryption=none&host=v3.lifetime50.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៨. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F43.252.41.204-2443&security=none&encryption=none&host=raspy-frog-8969.hyzzgnbh.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#១៩. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-vless://fc60147e-76b8-4bc5-b691-90b2da79e3d2@172.64.151.167:80?path=%2F46.232.122.240-8000&security=none&encryption=none&host=still-cell-dcbc.pvxlcvn.workers.dev&type=ws&sni=vless.apsarabot1.workers.dev#២០. មិត្តហ្វ្រូន - ប្រទេសហុងកុង HK 🇭🇰
-    </div>
-    
-    <div class="birds-container">
-        <div class="bird bird1">
-            <div class="bird-body"></div>
-            <div class="bird-wing left"></div>
-            <div class="bird-wing right"></div>
-            <div class="bird-tail"></div>
-            <div class="bird-eye"></div>
-        </div>
-        <div class="bird bird2">
-            <div class="bird-body"></div>
-            <div class="bird-wing left"></div>
-            <div class="bird-wing right"></div>
-            <div class="bird-tail"></div>
-            <div class="bird-eye"></div>
-        </div>
-        <div class="bird bird3">
-            <div class="bird-body"></div>
-            <div class="bird-wing left"></div>
-            <div class="bird-wing right"></div>
-            <div class="bird-tail"></div>
-            <div class="bird-eye"></div>
-        </div>
-        <div class="bird bird4">
-            <div class="bird-body"></div>
-            <div class="bird-wing left"></div>
-            <div class="bird-wing right"></div>
-            <div class="bird-tail"></div>
-            <div class="bird-eye"></div>
-        </div>
-        <div class="bird bird5">
-            <div class="bird-body"></div>
-            <div class="bird-wing left"></div>
-            <div class="bird-wing right"></div>
-            <div class="bird-tail"></div>
-            <div class="bird-eye"></div>
-        </div>
-    </div>
-    
-    <div class="bar bottom"></div>
-    
-    <div class="sky"></div>
-    
-    <div class="cloud"></div>
-    <div class="cloud c2"></div>
-    
-    <div class="fog"></div>
-    
-    <div class="mountain back"></div>
-    <div class="mountain front"></div>
-    
-    <audio id="clickSound">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3">
-    </audio>
-    
+
     <script>
-        function copyText() {
-            // យកអត្ថបទពីធាតុដែលមាន id "textToCopy"
-            const textToCopy = document.getElementById("textToCopy").textContent;
+        function playVideo() {
+            var videoContainer = document.getElementById('videoContainer');
+            var video = document.getElementById('myVideo');
             
-            // ប្រើ Clipboard API ដើម្បី copy អត្ថបទ
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                // បញ្ចេញសម្លេង
-                document.getElementById("clickSound").play();
-                
-                // បង្ហាញសារជោគជ័យ
-                const toast = document.getElementById("toast");
-                toast.style.display = "block";
-                
-                // លាក់សារបន្ទាប់ពី 1.8 វិនាទី
-                setTimeout(() => {
-                    toast.style.display = "none";
-                }, 1800);
-            }).catch(err => {
-                console.error("មានបញ្ហាក្នុងការ copy អត្ថបទ: ", err);
-                // ប្រសិនបើមិនអាច copy បាន ប្រើវិធីប្រឌិត
-                fallbackCopyText(textToCopy);
-            });
-        }
-        
-        // វិធីបម្លែងជំនួសប្រសិនបើ Clipboard API មិនដំណើរការ
-        function fallbackCopyText(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.opacity = "0";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
+            // បង្ហាញវីដេអូ
+            videoContainer.style.display = 'block';
             
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    document.getElementById("clickSound").play();
-                    const toast = document.getElementById("toast");
-                    toast.style.display = "block";
-                    setTimeout(() => {
-                        toast.style.display = "none";
-                    }, 1800);
-                } else {
-                    alert("មិនអាច copy អត្ថបទបានទេ។ សូមព្យាយាមម្តងទៀត។");
-                }
-            } catch (err) {
-                console.error("មានបញ្ហាក្នុងការ copy: ", err);
-                alert("មិនអាច copy អត្ថបទបានទេ។");
-            }
-            
-            document.body.removeChild(textArea);
+            // ចាក់វីដេអូ
+            video.play();
         }
     </script>
 </body>
