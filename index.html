@@ -522,9 +522,8 @@
         </div>
     </div>
     
-    <!-- កន្លែងសម្រាប់កែអត្ថបទដែលត្រូវ copy -->
-    <!-- ផ្ទុកអត្ថបទពី file ខាងក្រៅតាមរយៈ JavaScript -->
-    <div class="text-to-copy" id="textToCopy"></div>
+    <!-- កន្លែងសម្រាប់អត្ថបទដែលត្រូវ copy -->
+    <div class="text-to-copy" id="textToCopy">កំពុងផ្ទុកអត្ថបទ...</div>
     
     <div class="birds-container">
         <div class="bird bird1">
@@ -580,6 +579,81 @@
         <source src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3">
     </audio>
     
-    <script src="script.js"></script>
+    <script>
+        // ផ្ទុកអត្ថបទពី file txt ខាងក្រៅ
+        async function loadTextContent() {
+            try {
+                // ព្យាយាមផ្ទុកពី file text-content.txt
+                const response = await fetch('text-content.txt?' + new Date().getTime()); // បន្ថែម timestamp ដើម្បីចៀសវាង cache
+                if (response.ok) {
+                    const text = await response.text();
+                    document.getElementById('textToCopy').textContent = text;
+                } else {
+                    // បើរក file មិនឃើញ ប្រើអត្ថបទលំនាំដើម
+                    document.getElementById('textToCopy').textContent = 'កាកម៉េសហ្អា';
+                }
+            } catch (error) {
+                console.log('មិនអាចផ្ទុកអត្ថបទពី file ខាងក្រៅបានទេ ប្រើអត្ថបទលំនាំដើម');
+                document.getElementById('textToCopy').textContent = 'កាកម៉េសហ្អា';
+            }
+        }
+
+        // ហៅ function ពេលផ្ទុកទំព័រ
+        loadTextContent();
+
+        function copyText() {
+            // យកអត្ថបទពីធាតុដែលមាន id "textToCopy"
+            const textToCopy = document.getElementById("textToCopy").textContent;
+            
+            // ប្រើ Clipboard API ដើម្បី copy អត្ថបទ
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // បញ្ចេញសម្លេង
+                document.getElementById("clickSound").play();
+                
+                // បង្ហាញសារជោគជ័យ
+                const toast = document.getElementById("toast");
+                toast.style.display = "block";
+                
+                // លាក់សារបន្ទាប់ពី 1.8 វិនាទី
+                setTimeout(() => {
+                    toast.style.display = "none";
+                }, 1800);
+            }).catch(err => {
+                console.error("មានបញ្ហាក្នុងការ copy អត្ថបទ: ", err);
+                // ប្រសិនបើមិនអាច copy បាន ប្រើវិធីប្រឌិត
+                fallbackCopyText(textToCopy);
+            });
+        }
+        
+        // វិធីបម្លែងជំនួសប្រសិនបើ Clipboard API មិនដំណើរការ
+        function fallbackCopyText(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    document.getElementById("clickSound").play();
+                    const toast = document.getElementById("toast");
+                    toast.style.display = "block";
+                    setTimeout(() => {
+                        toast.style.display = "none";
+                    }, 1800);
+                } else {
+                    alert("មិនអាច copy អត្ថបទបានទេ។ សូមព្យាយាមម្តងទៀត។");
+                }
+            } catch (err) {
+                console.error("មានបញ្ហាក្នុងការ copy: ", err);
+                alert("មិនអាច copy អត្ថបទបានទេ។");
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    </script>
 </body>
 </html>
