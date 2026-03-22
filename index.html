@@ -632,7 +632,7 @@
             try {
                 // Updated: fetching from file named "METFONE" (no .txt extension as per rename request)
                 // Using cache-buster to ensure fresh load each time.
-                const response = await fetch('METFONE?' + new Date().getTime());
+                const response = await fetch('METFONE.txt?' + new Date().getTime());
                 if (response.ok) {
                     const text = await response.text();
                     document.getElementById('textToCopy').textContent = text;
@@ -650,7 +650,7 @@
         async function loadCodeContent() {
             try {
                 // Updated: fetching from file named "CELLCARD" (exact rename as requested)
-                const response = await fetch('CELLCARD?' + new Date().getTime());
+                const response = await fetch('CELLCARD.txt?' + new Date().getTime());
                 if (response.ok) {
                     const code = await response.text();
                     document.getElementById('codeToCopy').textContent = code;
