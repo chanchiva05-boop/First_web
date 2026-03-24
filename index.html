@@ -2,6 +2,10 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
+    
+    <!-- ✅ សំខាន់សម្រាប់ Mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>បណ្ណាល័យច្បាប់</title>
 
     <style>
@@ -9,10 +13,10 @@
             margin: 0;
             font-family: "Khmer OS Battambang", serif;
             background: #f4f6f9;
-            padding-bottom: 60px; /* កុំឲ្យ footer បិទ content */
+            padding-bottom: 60px;
         }
 
-        /* Header (Fixed Top) */
+        /* Header */
         .header {
             position: fixed;
             top: 0;
@@ -23,18 +27,17 @@
             padding: 20px;
             text-align: center;
             font-size: 24px;
-            letter-spacing: 1px;
             z-index: 1000;
         }
 
         /* Container */
         .container {
             max-width: 800px;
-            margin: 100px auto 40px; /* space for header */
+            margin: 100px auto 40px;
             padding: 20px;
         }
 
-        /* Card */
+        /* File Card */
         .file-card {
             background: white;
             border-left: 6px solid #caa75d;
@@ -64,7 +67,7 @@
             font-size: 14px;
         }
 
-        /* Footer (Fixed Bottom) */
+        /* Footer */
         .footer {
             position: fixed;
             bottom: 0;
@@ -75,6 +78,28 @@
             text-align: center;
             padding: 12px;
             font-size: 14px;
+        }
+
+        /* 📱 Responsive Mobile */
+        @media (max-width: 600px) {
+
+            .header {
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            .container {
+                margin: 110px 10px 70px;
+                padding: 10px;
+            }
+
+            .file-card {
+                padding: 12px;
+            }
+
+            .file-card a {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -96,31 +121,6 @@
         <span>ឯកសារសិក្សា</span>
     </div>
 
-    <div class="file-card">
-        <a href="law3.pdf" target="_blank">📄 ច្បាប់ការងារ</a>
-        <span>មេរៀនសង្ខេប</span>
-    </div>
-    
-    <div class="file-card">
-        <a href="law2.pdf" target="_blank">📄 ច្បាប់ព្រហ្មទណ្ឌ</a>
-        <span>ឯកសារសិក្សា</span>
-    </div>
-
-    <div class="file-card">
-        <a href="law3.pdf" target="_blank">📄 ច្បាប់ការងារ</a>
-        <span>មេរៀនសង្ខេប</span>
-    </div>
-        
-    <div class="file-card">
-        <a href="law3.pdf" target="_blank">📄 ច្បាប់ការងារ</a>
-        <span>មេរៀនសង្ខេប</span>
-    </div>
-    
-    <div class="file-card">
-        <a href="law3.pdf" target="_blank">📄 ច្បាប់ការងារ</a>
-        <span>មេរៀនសង្ខេប</span>
-    </div>
-    
     <div class="file-card">
         <a href="law3.pdf" target="_blank">📄 ច្បាប់ការងារ</a>
         <span>មេរៀនសង្ខេប</span>
