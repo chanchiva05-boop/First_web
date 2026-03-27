@@ -3,438 +3,473 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>វិវាទការងារ - ប្រាក់ធនានុគ្រោះ | បទបង្ហាញ</title>
+    <title>ការរំលាយកិច្ចសន្យា | បទបង្ហាញអាជីព</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* slightly better presentation feel, but text selectable if needed */
+            user-select: none; /* professional slide feel */
         }
 
         body {
-            background: #1e2a3a; /* dark background like presentation mode */
-            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'Moul', 'Battambang', 'Khmer OS', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: #1e2a3a;  /* dark grey-blue background like presentation mode */
+            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'Noto Sans Khmer', 'Moul', 'Battambang', system-ui, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            position: relative;
         }
 
-        /* container holds slides with snapping scroll */
+        /* presentation container: mimics slide deck */
         .presentation-container {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+            border-radius: 0px;  /* strictly square corners */
+            overflow: hidden;
+            background: #0b2b26; /* fallback */
+        }
+
+        .slides-wrapper {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
-            background: #2c3e2f; /* deep hotel-green hint */
-            box-shadow: 0 25px 40px rgba(0,0,0,0.3);
+            background: #fef9e8;  /* warm paper-like background for slides */
+            border-radius: 0px;
         }
 
-        /* each slide : fixed size 1280x720 centered, sharp corners */
+        /* custom scrollbar but hidden for clean look (but functional) */
+        .slides-wrapper::-webkit-scrollbar {
+            width: 6px;
+            background: #ddd;
+        }
+        .slides-wrapper::-webkit-scrollbar-thumb {
+            background: #9b7b4c;
+            border-radius: 0px;
+        }
+
+        /* each slide - fixed dimensions */
         .slide {
             width: 1280px;
             height: 720px;
-            margin: 0 auto;
             scroll-snap-align: start;
-            background: white;
-            border-radius: 0px; /* straight corners like PowerPoint */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            position: relative;
-            overflow-y: auto; /* in case content overflow, but we control via padding */
-            overflow-x: hidden;
-            transition: all 0.2s;
             background-size: cover;
             background-position: center;
-        }
-
-        /* custom scroll inside slide if needed */
-        .slide::-webkit-scrollbar {
-            width: 6px;
-        }
-        .slide::-webkit-scrollbar-track {
-            background: #f0f0f0;
-        }
-        .slide::-webkit-scrollbar-thumb {
-            background: #b87333;
-            border-radius: 8px;
-        }
-
-        /* inner content wrapper with decent spacing */
-        .slide-content {
-            padding: 40px 50px;
-            min-height: 100%;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(0px);
+            position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: space-between;
+            padding: 40px 60px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            background-blend-mode: overlay;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
         }
 
-        /* title style: Khmer OS Muol Light */
-        .title {
-            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', 'Khmer OS', serif;
-            font-size: 2.6rem;
-            font-weight: bold;
-            color: #b45f2b;
-            border-left: 8px solid #b45f2b;
-            padding-left: 20px;
-            margin-bottom: 25px;
-            margin-top: 10px;
-            letter-spacing: -0.5px;
+        /* decorative overlay for texture and elegance */
+        .slide::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(210, 180, 140, 0.03) 2%, transparent 2.5%);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .subtitle {
-            font-family: 'Khmer OS Battambang', sans-serif;
-            font-size: 1.2rem;
-            color: #4a627a;
-            margin-bottom: 25px;
+        /* header styling with Khmer touch */
+        .slide-header {
+            border-left: 8px solid #c59a6b;
+            padding-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .slide-title {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', serif;
+            font-size: 38px;
+            font-weight: 600;
+            color: #2c3e2f;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.02);
+        }
+        .slide-sub {
+            font-size: 18px;
+            color: #b87c4f;
+            margin-top: 8px;
             font-weight: 500;
         }
 
-        /* card style for legal content */
-        .card-law {
-            background: #fef7e8;
-            border-left: 6px solid #b87333;
-            padding: 18px 22px;
-            margin: 20px 0;
-            border-radius: 0px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .highlight {
-            background: #fff0db;
-            font-weight: bold;
-            color: #b45f2b;
-            padding: 2px 8px;
-            border-radius: 0px;
-            font-family: monospace;
-        }
-
-        .law-article {
-            font-family: 'Khmer OS Battambang', monospace;
-            background: #f2efe0;
-            padding: 12px 18px;
-            border-radius: 0px;
-            border-left: 4px solid #8b5a2b;
-            margin: 15px 0;
-            font-size: 0.95rem;
-        }
-
-        .grid-2col {
-            display: flex;
-            gap: 30px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        .col {
+        .content-area {
             flex: 1;
-            background: #faf9f5;
-            padding: 18px;
-            border-top: 2px solid #e0cfb0;
+            position: relative;
+            z-index: 2;
+            overflow-y: auto;
+            padding-right: 15px;
+            margin: 15px 0;
         }
-
-        .footer-note {
-            margin-top: auto;
-            font-size: 0.7rem;
-            text-align: center;
-            color: #8f8a7a;
-            border-top: 1px solid #e2dccd;
-            padding-top: 12px;
+        .content-area::-webkit-scrollbar {
+            width: 4px;
         }
-
-        /* decorative images / icons background */
-        .bg-icon {
+        
+        /* card style for legal points */
+        .legal-card {
+            background: #fdf9f2;
+            border-left: 4px solid #c5a16e;
+            padding: 18px 24px;
+            margin-bottom: 24px;
+            border-radius: 0px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: transform 0.1s ease;
+        }
+        .legal-card strong {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            color: #8b5a2b;
+            font-size: 20px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .legal-text {
+            font-size: 18px;
+            line-height: 1.55;
+            color: #2d3e2b;
+        }
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .bullet-list li {
+            margin-bottom: 12px;
+            padding-left: 28px;
+            position: relative;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+        .bullet-list li:before {
+            content: "▪";
+            color: #bc8f6b;
+            font-weight: bold;
             position: absolute;
-            right: 20px;
-            bottom: 20px;
-            opacity: 0.08;
-            pointer-events: none;
-            font-size: 80px;
+            left: 8px;
+            font-size: 20px;
+        }
+        .law-ref {
+            background: #f3ede3;
+            display: inline-block;
+            padding: 4px 12px;
+            font-family: monospace;
+            font-size: 15px;
+            border-radius: 20px;
+            color: #7a582e;
+            margin-right: 8px;
+        }
+        .quote-note {
+            background: #e9e0d3;
+            padding: 20px 28px;
+            font-style: normal;
+            border-radius: 0px;
+            margin-top: 15px;
+            border-right: 3px solid #c59a6b;
         }
 
-        button.nav-control {
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            background: #2c3e50cc;
-            backdrop-filter: blur(8px);
+        .slide-footer {
+            font-size: 13px;
+            border-top: 1px solid #e5d9cc;
+            padding-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            color: #9b8c76;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* navigation controls */
+        .nav-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+        .nav-btn {
+            background: #2c3e2f;
             border: none;
             color: white;
-            padding: 12px 18px;
-            border-radius: 40px;
             font-family: 'Khmer OS Battambang', sans-serif;
-            font-size: 1rem;
+            font-size: 18px;
+            padding: 8px 24px;
             cursor: pointer;
-            z-index: 1000;
+            border-radius: 40px;
             transition: 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            display: flex;
-            gap: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        button.nav-control:hover {
-            background: #b87333;
-            transform: scale(1.02);
+        .nav-btn:hover {
+            background: #b87c4f;
+            transform: scale(0.97);
         }
-        .slide-counter {
-            position: fixed;
-            bottom: 28px;
-            left: 30px;
-            background: #000000aa;
-            color: white;
-            padding: 6px 16px;
+        .page-indicator {
+            background: #f2e5d8;
+            padding: 6px 18px;
             border-radius: 40px;
             font-family: monospace;
-            font-size: 1rem;
-            z-index: 1000;
-            backdrop-filter: blur(4px);
-            pointer-events: none;
-        }
-        /* responsive: make container scroll with fixed slide dimensions */
-        @media (max-width: 1300px) {
-            .slide {
-                transform: scale(0.98);
-                margin: 0 auto;
-            }
-        }
-        /* ensure container scroll snapping works */
-        .presentation-container {
-            scrollbar-width: thin;
-        }
-        .big-number {
-            font-size: 2rem;
             font-weight: bold;
-            color: #b87333;
+            color: #5f4c2e;
         }
-        hr {
-            margin: 15px 0;
-            border-color: #ebdbc0;
+
+        /* images integration: subtle background elements */
+        .slide[data-bg="law"] {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" opacity="0.08"><path fill="%23b87c4f" d="M400,100 L500,200 L400,300 L300,200 Z M200,400 L600,400 L550,500 L250,500 Z M150,600 L650,600 L600,700 L200,700 Z"/><circle cx="700" cy="150" r="40"/><rect x="50" y="500" width="100" height="20"/></svg>');
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            background-size: 280px;
+        }
+        .slide[data-bg="contract"] {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" opacity="0.07"><path fill="%23997b55" d="M60,80 L340,80 L340,420 L60,420 Z M90,130 L310,130 M90,180 L280,180 M90,230 L310,230 M90,280 L270,280"/><text x="120" y="360" font-size="30">⚖️</text></svg>');
+            background-position: 95% 85%;
+            background-size: 200px;
         }
     </style>
 </head>
 <body>
-<div class="presentation-container" id="presentationContainer">
-    <!-- SLIDE 1: អង្គហេតុ និងភាគី -->
-    <div class="slide">
-        <div class="slide-content">
-            <div class="title">វិវាទការងារ៖ ប្រាក់ធនានុគ្រោះ</div>
-            <div class="subtitle">ក្រុមហ៊ុន ផូគីថរ៉ា រីសត & ស៉្បា (ខេមបូឌា) vs តំណាងកម្មករនិយោជិត</div>
-            <div class="grid-2col">
-                <div class="col">
-                    <strong>🏨 ភាគីនិយោជក</strong><br>
-                    ក្រុមហ៊ុន ផូគីថរ៉ា រីសត & ស៉្បា (ខេមបូឌា)<br>
-                    អ្នកតំណាង៖ លោក ហុង ម៉េង, លោក ជា មីនា (HR)<br>
-                    <hr>
-                    <strong>📌 ប្រាក់ធនានុគ្រោះ ៧.៥% កាត់ទុកបម្រុងបែកបាក់</strong>
+<div class="presentation-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+        <!-- SLIDE 1: មូលហេតុនៃការរំលាយកិច្ចសន្យា + overview -->
+        <div class="slide" data-bg="law">
+            <div class="slide-header">
+                <div class="slide-title">ការរំលាយកិច្ចសន្យា</div>
+                <div class="slide-sub">ដោយផ្អែកលើច្បាប់ និងបញ្ញត្តិពាក់ព័ន្ធ (មាត្រា ៤០៨, ៤១៤១១, ៥៣២)</div>
+            </div>
+            <div class="content-area">
+                <div class="legal-card">
+                    <strong>📜 មូលហេតុសំខាន់ៗនៃការរំលាយកិច្ចសន្យា</strong>
+                    <ul class="bullet-list">
+                        <li>ការបំពានកិច្ចសន្យាយ៉ាងផ្តូវផ្តើម (មាត្រា ៤០៨)</li>
+                        <li>ហេតុដែលកំណត់ទុកក្នុងកិច្ចសន្យា (មាត្រា ៤១៤១១)</li>
+                        <li>ការព្រមព្រៀងរបស់គ្រប់ភាគី (មាត្រា ១៤១១២)</li>
+                        <li>ការរំលាយតាមបញ្ញត្តិច្បាប់ (មាត្រា ៥៣២, ៥៣៣, ៥៨១, ៦០៦)</li>
+                    </ul>
                 </div>
-                <div class="col">
-                    <strong>👥 ភាគីកម្មករនិយោជិត (ដើមចោទ)</strong><br>
-                    តំណាងដោយ៖ លោក សុខ ហេង (មេធាវី), លោក សៅ សាយ, លោក ផូ វណ្ណា, លោក សុខ វិសាល, លោកស្រី រឿង ណាវី និងក្រុមការងារ។<br>
-                    <span class="highlight">ទាមទារ៖ បើកប្រាក់ធនានុគ្រោះទាំងអស់ បញ្ឈប់ការកាត់ ៧.៥%</span>
+                <div class="legal-card">
+                    <strong>⚖️ ការបំពានកិច្ចសន្យាយ៉ាងផ្តូវផ្តើម (ម.៤០៨)</strong>
+                    <ul class="bullet-list">
+                        <li><strong>ក.</strong> ភាគីមិនអនុវត្តកាតព្វកិច្ច ទោះបីបានដាស់តឿនដោយកំណត់អំឡុងពេលសមរម្យ។</li>
+                        <li><strong>ខ.</strong> ភាគីមិនអនុវត្តកាតព្វកិច្ចតាមពេលកំណត់ បើគោលបំណងនៃកិច្ចសន្យាមិនសម្រេច។</li>
+                        <li><strong>គ.</strong> ភាគីមិនអាចអនុវត្តករណីកិច្ចផ្តល់គ្នាកាលិកចមបងបាន ដោយសារវត្ថុបាត់បង់។</li>
+                        <li><strong>ឃ.</strong> ការបំពានកិច្ចសន្យាមានភាពហួសហេតុ ធ្វើឱ្យបាត់បង់ទំនុកចិត្ត និងមិនអាចរំពឹងអនុវត្តនាពេលអនាគត។</li>
+                    </ul>
+                </div>
+                <div class="quote-note">
+                    <span style="font-weight:bold;">📌 សេចក្តីសន្និដ្ឋាន៖</span> កិច្ចសន្យាអាចរំលាយដោយការបំពានផ្តូវផ្តើម (កិច្ចសន្យាអញ្ចូមញ្ចូ – មាត្រា ៤០៧)។
                 </div>
             </div>
-            <div class="card-law">
-                <span style="font-weight: bold;">⚖️ សង្ខេបវិវាទ៖</span> និយោជកបានកាត់ប្រាក់ធនានុគ្រោះ ៧.៥% ពីចំនួនសរុប ដើម្បីបម្រុងទុកចំណាយលើការបែកបាក់ ខូចខាតទ្រព្យសម្បត្តិសណ្ឋាគារ។ ភាគីកម្មករអះអាងថាការកាត់នេះមិនស្របច្បាប់ និងគ្មានការយល់ព្រមពីកម្មករ។
+            <div class="slide-footer">
+                <span>📖 ជំពូកទី១៖ មូលហេតុផ្លូវច្បាប់</span>
+                <span>1 / 5</span>
             </div>
-            <div class="law-article">
-                📜 កិច្ចព្រមព្រៀងឆ្នាំ២០១៨ ចំណុចទី៣ បានឲ្យដក ៧.៥% សម្រាប់បម្រុងបែកបាក់។ ប៉ុន្តែតំណាងកម្មករបច្ចុប្បន្នទាមទារឲ្យបញ្ឈប់ ព្រោះវាជាការកាត់ឯកតោភាគី និងផ្ទុយនឹងគោលការណ៍ច្បាប់ការងារ។
-            </div>
-            <div class="footer-note">អាជ្ញាកណ្តាល សំណុំរឿងលេខ ០០៥/២៥ | សណ្ឋាគារ ផូគីថរ៉ា</div>
         </div>
-        <div class="bg-icon">🏨⚖️</div>
-    </div>
 
-    <!-- SLIDE 2: ច្បាប់សំខាន់ៗ - មាត្រា ១៣៤ និង ១៣៦ -->
-    <div class="slide">
-        <div class="slide-content">
-            <div class="title">មូលដ្ឋានច្បាប់ការងារ</div>
-            <div class="subtitle">ប្រាក់ធនានុគ្រោះ ជាកម្រៃសម្រាប់បុគ្គលិក</div>
-            <div class="law-article">
-                <strong>មាត្រា ១៣៤</strong> ៖ ប្រាក់ធនានុគ្រោះ គឺជាកំរៃដែលអតិថិជនឲ្យទៅបុគ្គលិក និយោជកមានតួនាទីប្រមូល និងបើកឲ្យបុគ្គលិកដែលទាក់ទងនឹងអតិថិជនវិញទាំងអស់។
+        <!-- SLIDE 2: លក្ខខណ្ឌនៃការបំពាន (លម្អិតចំណុច ក, ខ, គ, ឃ) -->
+        <div class="slide" data-bg="contract">
+            <div class="slide-header">
+                <div class="slide-title">លក្ខខណ្ឌនៃការបំពានយ៉ាងផ្តូវផ្តើម</div>
+                <div class="slide-sub">សម្រាប់ការរំលាយកិច្ចសន្យា (មាត្រា ៤០៨)</div>
             </div>
-            <div class="law-article">
-                <strong>មាត្រា ១៣៦</strong> ៖ របៀបចែកចាយប្រាក់ធនានុគ្រោះ ត្រូវកំណត់តាមទម្លាប់វិជ្ជាជីវៈ ឬប្រកាសក្រសួង ប៉ុន្តែ <span class="highlight">មិនមានការអនុញ្ញាតឲ្យកាត់ទុកជាប្រាក់បម្រុងបែកបាក់ទេ</span>។
-            </div>
-            <div class="card-law">
-                💡 ក្រុមប្រឹក្សាអាជ្ញាកណ្តាលបានបកស្រាយថា ប្រាក់ធនានុគ្រោះត្រូវបើក ១០០% ជូនកម្មករនិយោជិត (សំណុំរឿង សណ្ឋាគារកាំបូឌីយ៉ាណា និងសំណុំរឿងមុនៗ)។
-            </div>
-            <div class="grid-2col">
-                <div class="col">✅ <strong>គោលការណ៍៖</strong> ធនានុគ្រោះ = ផ្នែកមួយនៃប្រាក់ឈ្នួល ជារង្វាន់លើកទឹកចិត្ត។</div>
-                <div class="col">⛔ <strong>ការកាត់ជាសមាមាត្ររួម</strong> មិនមានចែងក្នុងច្បាប់ និងមិនស្របតាមវិញ្ញាសាការងារ។</div>
-            </div>
-            <div class="footer-note">យោង៖ ច្បាប់ស្តីពីការងារ ១៩៩៧, សេចក្តីបង្គាប់អាជ្ញាកណ្តាលលេខ ០៩៦/១៩</div>
-        </div>
-        <div class="bg-icon">📜⚖️</div>
-    </div>
-
-    <!-- SLIDE 3: មាត្រា ១២៧ ការកាត់ប្រាក់ឈ្នួល និងការទទួលខុសត្រូវផ្ទាល់ -->
-    <div class="slide">
-        <div class="slide-content">
-            <div class="title">ការកាត់ប្រាក់ឈ្នួលតាមច្បាប់</div>
-            <div class="subtitle">មាត្រា ១២៧ នៃច្បាប់ការងារ</div>
-            <div class="law-article">
-                <strong>មាត្រា ១២៧</strong>៖ និយោជកអាចកាត់ប្រាក់ឈ្នួលបានតែក្នុងករណី៖ <br>
-                ១. គ្រឿងប្រដាប់ការងារមិនប្រគល់វិញ <br>
-                ២. វត្ថុធាតុដែលកម្មករទទួលបន្ទុកប្រើប្រាស់ខូចខាតដោយផ្ទាល់ <br>
-                ៣. ប្រាក់បានបើកមុន និង ៤. អាគារូបដ្ឋាន។ <br>
-                <span class="highlight">ការកាត់ត្រូវធ្វើជាលក្ខណៈបុគ្គល មិនមែនកាត់ជាសមាមាត្រពីកម្មករទាំងអស់ទេ។</span>
-            </div>
-            <div class="card-law">
-                🔍 និយោជកបានកាត់ ៧.៥% ពីប្រាក់ធនានុគ្រោះសរុប ជាសមាមាត្ររួម ទោះបីកម្មករណាមិនពាក់ព័ន្ធនឹងការបែកបាក់ក៏ដោយ។ នេះផ្ទុយនឹងមាត្រា ១២៧ និងគោលការណ៍ទទួលខុសត្រូវផ្ទាល់ខ្លួន។
-            </div>
-            <div class="grid-2col">
-                <div class="col"><span style="font-size:1.8rem;">⚖️</span><br>ការកាត់ប្រាក់ធនានុគ្រោះដោយគ្មានកំហុសផ្ទាល់ គឺខុសច្បាប់។</div>
-                <div class="col"><span style="font-size:1.8rem;">📊</span><br>អនុវត្តកាត់ ៧.៥% ពីគ្រប់ផ្នែក → ប៉ះពាល់ប្រាក់ចំណូលយុត្តិធម៌។</div>
-            </div>
-            <div class="footer-note">សេចក្តីបង្គាប់អាជ្ញាកណ្តាលលេខ ០៤២/១៦ បានចែងថា ប្រាក់ធនានុគ្រោះជាផ្នែកប្រាក់ឈ្នួល</div>
-        </div>
-        <div class="bg-icon">💼🔨</div>
-    </div>
-
-    <!-- SLIDE 4: ការអនុវត្តឯកតោភាគី & កង្វះការយល់ព្រម -->
-    <div class="slide">
-        <div class="slide-content">
-            <div class="title">ការអនុវត្តឯកតោភាគី</div>
-            <div class="subtitle">មិនមានកិច្ចព្រមព្រៀងពីកម្មករនិយោជិតបច្ចុប្បន្ន</div>
-            <div class="law-article">
-                និយោជកអះអាងថាអនុវត្តតាមកិច្ចព្រមព្រៀងឆ្នាំ២០១៨ និងបទបញ្ជាផ្ទៃក្នុង។ ប៉ុន្តែ៖
-                <ul style="margin-left: 25px; margin-top: 12px;">
-                    <li>កិច្ចព្រមព្រៀងចាស់មិនអាចអនុវត្តជាអចិន្ត្រៃយ៍ដោយគ្មានការពិនិត្យឡើងវិញ</li>
-                    <li>កម្មករភាគច្រើនមិនបានយល់ព្រមឲ្យកាត់ប្រាក់ធនានុគ្រោះសម្រាប់បម្រុងបែកបាក់</li>
-                    <li>ប្រការ ១៨ នៃបញ្ជាផ្ទៃក្នុងគ្រាន់តែកំណត់ការទទួលខុសត្រូវផ្ទាល់ មិនមែនកាត់ជារួម</li>
-                </ul>
-            </div>
-            <div class="card-law" style="background: #fff3e0;">
-                ✋ <strong>សេចក្តីសម្រេចរបស់ក្រុមប្រឹក្សាអាជ្ញាកណ្តាល៖</strong> បង្គាប់ឲ្យនិយោជកបើកប្រាក់ធនានុគ្រោះទាំងអស់ និងបញ្ឈប់ការកាត់ ៧.៥% ចាប់ពីថ្ងៃចេញបង្គាប់។
-            </div>
-            <div class="footer-note">អនុលោមតាមប្រការ ៣៤ នៃប្រកាស ០៩៩ សកបឃ. ស្តីពីអំណាចក្រុមប្រឹក្សាអាជ្ញាកណ្តាល</div>
-        </div>
-        <div class="bg-icon">📢⚙️</div>
-    </div>
-
-    <!-- SLIDE 5: ហេតុផលច្បាប់លម្អិត + ការវិភាគ -->
-    <div class="slide">
-        <div class="slide-content">
-            <div class="title">ហេតុផលតុលាការការងារ</div>
-            <div class="subtitle">ហេតុអ្វីការកាត់ ៧.៥% មិនត្រឹមត្រូវ?</div>
-            <div class="grid-2col">
-                <div class="col">
-                    <span class="big-number">❶</span> ប្រាក់ធនានុគ្រោះជាកម្រៃលើកទឹកចិត្តផ្ទាល់ដល់បុគ្គលិកផ្តល់សេវា។ និយោជកគ្រាន់តែជាអ្នកប្រមូល។
+            <div class="content-area">
+                <div class="legal-card">
+                    <strong>🔹 ករណីទី១: ការមិនអនុវត្តកាតព្វកិច្ច ទោះបីមានការដាស់តឿន</strong>
+                    <div class="legal-text">លក្ខខណ្ឌ៖ (១) មិនអនុវត្តតាមកិច្ចសន្យា, (២) បានដាស់តឿនដោយកំណត់អំឡុងពេលសមរម្យ, (៣) អំឡុងពេលនោះកន្លងផុត។</div>
                 </div>
-                <div class="col">
-                    <span class="big-number">❷</span> មិនមានបទប្បញ្ញត្តិណាអនុញ្ញាតឲ្យកាត់ទុកជាប្រាក់បម្រុងសម្រាប់ការបែកបាក់ពីធនានុគ្រោះទាំងអស់។
+                <div class="legal-card">
+                    <strong>⏱️ ករណីទី២: ការមិនអនុវត្តតាមពេលកំណត់</strong>
+                    <div class="legal-text">បើគោលបំណងនៃកិច្ចសន្យាមិនអាចសម្រេចបាន បើភាគីខកខានអនុវត្តកាតព្វកិច្ចតាមកំណត់ពេលដែលបានព្រមព្រៀង។</div>
+                </div>
+                <div class="legal-card">
+                    <strong>📦 ករណីទី៣: អសមត្ថភាពអនុវត្តករណីកិច្ចផ្តល់គ្នាកាលិកចមបង</strong>
+                    <div class="legal-text">វត្ថុនៃកិច្ចសន្យាបាត់បង់ ឬភាគីមិនអាចបំពេញកាតព្វកិច្ចសំខាន់បាន ដោយហេតុផលផ្សេងៗ។</div>
+                </div>
+                <div class="legal-card">
+                    <strong>⚠️ ករណីទី៤: ការបំពានហួសហេតុ</strong>
+                    <div class="legal-text">បាត់បង់ទំនុកចិត្ត ហើយច្បាស់ថាភាគីមិនអាចអនុវត្តកិច្ចសន្យានាពេលអនាគត។ នេះជាមូលដ្ឋានគ្រប់គ្រាន់សម្រាប់ការរំលាយ។</div>
                 </div>
             </div>
-            <div class="law-article">
-                <strong>ការបកស្រាយរបស់អាជ្ញាកណ្តាល (សំណុំរឿង ផូគីថរ៉ា មុនៗ)៖</strong> “ប្រាក់ធនានុគ្រោះត្រូវចាត់ទុកជាផ្នែកមួយនៃប្រាក់ឈ្នួល ហើយត្រូវបើក ១០០% ជូនកម្មករ។ ការកាត់ជាសមាមាត្ររួមគឺគ្មានមូលដ្ឋានច្បាប់”។
+            <div class="slide-footer">
+                <span>⚖️ យោងមាត្រា ៤០៨ នៃក្រមរដ្ឋប្បវេណី</span>
+                <span>2 / 5</span>
             </div>
-            <div class="card-law">
-                🧾 <strong>សេចក្តីសន្និដ្ឋាន៖</strong> ការកាត់ប្រាក់ធនានុគ្រោះ ៧.៥% សម្រាប់បម្រុងបែកបាក់ គឺមិនស្របតាមមាត្រា ១៣៤, ១៣៦, និង ១២៧ នៃច្បាប់ការងារ។ និយោជកត្រូវប្រគល់ប្រាក់ធនានុគ្រោះទាំងស្រុង និងបញ្ឈប់ការកាត់ដោយគ្មានការយល់ព្រម។
-            </div>
-            <div class="footer-note">គោលការណ៍យុត្តិធម៌ និងការពារសិទ្ធិកម្មករ</div>
         </div>
-        <div class="bg-icon">⚖️📑</div>
-    </div>
 
-    <!-- SLIDE 6: ការសម្រេចចុងក្រោយ និងការអនុវត្ត -->
-    <div class="slide">
-        <div class="slide-content">
-            <div class="title">សេចក្តីសម្រេចអាជ្ញាកណ្តាល</div>
-            <div class="subtitle">បង្គាប់ឲ្យអនុវត្តជាបន្ទាន់</div>
-            <div class="law-article" style="background:#e8f0e7;">
-                <span style="font-size:1.5rem;">📌</span> <strong>ចំណុចវិវាទ៖</strong> បញ្ជាឲ្យនិយោជកបើកប្រាក់ធនានុគ្រោះទាំងអស់ដែលប្រមូលបានពីអតិថិជនជូនកម្មករនិយោជិត និងបញ្ឈប់ការកាត់ ៧.៥% នៃប្រាក់ធនានុគ្រោះសរុប។
+        <!-- SLIDE 3: វិធីអនុវត្តសិទ្ធិរំលាយ និងអានុភាពទូទៅ -->
+        <div class="slide" data-bg="law">
+            <div class="slide-header">
+                <div class="slide-title">វិធីអនុវត្តសិទ្ធិរំលាយ និងអានុភាពផ្លូវច្បាប់</div>
+                <div class="slide-sub">មាត្រា ៤០៨, ៤១១១, ៤១១២, ៤១១៣</div>
             </div>
-            <div class="grid-2col">
-                <div class="col" style="background:#fff5ea;">
-                    <span style="font-size:2rem;">✅</span><br>
-                    <strong>ត្រូវអនុវត្តចាប់ពីថ្ងៃចេញសេចក្តីបង្គាប់</strong><br>
-                    ក្រុមហ៊ុនត្រូវចែកចាយប្រាក់ធនានុគ្រោះពេញលេញ និងឈប់កាត់ទុកប្រាក់បម្រុងបែកបាក់។
+            <div class="content-area">
+                <div class="legal-card">
+                    <strong>📌 វិធីអនុវត្តសិទ្ធិរំលាយ (ម.៤០៨)</strong>
+                    <div class="legal-text">ភាគីដែលរងគ្រោះអាចប្រកាសរំលាយកិច្ចសន្យាតាមរយៈការជូនដំណឹងជាលាយលក្ខណ៍អក្សរ ឬដោយសេចក្តីសម្រេចរបស់តុលាការ អាស្រ័យលើលក្ខខណ្ឌនៃការបំពាន។ ការរំលាយមានប្រសិទ្ធភាពចាប់ពីពេលភាគីម្ខាងទទួលបានដំណឹង។</div>
                 </div>
-                <div class="col" style="background:#f0f2f5;">
-                    <span style="font-size:2rem;">🏛️</span><br>
-                    <strong>យុត្តិការណ៍៖</strong> ការកាត់ប្រាក់គួរធ្វើឡើងតាមបុគ្គលដែលបង្កការខូចខាតប៉ុណ្ណោះ មិនមែនកាត់ពីកម្មករទាំងអស់ឡើយ។
+                <div class="legal-card">
+                    <strong>💠 អានុភាពនៃការរំលាយកិច្ចសន្យា</strong>
+                    <ul class="bullet-list">
+                        <li>គូភាគីរួចផុតពីករណីកិច្ចក្នុងកិច្ចសន្យា (លើកលែងតែករណីសំណងខូចខាត) – មាត្រា ៤១១១</li>
+                        <li>ភាគីដែលបានទទួលការផ្តល់រួច ត្រូវមានករណីកិច្ចសងវិញ (បដិទាន) ទៅវិញទៅមក (ម.៤១១២)</li>
+                        <li>បើការលិកជាប្រាក់ ត្រូវសងជាមួយការប្រាក់ចាប់ពីថ្ងៃទទួលប្រាក់ដើម (ម.៤១១៣)</li>
+                        <li>បើការលិកជាវត្ថុ ត្រូវសងទាំងផលដែលទទួលបានពីវត្ថុនោះ។</li>
+                    </ul>
                 </div>
             </div>
-            <div class="card-law" style="margin-top: 15px;">
-                💼 <strong>ផលប៉ះពាល់វិជ្ជមាន៖</strong> ការសម្រេចនេះពង្រឹងទំនុកចិត្ត និងសមធម៌ក្នុងទំនាក់ទំនងការងារ ការពារប្រាក់ចំណូលកម្មករពីការកាត់ដោយគ្មានមូលដ្ឋាន។
+            <div class="slide-footer">
+                <span>🔄 បដិទានជាគោលការណ៍សំខាន់</span>
+                <span>3 / 5</span>
             </div>
-            <div class="footer-note">ឯកសារយោង៖ ច្បាប់ការងារ ១៩៩៧, ប្រកាស ០៩៩, សំណុំរឿងអាជ្ញាកណ្តាលលេខ ០០៥/២៥</div>
         </div>
-        <div class="bg-icon">🏆⚖️</div>
+
+        <!-- SLIDE 4: ករណីសិក្សា - ប្រាក់ដែលបានបង់ និងខ្សែសន្យាពិសេស (ឃ្លាប្រាក់បញ្ញើ) -->
+        <div class="slide" data-bg="contract">
+            <div class="slide-header">
+                <div class="slide-title">ករណីសិក្សា៖ ឃ្លាពិសេស និងការបកស្រាយ</div>
+                <div class="slide-sub">បើអ្នកទិញខកខានបង់ប្រាក់ តើអ្នកលក់អាចរក្សាទុកប្រាក់ដែលបានបង់រួចបានដែរឬទេ?</div>
+            </div>
+            <div class="content-area">
+                <div class="legal-card">
+                    <strong>📑 ខ្សែសន្យាពិសេស (ឃ្លារក្សាប្រាក់)</strong>
+                    <div class="legal-text">“បើសិនអ្នកទិញខកខានបង់ប្រាក់ក្នុងដំណាក់កាលណាមួយ ប្រាក់ដែលបានបង់រួច ត្រូវញាយជាដលប្រោធន៍របស់អ្នកលក់”។</div>
+                </div>
+                <div class="quote-note">
+                    <strong>⚖️ ការបកស្រាយតាមច្បាប់៖</strong><br>
+                    អនុភាពនៃការរំលាយកិច្ចសន្យា នាំឱ្យភាគីនីមួយៗមានករណីកិច្ចធ្វើបដិទាន។ ពោលគឺ អ្នកលក់ត្រូវប្រគល់ប្រាក់ថ្លៃលក់ដែលអ្នកទិញបានបង់រួច ត្រឡប់ទៅអ្នកទិញវិញ។
+                </div>
+                <div class="legal-card" style="background:#f7efdf;">
+                    <strong>🏛️ មតិយោបល់៖</strong>
+                    <div class="legal-text">ការកំណត់ក្នុងកិច្ចសន្យាថាប្រាក់ដែលបានបង់រួចត្រូវញាយជាដលប្រោធន៍ អាចផ្ទុយនឹងគោលការណ៍បដិទាន (មាត្រា ៤១១២)។ ចំពោះការរំលាយកិច្ចសន្យា ការរក្សាទុកប្រាក់ដោយគ្មានការសងវិញ មិនអាចធ្វើបានទេ លើកលែងតែមានការព្រមព្រៀងជាក់ស្តែងអំពីប្រាក់បញ្ញើ (អារប៊្រេត)។</div>
+                </div>
+                <div class="legal-text" style="margin-top: 10px; font-size: 16px;">👉 ដូចនេះ អ្នកលក់មិនអាចបដិសេធមិនសងប្រាក់ដែលបានបង់រួចនោះទេ បើកិច្ចសន្យាត្រូវបានរំលាយដោយផ្អែកលើបញ្ញត្តិច្បាប់។</div>
+            </div>
+            <div class="slide-footer">
+                <span>📌 យោងសេចក្តីបកស្រាយលើខចងពិលសស</span>
+                <span>4 / 5</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: សង្ខេប + ការអនុវត្តជាក់ស្តែង / គោលការណ៍ចុងក្រោយ -->
+        <div class="slide" data-bg="law">
+            <div class="slide-header">
+                <div class="slide-title">សង្ខេបគោលការណ៍សំខាន់ៗ</div>
+                <div class="slide-sub">ការរំលាយកិច្ចសន្យា និងផលវិបាកតាមផ្លូវច្បាប់</div>
+            </div>
+            <div class="content-area">
+                <div class="legal-card">
+                    <strong>📢 សេចក្តីសង្ខេបពីមូលហេតុ</strong>
+                    <div class="legal-text">ការរំលាយកិច្ចសន្យាកើតឡើងដោយសារ (១) ការបំពានផ្តូវផ្តើម (ម.៤០៨) (២) ការព្រមព្រៀងគ្នា (៣) តាមបញ្ញត្តិច្បាប់។ ការបំពានត្រូវមានលក្ខខណ្ឌច្បាស់លាស់ដូចជា ការដាស់តឿន និងអសមត្ថភាពអនុវត្តកាតព្វកិច្ចសំខាន់។</div>
+                </div>
+                <div class="legal-card">
+                    <strong>💡 អានុភាពសំខាន់ៗ</strong>
+                    <ul class="bullet-list">
+                        <li>ភាគីត្រូវប្រគល់វត្ថុ ឬប្រាក់វិញ (បដិទាន)</li>
+                        <li>សិទ្ធិទាមទារសំណងខូចខាតនៅតែមាន (ម.៤១១១)</li>
+                        <li>ការប្រាក់លើប្រាក់ដែលបានទទួលត្រូវសងចាប់ពីថ្ងៃទទួល</li>
+                        <li>ឃ្លាពិសេសក្នុងកិច្ចសន្យាមិនអាចលើសពីគោលការណ៍ច្បាប់បានទេ (សាធារណៈសណ្តាប់ធ្នាប់)</li>
+                    </ul>
+                </div>
+                <div class="quote-note" style="background:#e2d9ce;">
+                    <span style="font-weight:bold;">🏛️ ការណែនាំជាក់ស្តែង៖</span> មុននឹងរំលាយកិច្ចសន្យា ភាគីគួរតែផ្ញើការដាស់តឿនជាលាយលក្ខណ៍អក្សរ និងផ្តល់ពេលវេលាសមរម្យ។ ក្នុងករណីមានវិវាទ អាចប្តឹងទៅតុលាការ ឬអាជ្ញាកណ្តាល។
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>✅ បញ្ចប់បទបង្ហាញ ស្តីពីការរំលាយកិច្ចសន្យា</span>
+                <span>5 / 5</span>
+            </div>
+        </div>
     </div>
 </div>
-
-<!-- navigation buttons -->
-<div class="slide-counter" id="slideCounter">ស្លាយ 1 / 6</div>
-<div class="nav-control">
-    <button id="prevSlide" style="background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer;">◀ មុន</button>
-    <button id="nextSlide" style="background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer;">បន្ទាប់ ▶</button>
+<div class="nav-controls">
+    <button class="nav-btn" id="prevSlide">◀ មុន</button>
+    <span class="page-indicator" id="pageIndicator">ស្លាយ 1 នៃ 5</span>
+    <button class="nav-btn" id="nextSlide">បន្ទាប់ ▶</button>
 </div>
 
 <script>
-    const container = document.getElementById('presentationContainer');
+    const wrapper = document.getElementById('slidesWrapper');
     const slides = document.querySelectorAll('.slide');
-    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    const indicator = document.getElementById('pageIndicator');
     let currentIndex = 0;
+    const totalSlides = slides.length;
 
-    function updateCounter() {
-        counter.innerText = `ស្លាយ ${currentIndex+1} / ${slides.length}`;
+    function updateIndicator() {
+        indicator.innerText = `ស្លាយ ${currentIndex+1} នៃ ${totalSlides}`;
     }
 
-    function goToSlide(index) {
+    function scrollToSlide(index) {
         if (index < 0) index = 0;
-        if (index >= slides.length) index = slides.length - 1;
-        currentIndex = index;
-        const targetSlide = slides[currentIndex];
-        targetSlide.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        updateCounter();
+        if (index >= totalSlides) index = totalSlides - 1;
+        const slideElement = slides[index];
+        if (slideElement) {
+            slideElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            currentIndex = index;
+            updateIndicator();
+        }
     }
 
-    // detect scroll to update index after manual scroll
-    function observeScroll() {
-        let observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const idx = Array.from(slides).indexOf(entry.target);
-                    if (idx !== -1 && idx !== currentIndex) {
-                        currentIndex = idx;
-                        updateCounter();
-                    }
-                }
-            });
-        }, { threshold: 0.6 });
-        slides.forEach(slide => observer.observe(slide));
+    function getCurrentSlideIndex() {
+        const scrollTop = wrapper.scrollTop;
+        const slideHeight = 720;
+        let approx = Math.round(scrollTop / slideHeight);
+        if (approx < 0) approx = 0;
+        if (approx >= totalSlides) approx = totalSlides - 1;
+        return approx;
     }
-    observeScroll();
 
-    document.getElementById('prevSlide').addEventListener('click', () => {
-        goToSlide(currentIndex - 1);
-    });
-    document.getElementById('nextSlide').addEventListener('click', () => {
-        goToSlide(currentIndex + 1);
-    });
-
-    // keyboard arrows for presentation
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            goToSlide(currentIndex - 1);
-            e.preventDefault();
-        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-            goToSlide(currentIndex + 1);
-            e.preventDefault();
+    wrapper.addEventListener('scroll', () => {
+        // update current index based on scroll position
+        const newIndex = getCurrentSlideIndex();
+        if (newIndex !== currentIndex) {
+            currentIndex = newIndex;
+            updateIndicator();
         }
     });
 
-    // initial counter
-    updateCounter();
-    // ensure first slide is visible
-    setTimeout(() => {
-        slides[0].scrollIntoView({ block: 'start' });
-    }, 100);
+    prevBtn.addEventListener('click', () => {
+        let newIdx = currentIndex - 1;
+        if (newIdx >= 0) {
+            scrollToSlide(newIdx);
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        let newIdx = currentIndex + 1;
+        if (newIdx < totalSlides) {
+            scrollToSlide(newIdx);
+        }
+    });
+
+    // keyboard support
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevBtn.click();
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            nextBtn.click();
+        }
+    });
+
+    // initial sync
+    scrollToSlide(0);
 </script>
 </body>
-</html>
+    </html>
