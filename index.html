@@ -3,475 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ប្រទានកម្ម - បទបង្ហាញបែបវិជ្ជាជីវៈ</title>
+    <title>ភតិសន្យា | បទបង្ហាញបែប PowerPoint</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
-            background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Khmer OS Battambang', 'Inter', 'Segoe UI', system-ui, sans-serif;
-            padding: 32px;
-        }
-
-        @font-face {
-            font-family: 'Khmer OS Muol Light';
-            src: local('Khmer OS Muol Light'), local('KhmerOSMuolLight');
-            font-weight: normal;
-        }
-        @font-face {
-            font-family: 'Khmer OS Battambang';
-            src: local('Khmer OS Battambang'), local('KhmerOSBattambang');
-            font-weight: normal;
-        }
-
-        .presentation-container {
-            position: relative;
-            width: 1280px;
-            height: 720px;
-            background: #fff;
-            border-radius: 32px;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.1);
-            overflow: hidden;
-        }
-
-        .slides-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-            background: #f5f7fc;
-        }
-
-        .slides-wrapper::-webkit-scrollbar {
-            width: 8px;
-        }
-        .slides-wrapper::-webkit-scrollbar-track {
+            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'Inter', system-ui, -apple-system, sans-serif;
             background: #e2e8f0;
-            border-radius: 10px;
-        }
-        .slides-wrapper::-webkit-scrollbar-thumb {
-            background: #b91c1c;
-            border-radius: 10px;
-        }
-
-        .slide {
-            width: 100%;
-            height: 720px;
-            scroll-snap-align: start;
-            position: relative;
-            background: #ffffff;
-            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
         }
 
-        .slide-content {
-            padding: 48px 56px;
-            flex: 1;
-            background: linear-gradient(135deg, #fff 0%, #fefaf5 100%);
+        /* slide container — fixed size like PowerPoint 1280x720 */
+        .slide {
+            width: 1280px;
+            height: 720px;
+            margin: 30px auto;
+            border-radius: 32px;
+            background: #ffffff;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide:hover {
+            transform: scale(1.01);
+            box-shadow: 0 30px 55px -15px rgba(0, 0, 0, 0.45);
+        }
+
+        /* gradient / background decor */
+        .slide-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 100% 0%, rgba(230, 245, 255, 0.4) 0%, rgba(255,255,245,0.1) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* content area */
+        .content {
             position: relative;
             z-index: 2;
+            padding: 40px 48px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .slide-title {
-            font-family: 'Khmer OS Muol Light', 'Inter', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 600;
-            color: #a71e2e;
-            border-left: 7px solid #c5283e;
-            padding-left: 24px;
-            margin-bottom: 32px;
+        /* title styling */
+        .title {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Battambang', 'Inter', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1E3C72, #2A5298);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 24px;
+            border-left: 8px solid #2A5298;
+            padding-left: 28px;
             letter-spacing: -0.3px;
-            text-shadow: 0 1px 0 rgba(0,0,0,0.02);
         }
 
-        .slide-sub {
-            font-family: 'Khmer OS Battambang', sans-serif;
-            font-size: 1.2rem;
-            color: #2c3e4e;
-            margin-bottom: 28px;
+        .subtitle {
+            font-size: 1.4rem;
+            color: #2c3e66;
             font-weight: 500;
+            margin-bottom: 32px;
+            padding-left: 36px;
+            opacity: 0.85;
         }
 
+        /* card style for articles */
         .card-grid {
             display: flex;
-            gap: 28px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            gap: 28px;
+            margin-top: 16px;
         }
 
-        .law-card {
-            background: white;
+        .card {
+            background: rgba(248, 250, 252, 0.9);
+            backdrop-filter: blur(2px);
             border-radius: 28px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0,0,0,0.02);
             padding: 24px 28px;
-            flex: 1;
-            min-width: 220px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             transition: all 0.2s;
-            border: 1px solid rgba(199, 40, 62, 0.15);
+            flex: 1 1 280px;
         }
 
-        .law-card h3 {
+        .card h3 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 1.6rem;
-            color: #b22234;
-            margin-bottom: 16px;
+            font-size: 1.8rem;
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #bfd9ff;
+            display: inline-block;
+            padding-bottom: 6px;
         }
 
-        .law-card p, .law-card li {
-            font-family: 'Khmer OS Battambang', sans-serif;
+        .card p, .card li {
             font-size: 1rem;
-            line-height: 1.45;
-            color: #1f2e3a;
+            line-height: 1.55;
+            color: #1e293b;
+        }
+
+        .law-ref {
+            font-family: monospace;
+            background: #eef2ff;
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #1e40af;
+            margin-top: 12px;
+        }
+
+        .list-styled {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .list-styled li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .list-styled li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #2A5298;
+            font-weight: bold;
+        }
+
+        .two-columns {
+            display: flex;
+            gap: 32px;
+            margin: 16px 0;
+        }
+
+        .col {
+            flex: 1;
+            background: #f9fbfe;
+            border-radius: 24px;
+            padding: 24px;
         }
 
         .highlight {
-            background: #fff1f0;
-            padding: 18px 24px;
-            border-radius: 24px;
-            border-left: 5px solid #c5283e;
+            background: linear-gradient(120deg, #e6f0ff 0%, #ffffff 80%);
+            border-left: 6px solid #2A5298;
+            padding: 20px 28px;
+            border-radius: 20px;
             margin: 20px 0;
         }
 
-        .statute {
-            font-family: monospace;
-            background: #f0f2f5;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            color: #9b2c2c;
-        }
-
-        .deco-img {
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-            opacity: 0.1;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .slide-footer {
-            position: absolute;
-            bottom: 20px;
-            left: 56px;
-            right: 56px;
-            font-size: 0.75rem;
-            color: #7e8c8d;
-            border-top: 1px solid #e9ecef;
-            padding-top: 12px;
-            display: flex;
-            justify-content: space-between;
-            font-family: 'Khmer OS Battambang', monospace;
-            z-index: 3;
-            background: inherit;
-        }
-
-        .controls {
-            position: fixed;
-            bottom: 28px;
-            right: 32px;
-            display: flex;
-            gap: 12px;
-            z-index: 100;
-            background: rgba(10, 20, 30, 0.7);
-            backdrop-filter: blur(12px);
-            padding: 10px 18px;
-            border-radius: 60px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .ctrl-btn {
-            background: #1e293b;
-            border: none;
+        .badge-icon {
+            background: #1e3a5f;
             color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            border-radius: 40px;
+            width: 42px;
+            height: 42px;
+            border-radius: 60px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            font-family: monospace;
             font-weight: bold;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            font-size: 1.3rem;
+            margin-right: 14px;
         }
 
-        .ctrl-btn.copy-btn {
-            background: #a71e2e;
-            width: auto;
-            padding: 0 18px;
-            gap: 8px;
-            font-size: 1rem;
-            font-family: 'Khmer OS Battambang', sans-serif;
+        .footer-note {
+            font-size: 0.75rem;
+            color: #6c757d;
+            border-top: 1px solid #e2edf2;
+            padding-top: 20px;
+            margin-top: 24px;
+            text-align: center;
         }
 
-        .ctrl-btn:hover {
-            background: #c5283e;
-            transform: scale(1.02);
+        /* illustration icons */
+        .illustration {
+            text-align: right;
+            font-size: 5rem;
+            opacity: 0.2;
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .page-indicator {
-            background: #0f212e;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 1px;
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #cbd5e1;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c5282;
+            border-radius: 20px;
         }
 
         @media (max-width: 1320px) {
-            body { transform: scale(0.9); padding: 20px; }
-        }
-
-        .image-accent {
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23c5283e" width="48px" height="48px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>') no-repeat center;
-            background-size: contain;
-            opacity: 0.08;
-            width: 120px;
-            height: 120px;
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
+            .slide {
+                transform: scale(0.95);
+                margin: 20px auto;
+            }
+            body {
+                padding: 20px 0;
+            }
         }
     </style>
 </head>
 <body>
-<div class="presentation-container">
-    <div class="slides-wrapper" id="slidesWrapper">
-        <!-- SLIDE 1: និយមន័យ -->
-        <div class="slide" data-slide-idx="0">
-            <div class="slide-content">
-                <div class="slide-title">I. និយមន័យ ប្រទានកម្ម</div>
-                <div class="highlight">
-                    <p style="font-size:1.2rem; margin-bottom:12px;">📜 ប្រទានកម្ម សំដៅលើកិច្ចសន្យាមួយដែលត្រូវមានអានុភាព<br>ដោយភាគីម្ខាងបង្ហាញឆន្ទៈផ្ដល់ទៅឱ្យភាគីម្ខាងទៀតនូវទ្រព្យសម្បត្តិ</p>
-                    <p style="font-size:1.1rem;">✨ ដោយឥតយកថ្លៃ ហើយភាគីម្ខាងទៀតយល់ព្រមទទួល <span class="statute">(ម.៥៦៨)</span></p>
-                </div>
-                <div class="card-grid">
-                    <div class="law-card">
-                        <h3>⚖️ លក្ខណៈពិសេស</h3>
-                        <p>✓ កិច្ចសន្យាមិនយកថ្លៃថ្នូរ (មិនទាមទារតបតាវកាលិកតប)<br>✓ កិច្ចសន្យាឯកតោភាគី (ទាយកបំពេញកាតព្វកិច្ចតែម្នាក់ឯង)</p>
+
+    <!-- SLIDE 1: និយមន័យ + ការបង្កើតភតិសន្យា -->
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="content">
+            <div>
+                <div class="title">ភតិសន្យា</div>
+                <div class="subtitle">កិច្ចសន្យាជួល | មូលដ្ឋានគ្រឹះច្បាប់</div>
+                <div class="two-columns" style="margin-top: 20px;">
+                    <div class="col">
+                        <h3>📜 និយមន័យ</h3>
+                        <p style="margin-top: 14px;">កិច្ចសន្យាដែលភាគីម្ខាងឱ្យភាគីម្ខាងទៀតប្រើប្រាស់ និងអាស្រ័យផលពីវត្ថុណាមួយ ដោយយកថ្លៃ។ <span class="law-ref">មាត្រា ៥៩៦</span></p>
+                        <div class="highlight" style="margin-top: 28px;">
+                            <p>✍️ <strong>ការបង្កើត</strong> : ដោយការព្រមព្រៀងគ្នា (លាយលក្ខណ៍អក្សរ ឬផ្ទាល់មាត់)</p>
+                            <p>📌 លក្ខខណ្ឌសំខាន់ៗ៖ <br> វត្ថុជួល + ថ្លៃឈ្នួល + អំឡុងពេល</p>
+                        </div>
                     </div>
-                    <div class="law-card">
-                        <h3>🏛️ ធាតុផ្សំ</h3>
-                        <p>ការព្រមព្រៀងរវាងទាយក និងបដិគ្គាហក<br>ចំពោះអចលនវត្ថុតម្រូវឲ្យធ្វើជាលិខិតយថាភូត <span class="statute">(ម.៥៦៩, ៣៣៦ ក២)</span></p>
+                    <div class="col">
+                        <h3>🏛️ កម្មវត្ថុ</h3>
+                        <ul class="list-styled">
+                            <li>ចលនវត្ថុ (រថយន្ត, គ្រឿងម៉ាស៊ីន)</li>
+                            <li>អចលនវត្ថុ (ដី, ផ្ទះ, អគារ)</li>
+                        </ul>
+                        <h3 style="margin-top: 24px;">⏳ អំឡុងពេល</h3>
+                        <p>មានកំណត់ ឬគ្មានកំណត់ (ម.៥៩៩)<br> 
+                        អចលនវត្ថុចាប់ពី ១៥ឆ្នាំឡើង → សិទ្ធិជួលអចិន្ត្រៃយ៍</p>
+                        <div class="law-ref">ម.៥៩៩ ក២, ២៤៤</div>
                     </div>
                 </div>
-                <div class="image-accent" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"%23c5283e\"><path d=\"M50,15 L70,35 L65,60 L35,60 L30,35 Z\" opacity=\"0.2\"/><circle cx=\"50\" cy=\"45\" r=\"12\" fill=\"%23c5283e\" opacity=\"0.1\"/></svg>');"></div>
             </div>
-            <div class="slide-footer"><span>ប្រទានកម្ម · មូលដ្ឋានច្បាប់</span><span>១ / ៥</span></div>
+            <div class="footer-note">ផ្អែកតាមក្រមរដ្ឋប្បវេណី | ភតិសន្យា</div>
         </div>
-
-        <!-- SLIDE 2: លក្ខខណ្ឌ និងប្រភេទ -->
-        <div class="slide" data-slide-idx="1">
-            <div class="slide-content">
-                <div class="slide-title">II. លក្ខខណ្ឌ និងប្រភេទនៃប្រទានកម្ម</div>
-                <div class="card-grid" style="margin-bottom: 20px;">
-                    <div class="law-card"><h3>📌 លក្ខខណ្ឌជាមូលដ្ឋាន</h3><p>ត្រូវមានការព្រមព្រៀងរវាងទាយក និងបដិគ្គាហក។ ចំពោះប្រទានកម្មអចលនវត្ថុត្រូវធ្វើជាលិខិតយថាភូត (ម.៥៦៩)</p></div>
-                    <div class="law-card"><h3>⏳ ប្រទានកម្មមានកំណត់ពេល</h3><p>ទាយកផ្ដល់ទ្រព្យបន្តបន្ទាប់រហូតដល់កំណត់ណាមួយ (ម.៥៧៥)</p></div>
-                </div>
-                <div class="card-grid">
-                    <div class="law-card"><h3>⚖️ ប្រទានកម្មភ្ជាប់បន្ទុក</h3><p>បដិគ្គាហកត្រូវអនុវត្តកាតព្វកិច្ចជាក់លាក់។ បន្ទុកនេះមានតម្លៃមិនស្មើនឹងកាតព្វកិច្ចទាយក (ម.៥៧៦)</p></div>
-                    <div class="law-card"><h3>🕊️ ប្រទានកម្មដោយមូលហេតុមរណភាព</h3><p>មរណភាពរបស់ទាយកជាលក្ខខណ្ឌបង្កើតអានុភាព (ម.៥៧៧)</p><div class="statute" style="margin-top:12px;">ចំណាំ៖ ប្រទានកម្មនេះទាមទារការព្រមព្រៀង ខុសពីអច្ច័យទាន</div></div>
-                </div>
-            </div>
-            <div class="slide-footer"><span>ប្រភេទ · លក្ខខណ្ឌច្បាប់</span><span>២ / ៥</span></div>
-        </div>
-
-        <!-- SLIDE 3: ការលុបចោល (រំលោភ, ទីទាល់ក្រ, លិខិត) -->
-        <div class="slide" data-slide-idx="2">
-            <div class="slide-content">
-                <div class="slide-title">III. ការលុបចោលប្រទានកម្ម</div>
-                <div class="card-grid">
-                    <div class="law-card"><h3>⚠️ រំលោភលើទំនុកចិត្ត</h3><p>បដិគ្គាហកធ្វើអំពើរំលោភទំនុកចិត្តលើទាយក។ ទាយកអាចលុបចោលក្នុងអំឡុងពេល <span style="background:#c5283e20; padding:2px 8px; border-radius:30px; font-weight:bold;">៥ឆ្នាំ</span> គិតពីពេលកើតអំពើ (ម.៥៧១)</p></div>
-                    <div class="law-card"><h3>📉 សាភាពទីទាល់ក្ររបស់ទាយក</h3><p>ទាយកធ្លាក់ក្នុងភាពទីទាល់ក្រ មិនអាចរក្សាជីវភាពខ្លួនឯង និងបុគ្គលដែលមានកាតព្វកិច្ច។ លុបចោលបានក្នុងរយៈពេល <strong>៥ឆ្នាំ</strong> (ម.៥៧២)</p></div>
-                </div>
-                <div class="highlight" style="margin-top: 12px;">
-                    <h3 style="font-family: 'Khmer OS Muol Light'; font-size:1.3rem;">📄 លុបចោលដោយមិនបានធ្វើលាយល័ក្ខអក្សរ</h3>
-                    <p>បើមិនបានធ្វើជាលាយល័ក្ខអក្សរ ទាយកអាចលុបចោលដោយដកការបង្ហាញឆន្ទៈវិញបាន ប៉ុន្តែផ្នែកដែលបានអនុវត្តហើយមិនអាចដកបានទេ (ម.៥៧០)</p>
-                </div>
-                <div style="position: absolute; right: 40px; bottom: 50px; opacity: 0.1;">⚖️</div>
-            </div>
-            <div class="slide-footer"><span>មូលហេតុលុបចោល · វិធានការនីតិសាស្ត្រ</span><span>៣ / ៥</span></div>
-        </div>
-
-        <!-- SLIDE 4: អនុភាពនៃការលុបចោល + សងទ្រព្យ -->
-        <div class="slide" data-slide-idx="3">
-            <div class="slide-content">
-                <div class="slide-title">IV. អនុភាពនៃការលុបចោល</div>
-                <div class="highlight" style="margin-bottom: 24px;">
-                    <p style="font-size:1.2rem;">🔁 អានុភាពនៃការលុបចោលប្រទានកម្មសំដៅលើសកម្មភាពរបស់ទាយក ក្នុងការទាមទារឱ្យបដិគ្គាហកសងទ្រព្យសម្បត្តិដែលបានធ្វើប្រទានកម្មនោះមកវិញ</p>
-                    <div class="statute" style="margin-top: 16px; background:#2c3e4e20;">ផ្អែកតាមបញ្ញត្តិស្ដីពីសងនៃសេចក្ដីចម្រើនដោយឥតហេតុ (ម.៥៧៣)</div>
-                </div>
-                <div class="card-grid">
-                    <div class="law-card"><h3>📌 សិទ្ធិទាមទារមកវិញ</h3><p>នៅពេលលុបចោល ទាយកមានសិទ្ធិសុំសងវិញនូវទ្រព្យដែលបានផ្តល់ជាប្រទានកម្ម ដោយអនុវត្តតាមគោលការណ៍សងដោយឥតហេតុ។</p></div>
-                    <div class="law-card"><h3>🧾 ផលប៉ះពាល់ផ្លូវច្បាប់</h3><p>ការលុបចោលធ្វើឱ្យប្រទានកម្មបាត់អានុភាពតាំងពីដើម លើកលែងតែមានការព្រមព្រៀងផ្សេង។</p></div>
-                </div>
-            </div>
-            <div class="slide-footer"><span>អនុភាពតបសង្គម · ការអនុវត្ត</span><span>៤ / ៥</span></div>
-        </div>
-
-        <!-- SLIDE 5: សេចក្តីសង្ខេប + សារៈសំខាន់ -->
-        <div class="slide" data-slide-idx="4">
-            <div class="slide-content">
-                <div class="slide-title">V. សង្ខេបអំពីប្រទានកម្ម</div>
-                <div class="card-grid">
-                    <div class="law-card"><h3>🏺 លក្ខណៈសំខាន់</h3><p>ប្រទានកម្មជាកិច្ចសន្យាឥតការតបស្នង ឯកតោភាគី ទាមទារការព្រមព្រៀងច្បាស់លាស់។ អចលនវត្ថុត្រូវធ្វើលិខិតយថាភូតជាកំហិត។</p></div>
-                    <div class="law-card"><h3>⚡ ការលុបចោល</h3><p>អាចលុបចោលបានតាមមូលហេតុច្បាប់៖ រំលោភទំនុកចិត្ត, ទីទាល់ក្រ, កង្វះទម្រង់លាយល័ក្ខអក្សរ។ អាណត្តិ ៥ឆ្នាំ។</p></div>
-                </div>
-                <div class="highlight" style="background: #eef2ff;">
-                    <p style="font-weight: bold;">📢 ការយល់ដឹងពីប្រទានកម្ម ជួយការពារសិទ្ធិទាំងទាយក និងបដិគ្គាហក ឲ្យមានតម្លាភាពនឹងនីតិវិធី។</p>
-                </div>
-                <div style="font-family:'Khmer OS Battambang'; font-size:0.85rem; margin-top: 24px; text-align: right; opacity:0.7;">យោងតាមក្រមរដ្ឋប្បវេណី · មាត្រា ៥៦៨ ដល់ ៥៧៧</div>
-            </div>
-            <div class="slide-footer"><span>សង្ខេប · សារៈសំខាន់ច្បាប់</span><span>៥ / ៥</span></div>
-        </div>
+        <div class="illustration">🏢🔑</div>
     </div>
-</div>
 
-<div class="controls">
-    <button class="ctrl-btn" id="prevSlideBtn" title="ស្លាយមុន">◀</button>
-    <div class="page-indicator" id="pageIndicator">1 / 5</div>
-    <button class="ctrl-btn" id="nextSlideBtn" title="ស្លាយបន្ទាប់">▶</button>
-    <button class="ctrl-btn copy-btn" id="captureSlideBtn">📸 COPY ជារូបភាព</button>
-</div>
+    <!-- SLIDE 2: លក្ខខណ្ឌតតាំង + សិទ្ធិភតិបតី (ផ្នែកទី១) -->
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="content">
+            <div>
+                <div class="title">⚖️ លក្ខខណ្ឌតតាំង &amp; ករណីកិច្ចភតិបតី</div>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🛡️ តតាំងតតិយជន</h3>
+                        <p>ភតិកៈអាចតតាំងជាមួយភាគីទីបី បើមានការកាន់កាប់ជាក់ស្ដែងបន្តបន្ទាប់ <span class="law-ref">ម.៥៩៨ ក១</span></p>
+                        <p>ទាមទារប្រគល់វិញ ឬបញ្ឈប់ការរារាំង បើតតិយជនបំពាន <span class="law-ref">ម.៥៩៨ ក២</span></p>
+                    </div>
+                    <div class="card">
+                        <h3>🏠 ករណីកិច្ចភតិបតី</h3>
+                        <p>✅ ធានាឲ្យភតិកៈប្រើប្រាស់ដោយសេរី គ្មានការរំខាន (ម.៦០០)<br>
+                        ✅ ជួសជុលចាំបាច់៖ ការជ្រាបទឹកភ្លៀង ឬការខូចខាតធំ (ម.៦០២)<br>
+                        ✅ បើគ្មានលទ្ធភាពជួសជុល → បញ្ចុះថ្លៃជួល ឬបញ្ចប់កិច្ចសន្យា</p>
+                    </div>
+                </div>
+                <div class="highlight" style="margin-top: 8px;">
+                    <strong>🧰 ការជួសជុល & សោហ៊ុយចំណាយ</strong><br>
+                    - សោហ៊ុយចាំបាច់ → ភតិបតីត្រូវសងវិញ (ម.៦០៤ ក១)<br>
+                    - សោហ៊ុយបង្កើនតម្លៃ → សងវិញតាមការព្រមព្រៀង ឬតាមច្បាប់ (រយៈពេល១ឆ្នាំ)
+                </div>
+            </div>
+            <div class="footer-note">ភតិបតី = ម្ចាស់អ្នកឲ្យជួល | ភតិកៈ = អ្នកជួល</div>
+        </div>
+        <div class="illustration">🔧🏚️</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script>
-    (function() {
-        const wrapper = document.getElementById('slidesWrapper');
-        const slides = Array.from(document.querySelectorAll('.slide'));
-        const total = slides.length;
-        const indicator = document.getElementById('pageIndicator');
-        const prevBtn = document.getElementById('prevSlideBtn');
-        const nextBtn = document.getElementById('nextSlideBtn');
-        const captureBtn = document.getElementById('captureSlideBtn');
+    <!-- SLIDE 3: សិទ្ធិ និងករណីកិច្ចរបស់ភតិកៈ (ថ្លៃឈ្នួល, ប្រើប្រាស់, អនុប្បទាន) -->
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="content">
+            <div>
+                <div class="title">📋 សិទ្ធិ និងករណីកិច្ចភតិកៈ</div>
+                <div class="two-columns">
+                    <div class="col">
+                        <h3>💰 ការបង់ថ្លៃឈ្នួល</h3>
+                        <p>បង់តាមពេលកំណត់ (ម.៦១០)។ បើគ្មានកំណត់៖<br>
+                        - ចលនវត្ថុ / ផ្ទះ → រាល់ចុងខែ<br>
+                        - ដីធ្លី → រាល់ចុងឆ្នាំ<br>
+                        - វត្ថុតាមរដូវប្រមូលផល → បង់ក្រោយផុតរដូវ</p>
+                        <div class="law-ref">មាត្រា ៦១០ ក២</div>
+                    </div>
+                    <div class="col">
+                        <h3>🔄 សិទ្ធិប្រើប្រាស់</h3>
+                        <p>ប្រើប្រាស់តាមវិធីធម្មតា (ម.៦០០) និងថែរក្សាក្នុងនាមអ្នកគ្រប់គ្រងល្អ (ម.៦១៨)<br>
+                        ❌ មិនអាចជួលបន្ត ឬអនុប្បទានសិទ្ធិជួល បើគ្មានការយល់ព្រមពីភតិបតី (ម.៦០៨)</p>
+                    </div>
+                </div>
+                <div class="highlight">
+                    <strong>📉 សិទ្ធិបន្ថយថ្លៃជួល / រំលាយ</strong><br>
+                    - ករណីចំណូលថយ (ម.៦០៦)<br>
+                    - បាត់បង់ ឬវិនាសវត្ថុជួលមួយផ្នែក (ម.៦០៧)<br>
+                    - ការជួលបន្តមានស្វ័យប្រវត្តិបើគ្មានការជំទាស់ (ម.៦០៩)
+                </div>
+            </div>
+            <div class="footer-note">ភតិកៈត្រូវប្រើប្រាស់ដោយសុចរិត បើមិនដូច្នោះអាចត្រូវរំលាយកិច្ចសន្យា</div>
+        </div>
+        <div class="illustration">💸📑</div>
+    </div>
 
-        let activeIndex = 0;
-        let isScrollingProgrammatically = false;
+    <!-- SLIDE 4: ការរំលាយភតិសន្យា (គ្រប់មូលហេតុ) + វិធីសង្គ្រោះ -->
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="content">
+            <div>
+                <div class="title">🚪 ការរំលាយភតិសន្យា</div>
+                <div class="two-columns">
+                    <div class="col">
+                        <h3>📌 មូលហេតុបញ្ចប់</h3>
+                        <ul class="list-styled">
+                            <li>⏰ ផុតអំឡុងពេលកំណត់ (ម.៦១២)</li>
+                            <li>📢 ស្នើសុំរំលាយដោយគ្មានកំណត់ពេល៖ <br> 
+                            ចលនវត្ថុ → ១ថ្ងៃ, អគារ → ៣ខែ, ដីធ្លី → ១ឆ្នាំ (ម.៦១៥)</li>
+                            <li>💥 បាត់បង់/ខូចខាតធ្ងន់ធ្ងរ (ម.៦០៧) បើមានកំហុស → ទទួលខុសត្រូវលើសំណង (ម.៣៩៨)</li>
+                            <li>⚖️ មិនអនុវត្តកាតព្វកិច្ចធ្ងន់ធ្ងរ → រំលាយភ្លាម (ម.៤០៧)</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h3>🛠️ វិធីសង្គ្រោះ</h3>
+                        <p>បើកូនបំណុលមិនអនុវត្តកាតព្វកិច្ច ម្ចាស់បំណុលអាចប្រើវិធីសង្គ្រោះតាម <strong>មាត្រា ៣៩០</strong>។</p>
+                        <p>ការរំលាយភតិសន្យាគ្មានអានុភាពប្រតិសកម្ម (ម.៦១៧)។</p>
+                        <div class="highlight" style="margin-top: 20px; padding: 16px;">
+                            <p>🔁 <strong>ការបញ្ចប់ដោយសារផុតពេល</strong> : ភតិកៈសងវត្ថុជួលវិញ ហើយភតិបតីត្រូវបង់ថ្លៃចំណាយបង្កើនតម្លៃ។</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 8px; background:#eef2ff;">
+                    <p><strong>ចំណាំសំខាន់</strong> : បើភតិកៈបំពានប្រើប្រាស់មិនសុចរិត ឬជួលបន្តគ្មានការអនុញ្ញាត ភតិបតីអាចរំលាយកិច្ចសន្យាបាន (ម.៦០១ ក២, ម.៦០៨)។</p>
+                </div>
+            </div>
+            <div class="footer-note">អនុលោមតាមក្រមរដ្ឋប្បវេណី ភាគ៤ ស្តីពីភតិសន្យា</div>
+        </div>
+        <div class="illustration">⚖️🔚</div>
+    </div>
 
-        function updateIndicator() {
-            indicator.innerText = `${activeIndex+1} / ${total}`;
-        }
+    <!-- SLIDE 5: សង្ខេបចំណុចសំខាន់ + តារាងសិទ្ធិភាគី -->
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="content">
+            <div>
+                <div class="title">📌 សង្ខេបសិទ្ធិ &amp; កាតព្វកិច្ច</div>
+                <div class="two-columns" style="margin-top: 12px;">
+                    <div class="col">
+                        <h3>👑 ភតិបតី</h3>
+                        <ul class="list-styled">
+                            <li>ផ្តល់វត្ថុជួលតាមលក្ខខណ្ឌ</li>
+                            <li>ជួសជុលចាំបាច់ (ភាពជ្រាបទឹក ខូចខាតធំ)</li>
+                            <li>មិនរំខានការប្រើប្រាស់</li>
+                            <li>សងសោហ៊ុយបង្កើនតម្លៃ ឬចាំបាច់</li>
+                            <li>ទទួលបានថ្លៃឈ្នួល និងសិទ្ធិរំលាយក្នុងករណីបំពាន</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h3>🙋 ភតិកៈ</h3>
+                        <ul class="list-styled">
+                            <li>បង់ថ្លៃឈ្នួលទាន់ពេល</li>
+                            <li>ប្រើប្រាស់ដោយសុចរិត ថែរក្សាវត្ថុជួល</li>
+                            <li>មិនជួលបន្ត ឬផ្ទេរសិទ្ធិដោយគ្មានការអនុញ្ញាត</li>
+                            <li>ទាមទារបញ្ចុះថ្លៃ ឬរំលាយនៅពេលមានការខូចខាត/ចំណូលថយ</li>
+                            <li>អនុវត្តសិទ្ធិកាន់កាប់តាមផ្លូវច្បាប់</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight" style="margin-top: 20px; text-align: center;">
+                    <p>📖 <strong>ភតិសន្យាអចលនវត្ថុលើសពី១៥ឆ្នាំ</strong> → ចាត់ទុកជាសិទ្ធិជួលអចិន្ត្រៃយ៍ (ម.៥៩៩ ក៣, ២៤៤)</p>
+                    <p>រយៈពេលកំណត់សំខាន់ៗ៖ ការទាមទារសោហ៊ុយ (១ឆ្នាំ) ការជូនដំណឹងរំលាយតាមប្រភេទវត្ថុ</p>
+                </div>
+            </div>
+            <div class="footer-note">ភតិសន្យា — ឧបករណ៍ច្បាប់សំខាន់សម្រាប់សិទ្ធិប្រើប្រាស់ទ្រព្យសម្បត្តិ</div>
+        </div>
+        <div class="illustration">🏛️📜</div>
+    </div>
 
-        function scrollToSlide(index) {
-            if (index < 0) index = 0;
-            if (index >= total) index = total - 1;
-            if (index === activeIndex && Math.abs(wrapper.scrollTop - (index * 720)) < 2) return;
-            activeIndex = index;
-            isScrollingProgrammatically = true;
-            wrapper.scrollTo({
-                top: activeIndex * 720,
-                behavior: 'smooth'
+    <!-- SLIDE 6: បញ្ញត្តិពិសេស + ការអនុវត្តន៍ក្នុងករណីជាក់ស្តែង -->
+    <div class="slide">
+        <div class="slide-bg"></div>
+        <div class="content">
+            <div>
+                <div class="title">💡 បញ្ញត្តិពិសេស &amp; យន្តការអនុវត្ត</div>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🏘️ ការជួលអគារលំនៅឋាន</h3>
+                        <p>អនុលោមតាមច្បាប់ស្តីពីការជួល បើគ្មានកំណត់ពេល ភាគីត្រូវជូនដំណឹង ៣ខែជាមុន (ម.៦១៥)។ ការដាស់តឿនឱ្យបញ្ឈប់ការបំពានត្រូវកំណត់ពេលសមរម្យ។</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚙️ ការប្រើប្រាស់ខុសពីធម្មតា</h3>
+                        <p>បើភតិកៈប្រើប្រាស់វត្ថុជួលខុសពីគោលបំណង ឬធ្វើឱ្យខូចខាត ភតិបតីអាចរំលាយកិច្ចសន្យាបានភ្លាមៗ ដោយមិនចាំបាច់ផ្តល់ពេល (ម.៦០១ ក២ និង ម.៤០៧)។</p>
+                        <div class="law-ref">សិទ្ធិក្នុងការកាន់កាប់ជាក់ស្តែង (ម.៥៩៨, ២៣៦)</div>
+                    </div>
+                </div>
+                <div class="highlight" style="margin-top: 10px;">
+                    <p>🔍 <strong>ការតតាំងជាមួយតតិយជន</strong> : ភតិកៈអាចប្តឹងទាមទារដោយផ្អែកលើការកាន់កាប់ជាក់ស្តែង (ម.៥៩៨ ក២) និងប្រើប្រាស់សិទ្ធិតាមមាត្រា ២៣៦ ដើម្បីទប់ស្កាត់ការរំខាន។</p>
+                </div>
+            </div>
+            <div class="footer-note">ភតិសន្យាមិនត្រឹមតែជាកិច្ចសន្យាឯកជន ប៉ុន្តែមានឥទ្ធិពលចំពោះបុគ្គលទីបី បើមានការកាន់កាប់ជាក់ស្តែង</div>
+        </div>
+        <div class="illustration">🏢⚡</div>
+    </div>
+
+    <script>
+        // smooth snap behavior is natural with CSS scroll-snap-type
+        // optional: keyboard navigation (left/right) but we use vertical scroll like PPT
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            const currentSlide = Array.from(slides).find(slide => {
+                const rect = slide.getBoundingClientRect();
+                return rect.top >= -100 && rect.top <= 200;
             });
-            setTimeout(() => { isScrollingProgrammatically = false; }, 400);
-            updateIndicator();
-        }
-
-        function onScrollEnd() {
-            let newIndex = Math.round(wrapper.scrollTop / 720);
-            if (newIndex < 0) newIndex = 0;
-            if (newIndex >= total) newIndex = total - 1;
-            if (newIndex !== activeIndex) {
-                activeIndex = newIndex;
-                updateIndicator();
-            }
-        }
-
-        wrapper.addEventListener('scroll', () => {
-            if (!isScrollingProgrammatically) {
-                requestAnimationFrame(() => {
-                    let idx = Math.round(wrapper.scrollTop / 720);
-                    if (idx !== activeIndex && idx >=0 && idx < total) {
-                        activeIndex = idx;
-                        updateIndicator();
-                    }
-                });
+            let index = currentSlide ? Array.from(slides).indexOf(currentSlide) : -1;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (index < slides.length - 1) {
+                    slides[index + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    e.preventDefault();
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (index > 0) {
+                    slides[index - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    e.preventDefault();
+                }
             }
         });
-
-        let scrollEndTimer;
-        wrapper.addEventListener('scroll', () => {
-            clearTimeout(scrollEndTimer);
-            scrollEndTimer = setTimeout(() => {
-                onScrollEnd();
-            }, 100);
-        });
-
-        prevBtn.addEventListener('click', () => scrollToSlide(activeIndex - 1));
-        nextBtn.addEventListener('click', () => scrollToSlide(activeIndex + 1));
-
-        async function captureCurrentSlide() {
-            const currentSlide = slides[activeIndex];
-            if (!currentSlide) return;
-            const originalOverflow = currentSlide.style.overflow;
-            currentSlide.style.overflow = 'hidden';
-            try {
-                const canvas = await html2canvas(currentSlide, {
-                    scale: 2.5,
-                    backgroundColor: '#ffffff',
-                    logging: false,
-                    useCORS: false,
-                    allowTaint: false
-                });
-                canvas.toBlob(async (blob) => {
-                    try {
-                        await navigator.clipboard.write([
-                            new ClipboardItem({
-                                [blob.type]: blob
-                            })
-                        ]);
-                        const originalBtnText = captureBtn.innerHTML;
-                        captureBtn.innerHTML = '✅ ចម្លងរួច!';
-                        setTimeout(() => {
-                            captureBtn.innerHTML = originalBtnText;
-                        }, 1500);
-                    } catch (err) {
-                        console.warn('clipboard write failed', err);
-                        alert('សូមចុចអនុញ្ញាតឲ្យចម្លងរូបភាព ឬប្រើប្រាស់ប្រព័ន្ធ screenshot ។');
-                        const link = document.createElement('a');
-                        link.download = `slide_${activeIndex+1}.png`;
-                        link.href = canvas.toDataURL();
-                        link.click();
-                    }
-                }, 'image/png');
-            } catch (e) {
-                console.error(e);
-                alert('មិនអាចចម្លងរូបភាពបានទេ សូមព្យាយាមម្តងទៀត។');
-            } finally {
-                currentSlide.style.overflow = originalOverflow;
+        // ensure first slide visible on load
+        window.addEventListener('load', () => {
+            if (window.location.hash === '') {
+                document.querySelector('.slide').scrollIntoView({ block: 'start' });
             }
-        }
-
-        captureBtn.addEventListener('click', captureCurrentSlide);
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') scrollToSlide(activeIndex - 1);
-            if (e.key === 'ArrowRight') scrollToSlide(activeIndex + 1);
         });
-
-        wrapper.style.scrollSnapType = 'y mandatory';
-        scrollToSlide(0);
-        updateIndicator();
-    })();
-</script>
+    </script>
 </body>
-                </html>
+</html>
