@@ -2,135 +2,476 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
-    
-    <!-- ✅ សំខាន់សម្រាប់ Mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>បណ្ណាល័យច្បាប់</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ប្រទានកម្ម - បទបង្ហាញបែបវិជ្ជាជីវៈ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: "Khmer OS Battambang", serif;
-            background: #f4f6f9;
-            padding-bottom: 60px;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
         }
 
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
+        body {
+            background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Khmer OS Battambang', 'Inter', 'Segoe UI', system-ui, sans-serif;
+            padding: 32px;
+        }
+
+        @font-face {
+            font-family: 'Khmer OS Muol Light';
+            src: local('Khmer OS Muol Light'), local('KhmerOSMuolLight');
+            font-weight: normal;
+        }
+        @font-face {
+            font-family: 'Khmer OS Battambang';
+            src: local('Khmer OS Battambang'), local('KhmerOSBattambang');
+            font-weight: normal;
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            background: #fff;
+            border-radius: 32px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .slides-wrapper {
             width: 100%;
-            background: #0d1b2a;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            z-index: 1000;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            background: #f5f7fc;
         }
 
-        /* Container */
-        .container {
-            max-width: 800px;
-            margin: 100px auto 40px;
-            padding: 20px;
+        .slides-wrapper::-webkit-scrollbar {
+            width: 8px;
         }
-
-        /* File Card */
-        .file-card {
-            background: white;
-            border-left: 6px solid #caa75d;
-            margin-bottom: 15px;
-            padding: 18px;
+        .slides-wrapper::-webkit-scrollbar-track {
+            background: #e2e8f0;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: 0.3s;
+        }
+        .slides-wrapper::-webkit-scrollbar-thumb {
+            background: #b91c1c;
+            border-radius: 10px;
         }
 
-        .file-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-        }
-
-        .file-card a {
-            text-decoration: none;
-            color: #0d1b2a;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .file-card span {
-            display: block;
-            margin-top: 5px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        /* Footer */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
+        .slide {
             width: 100%;
-            background: #0d1b2a;
-            color: #ccc;
-            text-align: center;
-            padding: 12px;
-            font-size: 14px;
+            height: 720px;
+            scroll-snap-align: start;
+            position: relative;
+            background: #ffffff;
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
         }
 
-        /* 📱 Responsive Mobile */
-        @media (max-width: 600px) {
+        .slide-content {
+            padding: 48px 56px;
+            flex: 1;
+            background: linear-gradient(135deg, #fff 0%, #fefaf5 100%);
+            position: relative;
+            z-index: 2;
+        }
 
-            .header {
-                font-size: 18px;
-                padding: 15px;
-            }
+        .slide-title {
+            font-family: 'Khmer OS Muol Light', 'Inter', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 600;
+            color: #a71e2e;
+            border-left: 7px solid #c5283e;
+            padding-left: 24px;
+            margin-bottom: 32px;
+            letter-spacing: -0.3px;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.02);
+        }
 
-            .container {
-                margin: 110px 10px 70px;
-                padding: 10px;
-            }
+        .slide-sub {
+            font-family: 'Khmer OS Battambang', sans-serif;
+            font-size: 1.2rem;
+            color: #2c3e4e;
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
 
-            .file-card {
-                padding: 12px;
-            }
+        .card-grid {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
 
-            .file-card a {
-                font-size: 16px;
-            }
+        .law-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0,0,0,0.02);
+            padding: 24px 28px;
+            flex: 1;
+            min-width: 220px;
+            transition: all 0.2s;
+            border: 1px solid rgba(199, 40, 62, 0.15);
+        }
+
+        .law-card h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 1.6rem;
+            color: #b22234;
+            margin-bottom: 16px;
+        }
+
+        .law-card p, .law-card li {
+            font-family: 'Khmer OS Battambang', sans-serif;
+            font-size: 1rem;
+            line-height: 1.45;
+            color: #1f2e3a;
+        }
+
+        .highlight {
+            background: #fff1f0;
+            padding: 18px 24px;
+            border-radius: 24px;
+            border-left: 5px solid #c5283e;
+            margin: 20px 0;
+        }
+
+        .statute {
+            font-family: monospace;
+            background: #f0f2f5;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #9b2c2c;
+        }
+
+        .deco-img {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .slide-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 56px;
+            right: 56px;
+            font-size: 0.75rem;
+            color: #7e8c8d;
+            border-top: 1px solid #e9ecef;
+            padding-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Khmer OS Battambang', monospace;
+            z-index: 3;
+            background: inherit;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 28px;
+            right: 32px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+            background: rgba(10, 20, 30, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 10px 18px;
+            border-radius: 60px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .ctrl-btn {
+            background: #1e293b;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: monospace;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .ctrl-btn.copy-btn {
+            background: #a71e2e;
+            width: auto;
+            padding: 0 18px;
+            gap: 8px;
+            font-size: 1rem;
+            font-family: 'Khmer OS Battambang', sans-serif;
+        }
+
+        .ctrl-btn:hover {
+            background: #c5283e;
+            transform: scale(1.02);
+        }
+
+        .page-indicator {
+            background: #0f212e;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1320px) {
+            body { transform: scale(0.9); padding: 20px; }
+        }
+
+        .image-accent {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23c5283e" width="48px" height="48px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>') no-repeat center;
+            background-size: contain;
+            opacity: 0.08;
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
         }
     </style>
 </head>
 <body>
+<div class="presentation-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+        <!-- SLIDE 1: និយមន័យ -->
+        <div class="slide" data-slide-idx="0">
+            <div class="slide-content">
+                <div class="slide-title">I. និយមន័យ ប្រទានកម្ម</div>
+                <div class="highlight">
+                    <p style="font-size:1.2rem; margin-bottom:12px;">📜 ប្រទានកម្ម សំដៅលើកិច្ចសន្យាមួយដែលត្រូវមានអានុភាព<br>ដោយភាគីម្ខាងបង្ហាញឆន្ទៈផ្ដល់ទៅឱ្យភាគីម្ខាងទៀតនូវទ្រព្យសម្បត្តិ</p>
+                    <p style="font-size:1.1rem;">✨ ដោយឥតយកថ្លៃ ហើយភាគីម្ខាងទៀតយល់ព្រមទទួល <span class="statute">(ម.៥៦៨)</span></p>
+                </div>
+                <div class="card-grid">
+                    <div class="law-card">
+                        <h3>⚖️ លក្ខណៈពិសេស</h3>
+                        <p>✓ កិច្ចសន្យាមិនយកថ្លៃថ្នូរ (មិនទាមទារតបតាវកាលិកតប)<br>✓ កិច្ចសន្យាឯកតោភាគី (ទាយកបំពេញកាតព្វកិច្ចតែម្នាក់ឯង)</p>
+                    </div>
+                    <div class="law-card">
+                        <h3>🏛️ ធាតុផ្សំ</h3>
+                        <p>ការព្រមព្រៀងរវាងទាយក និងបដិគ្គាហក<br>ចំពោះអចលនវត្ថុតម្រូវឲ្យធ្វើជាលិខិតយថាភូត <span class="statute">(ម.៥៦៩, ៣៣៦ ក២)</span></p>
+                    </div>
+                </div>
+                <div class="image-accent" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"%23c5283e\"><path d=\"M50,15 L70,35 L65,60 L35,60 L30,35 Z\" opacity=\"0.2\"/><circle cx=\"50\" cy=\"45\" r=\"12\" fill=\"%23c5283e\" opacity=\"0.1\"/></svg>');"></div>
+            </div>
+            <div class="slide-footer"><span>ប្រទានកម្ម · មូលដ្ឋានច្បាប់</span><span>១ / ៥</span></div>
+        </div>
 
-<div class="header">
-    ⚖️ បណ្ណាល័យឯកសារច្បាប់
+        <!-- SLIDE 2: លក្ខខណ្ឌ និងប្រភេទ -->
+        <div class="slide" data-slide-idx="1">
+            <div class="slide-content">
+                <div class="slide-title">II. លក្ខខណ្ឌ និងប្រភេទនៃប្រទានកម្ម</div>
+                <div class="card-grid" style="margin-bottom: 20px;">
+                    <div class="law-card"><h3>📌 លក្ខខណ្ឌជាមូលដ្ឋាន</h3><p>ត្រូវមានការព្រមព្រៀងរវាងទាយក និងបដិគ្គាហក។ ចំពោះប្រទានកម្មអចលនវត្ថុត្រូវធ្វើជាលិខិតយថាភូត (ម.៥៦៩)</p></div>
+                    <div class="law-card"><h3>⏳ ប្រទានកម្មមានកំណត់ពេល</h3><p>ទាយកផ្ដល់ទ្រព្យបន្តបន្ទាប់រហូតដល់កំណត់ណាមួយ (ម.៥៧៥)</p></div>
+                </div>
+                <div class="card-grid">
+                    <div class="law-card"><h3>⚖️ ប្រទានកម្មភ្ជាប់បន្ទុក</h3><p>បដិគ្គាហកត្រូវអនុវត្តកាតព្វកិច្ចជាក់លាក់។ បន្ទុកនេះមានតម្លៃមិនស្មើនឹងកាតព្វកិច្ចទាយក (ម.៥៧៦)</p></div>
+                    <div class="law-card"><h3>🕊️ ប្រទានកម្មដោយមូលហេតុមរណភាព</h3><p>មរណភាពរបស់ទាយកជាលក្ខខណ្ឌបង្កើតអានុភាព (ម.៥៧៧)</p><div class="statute" style="margin-top:12px;">ចំណាំ៖ ប្រទានកម្មនេះទាមទារការព្រមព្រៀង ខុសពីអច្ច័យទាន</div></div>
+                </div>
+            </div>
+            <div class="slide-footer"><span>ប្រភេទ · លក្ខខណ្ឌច្បាប់</span><span>២ / ៥</span></div>
+        </div>
+
+        <!-- SLIDE 3: ការលុបចោល (រំលោភ, ទីទាល់ក្រ, លិខិត) -->
+        <div class="slide" data-slide-idx="2">
+            <div class="slide-content">
+                <div class="slide-title">III. ការលុបចោលប្រទានកម្ម</div>
+                <div class="card-grid">
+                    <div class="law-card"><h3>⚠️ រំលោភលើទំនុកចិត្ត</h3><p>បដិគ្គាហកធ្វើអំពើរំលោភទំនុកចិត្តលើទាយក។ ទាយកអាចលុបចោលក្នុងអំឡុងពេល <span style="background:#c5283e20; padding:2px 8px; border-radius:30px; font-weight:bold;">៥ឆ្នាំ</span> គិតពីពេលកើតអំពើ (ម.៥៧១)</p></div>
+                    <div class="law-card"><h3>📉 សាភាពទីទាល់ក្ររបស់ទាយក</h3><p>ទាយកធ្លាក់ក្នុងភាពទីទាល់ក្រ មិនអាចរក្សាជីវភាពខ្លួនឯង និងបុគ្គលដែលមានកាតព្វកិច្ច។ លុបចោលបានក្នុងរយៈពេល <strong>៥ឆ្នាំ</strong> (ម.៥៧២)</p></div>
+                </div>
+                <div class="highlight" style="margin-top: 12px;">
+                    <h3 style="font-family: 'Khmer OS Muol Light'; font-size:1.3rem;">📄 លុបចោលដោយមិនបានធ្វើលាយល័ក្ខអក្សរ</h3>
+                    <p>បើមិនបានធ្វើជាលាយល័ក្ខអក្សរ ទាយកអាចលុបចោលដោយដកការបង្ហាញឆន្ទៈវិញបាន ប៉ុន្តែផ្នែកដែលបានអនុវត្តហើយមិនអាចដកបានទេ (ម.៥៧០)</p>
+                </div>
+                <div style="position: absolute; right: 40px; bottom: 50px; opacity: 0.1;">⚖️</div>
+            </div>
+            <div class="slide-footer"><span>មូលហេតុលុបចោល · វិធានការនីតិសាស្ត្រ</span><span>៣ / ៥</span></div>
+        </div>
+
+        <!-- SLIDE 4: អនុភាពនៃការលុបចោល + សងទ្រព្យ -->
+        <div class="slide" data-slide-idx="3">
+            <div class="slide-content">
+                <div class="slide-title">IV. អនុភាពនៃការលុបចោល</div>
+                <div class="highlight" style="margin-bottom: 24px;">
+                    <p style="font-size:1.2rem;">🔁 អានុភាពនៃការលុបចោលប្រទានកម្មសំដៅលើសកម្មភាពរបស់ទាយក ក្នុងការទាមទារឱ្យបដិគ្គាហកសងទ្រព្យសម្បត្តិដែលបានធ្វើប្រទានកម្មនោះមកវិញ</p>
+                    <div class="statute" style="margin-top: 16px; background:#2c3e4e20;">ផ្អែកតាមបញ្ញត្តិស្ដីពីសងនៃសេចក្ដីចម្រើនដោយឥតហេតុ (ម.៥៧៣)</div>
+                </div>
+                <div class="card-grid">
+                    <div class="law-card"><h3>📌 សិទ្ធិទាមទារមកវិញ</h3><p>នៅពេលលុបចោល ទាយកមានសិទ្ធិសុំសងវិញនូវទ្រព្យដែលបានផ្តល់ជាប្រទានកម្ម ដោយអនុវត្តតាមគោលការណ៍សងដោយឥតហេតុ។</p></div>
+                    <div class="law-card"><h3>🧾 ផលប៉ះពាល់ផ្លូវច្បាប់</h3><p>ការលុបចោលធ្វើឱ្យប្រទានកម្មបាត់អានុភាពតាំងពីដើម លើកលែងតែមានការព្រមព្រៀងផ្សេង។</p></div>
+                </div>
+            </div>
+            <div class="slide-footer"><span>អនុភាពតបសង្គម · ការអនុវត្ត</span><span>៤ / ៥</span></div>
+        </div>
+
+        <!-- SLIDE 5: សេចក្តីសង្ខេប + សារៈសំខាន់ -->
+        <div class="slide" data-slide-idx="4">
+            <div class="slide-content">
+                <div class="slide-title">V. សង្ខេបអំពីប្រទានកម្ម</div>
+                <div class="card-grid">
+                    <div class="law-card"><h3>🏺 លក្ខណៈសំខាន់</h3><p>ប្រទានកម្មជាកិច្ចសន្យាឥតការតបស្នង ឯកតោភាគី ទាមទារការព្រមព្រៀងច្បាស់លាស់។ អចលនវត្ថុត្រូវធ្វើលិខិតយថាភូតជាកំហិត។</p></div>
+                    <div class="law-card"><h3>⚡ ការលុបចោល</h3><p>អាចលុបចោលបានតាមមូលហេតុច្បាប់៖ រំលោភទំនុកចិត្ត, ទីទាល់ក្រ, កង្វះទម្រង់លាយល័ក្ខអក្សរ។ អាណត្តិ ៥ឆ្នាំ។</p></div>
+                </div>
+                <div class="highlight" style="background: #eef2ff;">
+                    <p style="font-weight: bold;">📢 ការយល់ដឹងពីប្រទានកម្ម ជួយការពារសិទ្ធិទាំងទាយក និងបដិគ្គាហក ឲ្យមានតម្លាភាពនឹងនីតិវិធី។</p>
+                </div>
+                <div style="font-family:'Khmer OS Battambang'; font-size:0.85rem; margin-top: 24px; text-align: right; opacity:0.7;">យោងតាមក្រមរដ្ឋប្បវេណី · មាត្រា ៥៦៨ ដល់ ៥៧៧</div>
+            </div>
+            <div class="slide-footer"><span>សង្ខេប · សារៈសំខាន់ច្បាប់</span><span>៥ / ៥</span></div>
+        </div>
+    </div>
 </div>
 
-<div class="container">
-
-    <div class="file-card">
-        <a href="law1.pdf" target="_blank">📄 ច្បាប់ស៊ីវិល</a>
-        <span>ឯកសារផ្លូវការ PDF</span>
-    </div>
-
-    <div class="file-card">
-        <a href="law2.pdf" target="_blank">📄 ច្បាប់ព្រហ្មទណ្ឌ</a>
-        <span>ឯកសារសិក្សា</span>
-    </div>
-
-    <div class="file-card">
-        <a href="law3.pdf" target="_blank">📄 ច្បាប់ការងារ</a>
-        <span>មេរៀនសង្ខេប</span>
-    </div>
-
+<div class="controls">
+    <button class="ctrl-btn" id="prevSlideBtn" title="ស្លាយមុន">◀</button>
+    <div class="page-indicator" id="pageIndicator">1 / 5</div>
+    <button class="ctrl-btn" id="nextSlideBtn" title="ស្លាយបន្ទាប់">▶</button>
+    <button class="ctrl-btn copy-btn" id="captureSlideBtn">📸 COPY ជារូបភាព</button>
 </div>
 
-<div class="footer">
-    © 2026 Law Library | Designed for TEVA
-</div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+    (function() {
+        const wrapper = document.getElementById('slidesWrapper');
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const total = slides.length;
+        const indicator = document.getElementById('pageIndicator');
+        const prevBtn = document.getElementById('prevSlideBtn');
+        const nextBtn = document.getElementById('nextSlideBtn');
+        const captureBtn = document.getElementById('captureSlideBtn');
 
+        let activeIndex = 0;
+        let isScrollingProgrammatically = false;
+
+        function updateIndicator() {
+            indicator.innerText = `${activeIndex+1} / ${total}`;
+        }
+
+        function scrollToSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= total) index = total - 1;
+            if (index === activeIndex && Math.abs(wrapper.scrollTop - (index * 720)) < 2) return;
+            activeIndex = index;
+            isScrollingProgrammatically = true;
+            wrapper.scrollTo({
+                top: activeIndex * 720,
+                behavior: 'smooth'
+            });
+            setTimeout(() => { isScrollingProgrammatically = false; }, 400);
+            updateIndicator();
+        }
+
+        function onScrollEnd() {
+            let newIndex = Math.round(wrapper.scrollTop / 720);
+            if (newIndex < 0) newIndex = 0;
+            if (newIndex >= total) newIndex = total - 1;
+            if (newIndex !== activeIndex) {
+                activeIndex = newIndex;
+                updateIndicator();
+            }
+        }
+
+        wrapper.addEventListener('scroll', () => {
+            if (!isScrollingProgrammatically) {
+                requestAnimationFrame(() => {
+                    let idx = Math.round(wrapper.scrollTop / 720);
+                    if (idx !== activeIndex && idx >=0 && idx < total) {
+                        activeIndex = idx;
+                        updateIndicator();
+                    }
+                });
+            }
+        });
+
+        let scrollEndTimer;
+        wrapper.addEventListener('scroll', () => {
+            clearTimeout(scrollEndTimer);
+            scrollEndTimer = setTimeout(() => {
+                onScrollEnd();
+            }, 100);
+        });
+
+        prevBtn.addEventListener('click', () => scrollToSlide(activeIndex - 1));
+        nextBtn.addEventListener('click', () => scrollToSlide(activeIndex + 1));
+
+        async function captureCurrentSlide() {
+            const currentSlide = slides[activeIndex];
+            if (!currentSlide) return;
+            const originalOverflow = currentSlide.style.overflow;
+            currentSlide.style.overflow = 'hidden';
+            try {
+                const canvas = await html2canvas(currentSlide, {
+                    scale: 2.5,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    useCORS: false,
+                    allowTaint: false
+                });
+                canvas.toBlob(async (blob) => {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({
+                                [blob.type]: blob
+                            })
+                        ]);
+                        const originalBtnText = captureBtn.innerHTML;
+                        captureBtn.innerHTML = '✅ ចម្លងរួច!';
+                        setTimeout(() => {
+                            captureBtn.innerHTML = originalBtnText;
+                        }, 1500);
+                    } catch (err) {
+                        console.warn('clipboard write failed', err);
+                        alert('សូមចុចអនុញ្ញាតឲ្យចម្លងរូបភាព ឬប្រើប្រាស់ប្រព័ន្ធ screenshot ។');
+                        const link = document.createElement('a');
+                        link.download = `slide_${activeIndex+1}.png`;
+                        link.href = canvas.toDataURL();
+                        link.click();
+                    }
+                }, 'image/png');
+            } catch (e) {
+                console.error(e);
+                alert('មិនអាចចម្លងរូបភាពបានទេ សូមព្យាយាមម្តងទៀត។');
+            } finally {
+                currentSlide.style.overflow = originalOverflow;
+            }
+        }
+
+        captureBtn.addEventListener('click', captureCurrentSlide);
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') scrollToSlide(activeIndex - 1);
+            if (e.key === 'ArrowRight') scrollToSlide(activeIndex + 1);
+        });
+
+        wrapper.style.scrollSnapType = 'y mandatory';
+        scrollToSlide(0);
+        updateIndicator();
+    })();
+</script>
 </body>
-</html>
+                </html>
