@@ -3,501 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>បទបង្ហាញ៖ ប្លង់ប្រទានកម្ម | កិច្ចសន្យាបរិច្ចាគ</title>
+    <title>វិវាទការងារ - ប្រាក់ធនានុគ្រោះ | បទបង្ហាញ</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* slight improvement for slide feel, text still selectable */
+            user-select: none; /* slightly better presentation feel, but text selectable if needed */
         }
 
         body {
-            background: #1e2a3a; /* dark professional background like presentation mode */
+            background: #1e2a3a; /* dark background like presentation mode */
+            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'Moul', 'Battambang', 'Khmer OS', system-ui, -apple-system, 'Segoe UI', sans-serif;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'Segoe UI', 'system-ui', sans-serif;
-            padding: 24px 0 40px 0;
-        }
-
-        /* Slides container */
-        .presentation-container {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 32px;
-            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Individual slide card — fixed dimensions 1280x720 like PowerPoint */
+        /* container holds slides with snapping scroll */
+        .presentation-container {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            background: #2c3e2f; /* deep hotel-green hint */
+            box-shadow: 0 25px 40px rgba(0,0,0,0.3);
+        }
+
+        /* each slide : fixed size 1280x720 centered, sharp corners */
         .slide {
             width: 1280px;
-            min-width: 1280px;
             height: 720px;
-            background: #ffffff;
-            border-radius: 0px;   /* strictly square corners as required: "ត្រង់ចែងនៃស្លាយត្រូវជ្រុង មិនមែនមូលទេ" */
-            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0,0,0,0.05);
+            margin: 0 auto;
+            scroll-snap-align: start;
+            background: white;
+            border-radius: 0px; /* straight corners like PowerPoint */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             position: relative;
-            overflow: hidden;      /* content stays within slide boundaries */
-            transition: transform 0.2s ease, box-shadow 0.2s;
-            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', sans-serif;
+            overflow-y: auto; /* in case content overflow, but we control via padding */
+            overflow-x: hidden;
+            transition: all 0.2s;
+            background-size: cover;
+            background-position: center;
         }
 
-        .slide:hover {
-            transform: scale(1.01);
-            box-shadow: 0 30px 50px -12px rgba(0, 0, 0, 0.45);
-        }
-
-        /* inner scroll for slides? but we require FULL slide content visible without cutting? 
-           But requirement: "ស្លាយនីមួយៗត្រូវបង្ហាញឲ្យបានពេញស្លាយ" means the whole content layout 
-           fits inside 1280x720, so we use padding and auto overflow-y: auto only if needed? 
-           To ensure no cutting, we allow vertical scroll inside slide ONLY if content overflows, but design ensures it fits. 
-           We'll set overflow-y: auto to guarantee readability but preserve dimensions. 
-           But requirement wants full slide visible without hiding content because of overflow? 
-           We'll carefully design content height inside 720px, using flex column and compact spacing.
-        */
-        .slide-content {
-            padding: 40px 48px;
-            height: 100%;
-            width: 100%;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            background: linear-gradient(145deg, #fff 0%, #fefaf5 100%);
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .slide-content::-webkit-scrollbar {
+        /* custom scroll inside slide if needed */
+        .slide::-webkit-scrollbar {
             width: 6px;
-            background: #e2e8f0;
         }
-        .slide-content::-webkit-scrollbar-thumb {
-            background: #b91c1c;
+        .slide::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        .slide::-webkit-scrollbar-thumb {
+            background: #b87333;
             border-radius: 8px;
         }
 
-        /* Khmer typography */
-        h1, h2, .title-khmer {
-            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Khmer OS Battambang', sans-serif;
-            font-weight: normal;
+        /* inner content wrapper with decent spacing */
+        .slide-content {
+            padding: 40px 50px;
+            min-height: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
-        .slide-title {
-            font-size: 2.5rem;
-            color: #9b2c2c;
-            border-left: 8px solid #c53030;
-            padding-left: 24px;
-            margin-bottom: 28px;
-            letter-spacing: -0.3px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #7f1a1a, #b91c1c);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: none;
-        }
-
-        /* to keep consistent contrast, alternative solid fallback */
-        .alt-title {
-            background: none;
-            color: #9b2c2c;
-        }
-
-        .subheading {
-            font-size: 1.3rem;
+        /* title style: Khmer OS Muol Light */
+        .title {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', 'Khmer OS', serif;
+            font-size: 2.6rem;
             font-weight: bold;
-            color: #2d3748;
-            margin: 20px 0 12px 0;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 6px;
+            color: #b45f2b;
+            border-left: 8px solid #b45f2b;
+            padding-left: 20px;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            letter-spacing: -0.5px;
         }
 
-        .khmer-text {
-            font-size: 1.05rem;
-            line-height: 1.55;
-            color: #1a202c;
-            margin-bottom: 12px;
+        .subtitle {
+            font-family: 'Khmer OS Battambang', sans-serif;
+            font-size: 1.2rem;
+            color: #4a627a;
+            margin-bottom: 25px;
+            font-weight: 500;
         }
 
-        .definition-box {
-            background: #fff7ed;
-            padding: 20px 28px;
-            border-radius: 0px;
-            border-left: 6px solid #c53030;
+        /* card style for legal content */
+        .card-law {
+            background: #fef7e8;
+            border-left: 6px solid #b87333;
+            padding: 18px 22px;
             margin: 20px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            border-radius: 0px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .grid-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 15px 0;
-        }
-
-        .card-item {
-            background: #f9fafc;
-            padding: 16px 20px;
-            border: 1px solid #edf2f7;
-            transition: all 0.2s;
-        }
-
-        .badge {
-            font-family: 'Khmer OS Muol Light', monospace;
+        .highlight {
+            background: #fff0db;
             font-weight: bold;
-            color: #b91c1c;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            display: inline-block;
-        }
-
-        .law-ref {
-            font-size: 0.85rem;
-            color: #4a5568;
-            background: #f1f5f9;
-            display: inline-block;
+            color: #b45f2b;
             padding: 2px 8px;
-            border-radius: 20px;
-            margin-top: 6px;
-        }
-
-        footer-slide {
-            margin-top: auto;
-            font-size: 0.7rem;
-            text-align: right;
-            color: #94a3b8;
-            padding-top: 20px;
-        }
-
-        /* bullet styling */
-        ul, .custom-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .custom-list li {
-            margin-bottom: 12px;
-            padding-left: 24px;
-            position: relative;
-        }
-        .custom-list li::before {
-            content: "•";
-            color: #c53030;
-            font-weight: bold;
-            font-size: 1.4rem;
-            position: absolute;
-            left: 0;
-            top: -4px;
-        }
-
-        /* page number simulation */
-        .page-number {
-            text-align: right;
-            font-size: 0.75rem;
-            color: #cbd5e1;
-            margin-top: 18px;
+            border-radius: 0px;
             font-family: monospace;
         }
 
-        /* BUTTON PANEL */
-        .controls {
-            position: sticky;
-            bottom: 20px;
-            margin-top: 30px;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            background: #1e293bcc;
-            backdrop-filter: blur(10px);
-            padding: 12px 28px;
-            border-radius: 60px;
-            z-index: 100;
-            border: 1px solid #475569;
+        .law-article {
+            font-family: 'Khmer OS Battambang', monospace;
+            background: #f2efe0;
+            padding: 12px 18px;
+            border-radius: 0px;
+            border-left: 4px solid #8b5a2b;
+            margin: 15px 0;
+            font-size: 0.95rem;
         }
 
-        button {
-            background: #2d3748;
+        .grid-2col {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .col {
+            flex: 1;
+            background: #faf9f5;
+            padding: 18px;
+            border-top: 2px solid #e0cfb0;
+        }
+
+        .footer-note {
+            margin-top: auto;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #8f8a7a;
+            border-top: 1px solid #e2dccd;
+            padding-top: 12px;
+        }
+
+        /* decorative images / icons background */
+        .bg-icon {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            opacity: 0.08;
+            pointer-events: none;
+            font-size: 80px;
+        }
+
+        button.nav-control {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            background: #2c3e50cc;
+            backdrop-filter: blur(8px);
             border: none;
             color: white;
+            padding: 12px 18px;
+            border-radius: 40px;
             font-family: 'Khmer OS Battambang', sans-serif;
             font-size: 1rem;
-            padding: 10px 28px;
-            border-radius: 40px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 12px;
         }
-
-        button:hover {
-            background: #b91c1c;
+        button.nav-control:hover {
+            background: #b87333;
             transform: scale(1.02);
         }
-
-        .screenshot-info {
-            margin: 20px auto 0;
-            text-align: center;
-            color: #cbd5e6;
-            font-size: 0.8rem;
-            background: #0f172a80;
-            padding: 8px 18px;
+        .slide-counter {
+            position: fixed;
+            bottom: 28px;
+            left: 30px;
+            background: #000000aa;
+            color: white;
+            padding: 6px 16px;
             border-radius: 40px;
+            font-family: monospace;
+            font-size: 1rem;
+            z-index: 1000;
             backdrop-filter: blur(4px);
+            pointer-events: none;
         }
-
-        /* make responsive: ensure container scroll horizontally if needed but slides fixed */
-        @media (max-width: 1320px) {
-            body {
-                overflow-x: auto;
-                align-items: center;
+        /* responsive: make container scroll with fixed slide dimensions */
+        @media (max-width: 1300px) {
+            .slide {
+                transform: scale(0.98);
+                margin: 0 auto;
             }
-            .presentation-container {
-                padding: 0 20px;
-            }
+        }
+        /* ensure container scroll snapping works */
+        .presentation-container {
+            scrollbar-width: thin;
+        }
+        .big-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #b87333;
+        }
+        hr {
+            margin: 15px 0;
+            border-color: #ebdbc0;
         }
     </style>
-    <!-- include html2canvas for screenshot feature -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-
-<div class="presentation-container" id="slidesContainer">
-    <!-- SLIDE 1: និយមន័យ + លក្ខណៈទូទៅ -->
-    <div class="slide" id="slide1">
+<div class="presentation-container" id="presentationContainer">
+    <!-- SLIDE 1: អង្គហេតុ និងភាគី -->
+    <div class="slide">
         <div class="slide-content">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <div class="slide-title">ប្លង់ប្រទានកម្ម</div>
-                <span class="law-ref">មាត្រា ៥៦៨ - ៥៧៧</span>
+            <div class="title">វិវាទការងារ៖ ប្រាក់ធនានុគ្រោះ</div>
+            <div class="subtitle">ក្រុមហ៊ុន ផូគីថរ៉ា រីសត & ស៉្បា (ខេមបូឌា) vs តំណាងកម្មករនិយោជិត</div>
+            <div class="grid-2col">
+                <div class="col">
+                    <strong>🏨 ភាគីនិយោជក</strong><br>
+                    ក្រុមហ៊ុន ផូគីថរ៉ា រីសត & ស៉្បា (ខេមបូឌា)<br>
+                    អ្នកតំណាង៖ លោក ហុង ម៉េង, លោក ជា មីនា (HR)<br>
+                    <hr>
+                    <strong>📌 ប្រាក់ធនានុគ្រោះ ៧.៥% កាត់ទុកបម្រុងបែកបាក់</strong>
+                </div>
+                <div class="col">
+                    <strong>👥 ភាគីកម្មករនិយោជិត (ដើមចោទ)</strong><br>
+                    តំណាងដោយ៖ លោក សុខ ហេង (មេធាវី), លោក សៅ សាយ, លោក ផូ វណ្ណា, លោក សុខ វិសាល, លោកស្រី រឿង ណាវី និងក្រុមការងារ។<br>
+                    <span class="highlight">ទាមទារ៖ បើកប្រាក់ធនានុគ្រោះទាំងអស់ បញ្ឈប់ការកាត់ ៧.៥%</span>
+                </div>
             </div>
-            <div class="definition-box">
-                <div class="badge">និយមន័យ</div>
-                <div class="khmer-text" style="font-size:1.1rem;"><strong>ប្រទានកម្ម</strong> សំដៅទៅលើកិច្ចសន្យាមួយ ដែលត្រូវមានអនុភាព ដោយភាគីម្ខាងបង្ហាញឆន្ទៈផ្តល់ទៅឱ្យភាគីម្ខាងទៀតនូវទ្រព្យសម្បត្តិ ដោយឥតយកថ្លៃ ហើយភាគីម្ខាងទៀតយល់ព្រមទទួល។ <span style="color:#b91c1c;">(ម.៥៦៨)</span></div>
-                <div class="khmer-text" style="margin-top:8px;">✓ កិច្ចសន្យាមិនយកថ្លៃថាតប (មិនទាមទារតបកាលិកតប) <br>✓ កិច្ចសន្យាឯកតោភាគី (ទាយកបំពេញកាតព្វកិច្ចតែម្ខាងឯង)</div>
+            <div class="card-law">
+                <span style="font-weight: bold;">⚖️ សង្ខេបវិវាទ៖</span> និយោជកបានកាត់ប្រាក់ធនានុគ្រោះ ៧.៥% ពីចំនួនសរុប ដើម្បីបម្រុងទុកចំណាយលើការបែកបាក់ ខូចខាតទ្រព្យសម្បត្តិសណ្ឋាគារ។ ភាគីកម្មករអះអាងថាការកាត់នេះមិនស្របច្បាប់ និងគ្មានការយល់ព្រមពីកម្មករ។
             </div>
-            <div class="subheading">លក្ខណៈនៃប្រទានកម្ម</div>
-            <div class="khmer-text">តម្រូវឱ្យមានការព្រមព្រៀងរវាង <strong>ទាយក</strong> និង <strong>បដិគ្គាហក</strong>។ ចំពោះប្រទានកម្មអចលនវត្ថុ ត្រូវធ្វើជាលិខិតយថាភូត (ម.៥៦៩, ៣៣៦ ក២)។</div>
-            <div class="page-number">១ / ៥</div>
+            <div class="law-article">
+                📜 កិច្ចព្រមព្រៀងឆ្នាំ២០១៨ ចំណុចទី៣ បានឲ្យដក ៧.៥% សម្រាប់បម្រុងបែកបាក់។ ប៉ុន្តែតំណាងកម្មករបច្ចុប្បន្នទាមទារឲ្យបញ្ឈប់ ព្រោះវាជាការកាត់ឯកតោភាគី និងផ្ទុយនឹងគោលការណ៍ច្បាប់ការងារ។
+            </div>
+            <div class="footer-note">អាជ្ញាកណ្តាល សំណុំរឿងលេខ ០០៥/២៥ | សណ្ឋាគារ ផូគីថរ៉ា</div>
         </div>
+        <div class="bg-icon">🏨⚖️</div>
     </div>
 
-    <!-- SLIDE 2: ប្រភេទនៃប្រទានកម្ម (៣ ប្រភេទ) + ចំណាំ -->
-    <div class="slide" id="slide2">
+    <!-- SLIDE 2: ច្បាប់សំខាន់ៗ - មាត្រា ១៣៤ និង ១៣៦ -->
+    <div class="slide">
         <div class="slide-content">
-            <div class="slide-title alt-title">ប្រភេទនៃប្រទានកម្ម</div>
-            <div class="grid-list">
-                <div class="card-item">
-                    <div class="badge">១. ប្រទានកម្មមានកំណត់ពេលវេលា</div>
-                    <div class="khmer-text">ទាយកផ្តល់ទ្រព្យសម្បត្តិជាប្រយោជន៍បណ្តោះអាសន្នរហូតដល់កំណត់ណាមួយ (ម.៥៧៥)</div>
-                </div>
-                <div class="card-item">
-                    <div class="badge">២. ប្រទានកម្មដែលមានភារកិច្ច</div>
-                    <div class="khmer-text">បដិគ្គាហកត្រូវអនុវត្តកាតព្វកិច្ចជាក់លាក់ដើម្បីទទួលបានប្រទានកម្ម។ កាតព្វកិច្ចនេះមានតម្លៃមិនលើសពីកាតព្វកិច្ចរបស់ទាយក (ម.៥៧៦)</div>
-                </div>
-                <div class="card-item">
-                    <div class="badge">៣. ប្រទានកម្មដោយមូលហេតុមរណភាព</div>
-                    <div class="khmer-text">មរណភាពរបស់ទាយកជាលក្ខខណ្ឌបង្កើតអនុភាព (ម.៥៧៧)</div>
-                </div>
+            <div class="title">មូលដ្ឋានច្បាប់ការងារ</div>
+            <div class="subtitle">ប្រាក់ធនានុគ្រោះ ជាកម្រៃសម្រាប់បុគ្គលិក</div>
+            <div class="law-article">
+                <strong>មាត្រា ១៣៤</strong> ៖ ប្រាក់ធនានុគ្រោះ គឺជាកំរៃដែលអតិថិជនឲ្យទៅបុគ្គលិក និយោជកមានតួនាទីប្រមូល និងបើកឲ្យបុគ្គលិកដែលទាក់ទងនឹងអតិថិជនវិញទាំងអស់។
             </div>
-            <div class="definition-box" style="background:#fef2e8; margin-top:6px;">
-                <div class="badge">ចំណាំសំខាន់</div>
-                <div class="khmer-text">ប្រទានកម្មដោយមូលហេតុមរណភាព ទាមទារការព្រមព្រៀងគ្នារវាងទាយក និងបដិគ្គាហក។ រីឯអច្ឆាទានមិនតម្រូវឱ្យមានការព្រមព្រៀងគ្នាទេ មានតែការបង្ហាញឆន្ទៈរបស់ភាគីម្ខាងប៉ុណ្ណោះ។</div>
+            <div class="law-article">
+                <strong>មាត្រា ១៣៦</strong> ៖ របៀបចែកចាយប្រាក់ធនានុគ្រោះ ត្រូវកំណត់តាមទម្លាប់វិជ្ជាជីវៈ ឬប្រកាសក្រសួង ប៉ុន្តែ <span class="highlight">មិនមានការអនុញ្ញាតឲ្យកាត់ទុកជាប្រាក់បម្រុងបែកបាក់ទេ</span>។
             </div>
-            <div class="page-number">២ / ៥</div>
+            <div class="card-law">
+                💡 ក្រុមប្រឹក្សាអាជ្ញាកណ្តាលបានបកស្រាយថា ប្រាក់ធនានុគ្រោះត្រូវបើក ១០០% ជូនកម្មករនិយោជិត (សំណុំរឿង សណ្ឋាគារកាំបូឌីយ៉ាណា និងសំណុំរឿងមុនៗ)។
+            </div>
+            <div class="grid-2col">
+                <div class="col">✅ <strong>គោលការណ៍៖</strong> ធនានុគ្រោះ = ផ្នែកមួយនៃប្រាក់ឈ្នួល ជារង្វាន់លើកទឹកចិត្ត។</div>
+                <div class="col">⛔ <strong>ការកាត់ជាសមាមាត្ររួម</strong> មិនមានចែងក្នុងច្បាប់ និងមិនស្របតាមវិញ្ញាសាការងារ។</div>
+            </div>
+            <div class="footer-note">យោង៖ ច្បាប់ស្តីពីការងារ ១៩៩៧, សេចក្តីបង្គាប់អាជ្ញាកណ្តាលលេខ ០៩៦/១៩</div>
         </div>
+        <div class="bg-icon">📜⚖️</div>
     </div>
 
-    <!-- SLIDE 3: ការលុបចាងប្រទានកម្ម (៣ មូលហេតុ) -->
-    <div class="slide" id="slide3">
+    <!-- SLIDE 3: មាត្រា ១២៧ ការកាត់ប្រាក់ឈ្នួល និងការទទួលខុសត្រូវផ្ទាល់ -->
+    <div class="slide">
         <div class="slide-content">
-            <div class="slide-title alt-title">ការលុបចាងប្រទានកម្ម</div>
-            <div class="khmer-text" style="margin-bottom: 20px;">ទាយកមានសិទ្ធិលុបចាងកិច្ចសន្យាប្រទានកម្មក្នុងករណីដូចខាងក្រោម៖</div>
-            <ul class="custom-list">
-                <li><strong>អំពើគ្រេចលាភលើទំនុកចិត្ត</strong> – បដិគ្គាហកប្រព្រឹត្តអំពើគ្រេចលាភទំនុកចិត្តលើទាយក។ ទាយកអាចលុបចាងក្នុងរយៈពេល ៥ឆ្នាំ គិតពីពេលកើតហេតុ (ម.៥៧១)។</li>
-                <li><strong>សាភាពទីទាល់ក្ររបស់ទាយក</strong> – ទាយកធ្លាក់ក្នុងស្ថានភាពទីទាល់ក្រ មិនអាចរក្សាជីវភាពខ្លួនឯង និងអ្នកមានកាតព្វកិច្ច។ អាចលុបចាងក្នុងរយៈពេល ៥ឆ្នាំគិតពីពេលអនុវត្ត (ម.៥៧២)។</li>
-                <li><strong>ប្រទានកម្មមិនបានធ្វើជាលាយលក្ខណ៍អក្សរ</strong> – ប្រសិនមិនបានធ្វើជាលាយលក្ខណ៍អក្សរទេ ទាយកអាចដកការបង្ហាញឆន្ទៈវិញបាន លើកលែងតែផ្នែកដែលបានអនុវត្តរួចហើយ (ម.៥៧០)។</li>
-            </ul>
-            <div class="definition-box" style="margin-top: 14px;">
-                <div class="badge">ពេលវេលាកំណត់</div>
-                <div class="khmer-text">សិទ្ធិលុបចាងដោយអំពើគ្រេចលាភ និងភាពទីទាល់ក្រ ត្រូវអនុវត្តក្នុងរយៈពេល ៥ឆ្នាំ។ បើមិនបានប្រើសិទ្ធិទេ អាចនឹងបាត់បង់សិទ្ធិ។</div>
+            <div class="title">ការកាត់ប្រាក់ឈ្នួលតាមច្បាប់</div>
+            <div class="subtitle">មាត្រា ១២៧ នៃច្បាប់ការងារ</div>
+            <div class="law-article">
+                <strong>មាត្រា ១២៧</strong>៖ និយោជកអាចកាត់ប្រាក់ឈ្នួលបានតែក្នុងករណី៖ <br>
+                ១. គ្រឿងប្រដាប់ការងារមិនប្រគល់វិញ <br>
+                ២. វត្ថុធាតុដែលកម្មករទទួលបន្ទុកប្រើប្រាស់ខូចខាតដោយផ្ទាល់ <br>
+                ៣. ប្រាក់បានបើកមុន និង ៤. អាគារូបដ្ឋាន។ <br>
+                <span class="highlight">ការកាត់ត្រូវធ្វើជាលក្ខណៈបុគ្គល មិនមែនកាត់ជាសមាមាត្រពីកម្មករទាំងអស់ទេ។</span>
             </div>
-            <div class="page-number">៣ / ៥</div>
+            <div class="card-law">
+                🔍 និយោជកបានកាត់ ៧.៥% ពីប្រាក់ធនានុគ្រោះសរុប ជាសមាមាត្ររួម ទោះបីកម្មករណាមិនពាក់ព័ន្ធនឹងការបែកបាក់ក៏ដោយ។ នេះផ្ទុយនឹងមាត្រា ១២៧ និងគោលការណ៍ទទួលខុសត្រូវផ្ទាល់ខ្លួន។
+            </div>
+            <div class="grid-2col">
+                <div class="col"><span style="font-size:1.8rem;">⚖️</span><br>ការកាត់ប្រាក់ធនានុគ្រោះដោយគ្មានកំហុសផ្ទាល់ គឺខុសច្បាប់។</div>
+                <div class="col"><span style="font-size:1.8rem;">📊</span><br>អនុវត្តកាត់ ៧.៥% ពីគ្រប់ផ្នែក → ប៉ះពាល់ប្រាក់ចំណូលយុត្តិធម៌។</div>
+            </div>
+            <div class="footer-note">សេចក្តីបង្គាប់អាជ្ញាកណ្តាលលេខ ០៤២/១៦ បានចែងថា ប្រាក់ធនានុគ្រោះជាផ្នែកប្រាក់ឈ្នួល</div>
         </div>
+        <div class="bg-icon">💼🔨</div>
     </div>
 
-    <!-- SLIDE 4: អនុភាពនៃការលុបចាង + សំណង -->
-    <div class="slide" id="slide4">
+    <!-- SLIDE 4: ការអនុវត្តឯកតោភាគី & កង្វះការយល់ព្រម -->
+    <div class="slide">
         <div class="slide-content">
-            <div class="slide-title alt-title">អនុភាពនៃការលុបចាង</div>
-            <div style="display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
-                <div style="flex:1; background: #f1f5f9; padding: 20px;">
-                    <div class="badge" style="font-size:1.4rem;">ផលវិបាកចំពោះទាយក</div>
-                    <div class="khmer-text">ទាយកអាចទាមទារឱ្យបដិគ្គាហកសងទ្រព្យសម្បត្តិដែលបានធ្វើប្រទានកម្មនោះមកវិញ។ តាមមាត្រា ៥៧៣ ការលុបចាងសំដៅលើសកម្មភាពរបស់ទាយក រួមទាំងការទាមទារសងវត្ថុប្រទានវិញដោយឥតហេតុ។</div>
-                </div>
-                <div style="flex:1; background: #fff3e6; padding: 20px;">
-                    <div class="badge" style="font-size:1.4rem;">ករណីដែលមិនអាចដកហូត</div>
-                    <div class="khmer-text">ប្រសិនបើប្រទានកម្មត្រូវបានអនុវត្តរួចហើយ និងមិនមានករណីគ្រេចលាភឬទីទាល់ក្រ ទាយកមិនអាចលុបចាងបានទេ។ សម្រាប់ប្រទានកម្មដែលបានធ្វើជាលាយលក្ខណ៍អក្សរត្រឹមត្រូវ ការលុបចាងត្រូវផ្អែកតាមលក្ខខណ្ឌច្បាប់ប៉ុណ្ណោះ។</div>
-                </div>
+            <div class="title">ការអនុវត្តឯកតោភាគី</div>
+            <div class="subtitle">មិនមានកិច្ចព្រមព្រៀងពីកម្មករនិយោជិតបច្ចុប្បន្ន</div>
+            <div class="law-article">
+                និយោជកអះអាងថាអនុវត្តតាមកិច្ចព្រមព្រៀងឆ្នាំ២០១៨ និងបទបញ្ជាផ្ទៃក្នុង។ ប៉ុន្តែ៖
+                <ul style="margin-left: 25px; margin-top: 12px;">
+                    <li>កិច្ចព្រមព្រៀងចាស់មិនអាចអនុវត្តជាអចិន្ត្រៃយ៍ដោយគ្មានការពិនិត្យឡើងវិញ</li>
+                    <li>កម្មករភាគច្រើនមិនបានយល់ព្រមឲ្យកាត់ប្រាក់ធនានុគ្រោះសម្រាប់បម្រុងបែកបាក់</li>
+                    <li>ប្រការ ១៨ នៃបញ្ជាផ្ទៃក្នុងគ្រាន់តែកំណត់ការទទួលខុសត្រូវផ្ទាល់ មិនមែនកាត់ជារួម</li>
+                </ul>
             </div>
-            <div class="khmer-text" style="background:#e9f0f9; padding: 16px; border-left: 4px solid #c53030;">
-                <strong>សេចក្តីសង្ខេប៖</strong> អនុភាពនៃការលុបចាងប្រទានកម្មគឺធ្វើឱ្យកិច្ចសន្យាបាត់អនុភាពតាំងពីដើម ហើយបដិគ្គាហកត្រូវប្រគល់ទ្រព្យសម្បត្តិវិញ លើកលែងតែមានករណីដែលច្បាប់ហាមឃាត់។
+            <div class="card-law" style="background: #fff3e0;">
+                ✋ <strong>សេចក្តីសម្រេចរបស់ក្រុមប្រឹក្សាអាជ្ញាកណ្តាល៖</strong> បង្គាប់ឲ្យនិយោជកបើកប្រាក់ធនានុគ្រោះទាំងអស់ និងបញ្ឈប់ការកាត់ ៧.៥% ចាប់ពីថ្ងៃចេញបង្គាប់។
             </div>
-            <div class="page-number">៤ / ៥</div>
+            <div class="footer-note">អនុលោមតាមប្រការ ៣៤ នៃប្រកាស ០៩៩ សកបឃ. ស្តីពីអំណាចក្រុមប្រឹក្សាអាជ្ញាកណ្តាល</div>
         </div>
+        <div class="bg-icon">📢⚙️</div>
     </div>
 
-    <!-- SLIDE 5: សេចក្តីសន្និដ្ឋាន និងគោលការណ៍សំខាន់ៗ -->
-    <div class="slide" id="slide5">
+    <!-- SLIDE 5: ហេតុផលច្បាប់លម្អិត + ការវិភាគ -->
+    <div class="slide">
         <div class="slide-content">
-            <div class="slide-title alt-title">សេចក្តីសន្និដ្ឋាន</div>
-            <div style="display: flex; flex-direction: column; justify-content: center; min-height: 380px;">
-                <div class="definition-box" style="background: linear-gradient(105deg, #fff5eb, #ffffff);">
-                    <div class="badge">ខ្លឹមសារសំខាន់ៗ</div>
-                    <ul class="custom-list" style="margin-top: 8px;">
-                        <li>ប្រទានកម្មជាកិច្ចសន្យាផ្តល់ទ្រព្យដោយមិនយកថ្លៃតប មានលក្ខណៈឯកតោភាគី។</li>
-                        <li>តម្រូវឱ្យមានការព្រមព្រៀងគ្នារវាងទាយក និងបដិគ្គាហក លើកលែងអច្ឆាទាន។</li>
-                        <li>ប្រទានកម្មអាចលុបចាងបានតាមមូលហេតុ៖ អំពើគ្រេចលាភ, ភាពទីទាល់ក្រ, ឬកង្វះទម្រង់ជាលាយលក្ខណ៍អក្សរ។</li>
-                        <li>អនុភាពលុបចាងផ្តល់សិទ្ធិទាមទារសងទ្រព្យសម្បត្តិវិញ ក្នុងរយៈពេលកំណត់ ៥ឆ្នាំ។</li>
-                    </ul>
+            <div class="title">ហេតុផលតុលាការការងារ</div>
+            <div class="subtitle">ហេតុអ្វីការកាត់ ៧.៥% មិនត្រឹមត្រូវ?</div>
+            <div class="grid-2col">
+                <div class="col">
+                    <span class="big-number">❶</span> ប្រាក់ធនានុគ្រោះជាកម្រៃលើកទឹកចិត្តផ្ទាល់ដល់បុគ្គលិកផ្តល់សេវា។ និយោជកគ្រាន់តែជាអ្នកប្រមូល។
                 </div>
-                <div class="khmer-text" style="text-align: center; margin-top: 25px; font-style: italic;">"ប្រទានកម្មគឺជាសកម្មភាពច្បាប់ដ៏សប្បុរស ប៉ុន្តែត្រូវយល់ដឹងពីសិទ្ធិ និងករណីលុបចាង ដើម្បីធានាសុចរិតភាពរបស់ភាគី"</div>
+                <div class="col">
+                    <span class="big-number">❷</span> មិនមានបទប្បញ្ញត្តិណាអនុញ្ញាតឲ្យកាត់ទុកជាប្រាក់បម្រុងសម្រាប់ការបែកបាក់ពីធនានុគ្រោះទាំងអស់។
+                </div>
             </div>
-            <div class="page-number">៥ / ៥</div>
+            <div class="law-article">
+                <strong>ការបកស្រាយរបស់អាជ្ញាកណ្តាល (សំណុំរឿង ផូគីថរ៉ា មុនៗ)៖</strong> “ប្រាក់ធនានុគ្រោះត្រូវចាត់ទុកជាផ្នែកមួយនៃប្រាក់ឈ្នួល ហើយត្រូវបើក ១០០% ជូនកម្មករ។ ការកាត់ជាសមាមាត្ររួមគឺគ្មានមូលដ្ឋានច្បាប់”។
+            </div>
+            <div class="card-law">
+                🧾 <strong>សេចក្តីសន្និដ្ឋាន៖</strong> ការកាត់ប្រាក់ធនានុគ្រោះ ៧.៥% សម្រាប់បម្រុងបែកបាក់ គឺមិនស្របតាមមាត្រា ១៣៤, ១៣៦, និង ១២៧ នៃច្បាប់ការងារ។ និយោជកត្រូវប្រគល់ប្រាក់ធនានុគ្រោះទាំងស្រុង និងបញ្ឈប់ការកាត់ដោយគ្មានការយល់ព្រម។
+            </div>
+            <div class="footer-note">គោលការណ៍យុត្តិធម៌ និងការពារសិទ្ធិកម្មករ</div>
         </div>
+        <div class="bg-icon">⚖️📑</div>
+    </div>
+
+    <!-- SLIDE 6: ការសម្រេចចុងក្រោយ និងការអនុវត្ត -->
+    <div class="slide">
+        <div class="slide-content">
+            <div class="title">សេចក្តីសម្រេចអាជ្ញាកណ្តាល</div>
+            <div class="subtitle">បង្គាប់ឲ្យអនុវត្តជាបន្ទាន់</div>
+            <div class="law-article" style="background:#e8f0e7;">
+                <span style="font-size:1.5rem;">📌</span> <strong>ចំណុចវិវាទ៖</strong> បញ្ជាឲ្យនិយោជកបើកប្រាក់ធនានុគ្រោះទាំងអស់ដែលប្រមូលបានពីអតិថិជនជូនកម្មករនិយោជិត និងបញ្ឈប់ការកាត់ ៧.៥% នៃប្រាក់ធនានុគ្រោះសរុប។
+            </div>
+            <div class="grid-2col">
+                <div class="col" style="background:#fff5ea;">
+                    <span style="font-size:2rem;">✅</span><br>
+                    <strong>ត្រូវអនុវត្តចាប់ពីថ្ងៃចេញសេចក្តីបង្គាប់</strong><br>
+                    ក្រុមហ៊ុនត្រូវចែកចាយប្រាក់ធនានុគ្រោះពេញលេញ និងឈប់កាត់ទុកប្រាក់បម្រុងបែកបាក់។
+                </div>
+                <div class="col" style="background:#f0f2f5;">
+                    <span style="font-size:2rem;">🏛️</span><br>
+                    <strong>យុត្តិការណ៍៖</strong> ការកាត់ប្រាក់គួរធ្វើឡើងតាមបុគ្គលដែលបង្កការខូចខាតប៉ុណ្ណោះ មិនមែនកាត់ពីកម្មករទាំងអស់ឡើយ។
+                </div>
+            </div>
+            <div class="card-law" style="margin-top: 15px;">
+                💼 <strong>ផលប៉ះពាល់វិជ្ជមាន៖</strong> ការសម្រេចនេះពង្រឹងទំនុកចិត្ត និងសមធម៌ក្នុងទំនាក់ទំនងការងារ ការពារប្រាក់ចំណូលកម្មករពីការកាត់ដោយគ្មានមូលដ្ឋាន។
+            </div>
+            <div class="footer-note">ឯកសារយោង៖ ច្បាប់ការងារ ១៩៩៧, ប្រកាស ០៩៩, សំណុំរឿងអាជ្ញាកណ្តាលលេខ ០០៥/២៥</div>
+        </div>
+        <div class="bg-icon">🏆⚖️</div>
     </div>
 </div>
 
-<div class="controls">
-    <button id="prevSlideBtn">◀ ស្លាយមុន</button>
-    <button id="nextSlideBtn">ស្លាយបន្ទាប់ ▶</button>
-    <button id="screenshotBtn">📸 ថតស្លាយបច្ចុប្បន្ន (Auto Screenshot)</button>
+<!-- navigation buttons -->
+<div class="slide-counter" id="slideCounter">ស្លាយ 1 / 6</div>
+<div class="nav-control">
+    <button id="prevSlide" style="background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer;">◀ មុន</button>
+    <button id="nextSlide" style="background: none; border: none; color: white; font-size: 1.3rem; cursor: pointer;">បន្ទាប់ ▶</button>
 </div>
-<div id="screenshotMsg" class="screenshot-info"></div>
 
 <script>
-    // Smooth slide scrolling like PowerPoint: each slide visible and scroll to specific slide.
-    // requirement: "អូសឡើង រឺលើចុះក្រោមបានដូច slide PowerPoint" → means mouse wheel scroll moves between slides or we implement scroll snapping?
-    // But to match user expectation: user can manually scroll up/down to see slides (container scroll), and buttons also scroll to specific slide.
-    // So we use scrollIntoView with smooth behavior.
+    const container = document.getElementById('presentationContainer');
     const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
     let currentIndex = 0;
 
-    function scrollToSlide(index) {
+    function updateCounter() {
+        counter.innerText = `ស្លាយ ${currentIndex+1} / ${slides.length}`;
+    }
+
+    function goToSlide(index) {
         if (index < 0) index = 0;
         if (index >= slides.length) index = slides.length - 1;
         currentIndex = index;
-        slides[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const targetSlide = slides[currentIndex];
+        targetSlide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updateCounter();
     }
 
-    document.getElementById('prevSlideBtn').addEventListener('click', () => {
-        if (currentIndex > 0) {
-            scrollToSlide(currentIndex - 1);
-        } else {
-            // loop or just stay? professional style can stay or show hint
-            showMessage("នេះជាស្លាយដំបូងហើយ");
-        }
-    });
-
-    document.getElementById('nextSlideBtn').addEventListener('click', () => {
-        if (currentIndex < slides.length - 1) {
-            scrollToSlide(currentIndex + 1);
-        } else {
-            showMessage("នេះជាស្លាយចុងក្រោយហើយ");
-        }
-    });
-
-    function showMessage(msg) {
-        const msgDiv = document.getElementById('screenshotMsg');
-        msgDiv.innerText = msg;
-        setTimeout(() => { if(msgDiv.innerText === msg) msgDiv.innerText = ""; }, 1800);
-    }
-
-    // Wheel detection to simulate slide change optional but matches natural "scroll up/down like PowerPoint"
-    let isScrolling = false;
-    window.addEventListener('wheel', (e) => {
-        // prevent fast multiple triggers
-        if (isScrolling) return;
-        // detect direction: deltaY > 0 => down (next slide), deltaY < 0 => up (prev slide)
-        // but only if the user intent is to scroll between slides? To avoid conflict, we implement only when container scroll is near boundary.
-        // however better: we let default scrolling occur, but to enhance experience, we allow snap after scroll ends? 
-        // But requirement: drag up/down like PowerPoint slides – typical approach: when user scrolls, move to prev/next.
-        // We'll implement optional threshold. We also respect normal scroll inside slide content if overflow, but this may cause conflict.
-        // But each slide's content has overflow-y auto, if user scrolls inside slide content, we shouldn't change slide.
-        // We detect if the target is inside .slide-content and its scrollTop not at extremes, we do not change slide. Otherwise change slide.
-        const target = e.target;
-        const isInsideScrollable = target.closest('.slide-content');
-        if (isInsideScrollable) {
-            const scrollable = isInsideScrollable;
-            const atTop = scrollable.scrollTop <= 2;
-            const atBottom = (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight) <= 2;
-            if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)) {
-                // allow normal content scroll inside slide, do NOT change slide
-                return;
-            }
-        }
-        // if scrollable content at extreme or scroll outside, we change slide
-        e.preventDefault();
-        isScrolling = true;
-        if (e.deltaY > 0) {
-            // scroll down -> next
-            if (currentIndex < slides.length - 1) scrollToSlide(currentIndex + 1);
-            else showMessage("ចុងក្រោយ");
-        } else if (e.deltaY < 0) {
-            if (currentIndex > 0) scrollToSlide(currentIndex - 1);
-            else showMessage("ដើមស្លាយ");
-        }
-        setTimeout(() => { isScrolling = false; }, 400);
-    }, { passive: false });
-
-    // Screenshot feature: capture current visible slide (exact 1280x720)
-    const screenshotBtn = document.getElementById('screenshotBtn');
-    async function captureSlide(slideElement, index) {
-        try {
-            // ensure original dimensions: use clone or direct capture with scale
-            const canvas = await html2canvas(slideElement, {
-                scale: 2,            // high quality
-                backgroundColor: '#ffffff',
-                logging: false,
-                useCORS: false,
-                allowTaint: false
+    // detect scroll to update index after manual scroll
+    function observeScroll() {
+        let observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = Array.from(slides).indexOf(entry.target);
+                    if (idx !== -1 && idx !== currentIndex) {
+                        currentIndex = idx;
+                        updateCounter();
+                    }
+                }
             });
-            // download image
-            const link = document.createElement('a');
-            link.download = `slide_${index+1}_ប្រទានកម្ម.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            showMessage(`បានថតស្លាយទី ${index+1} រួចរាល់!`);
-        } catch (err) {
-            console.error(err);
-            showMessage('មានបញ្ហាក្នុងការថតអេក្រង់');
-        }
+        }, { threshold: 0.6 });
+        slides.forEach(slide => observer.observe(slide));
     }
+    observeScroll();
 
-    screenshotBtn.addEventListener('click', () => {
-        const currentSlide = slides[currentIndex];
-        captureSlide(currentSlide, currentIndex);
+    document.getElementById('prevSlide').addEventListener('click', () => {
+        goToSlide(currentIndex - 1);
+    });
+    document.getElementById('nextSlide').addEventListener('click', () => {
+        goToSlide(currentIndex + 1);
     });
 
-    // initial scroll to first slide
-    scrollToSlide(0);
-    // add IntersectionObserver to update currentIndex based on view
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const idx = Array.from(slides).indexOf(entry.target);
-                if (idx !== -1) currentIndex = idx;
-            }
-        });
-    }, { threshold: 0.5 });
-    slides.forEach(slide => observer.observe(slide));
-
-    // make sure slide content inner scrolling does not conflict with page scrolling (already handled)
-    // adjust any missing font fallback
-    document.querySelectorAll('.slide-content').forEach(el => {
-        el.style.fontFamily = "'Khmer OS Battambang', 'Khmer OS Muol Light', sans-serif";
+    // keyboard arrows for presentation
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            goToSlide(currentIndex - 1);
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            goToSlide(currentIndex + 1);
+            e.preventDefault();
+        }
     });
+
+    // initial counter
+    updateCounter();
+    // ensure first slide is visible
+    setTimeout(() => {
+        slides[0].scrollIntoView({ block: 'start' });
+    }, 100);
 </script>
 </body>
 </html>
