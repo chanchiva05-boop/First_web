@@ -1,1 +1,503 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ភតិសន្យា - បទបង្ហាញវិជ្ជាជីវៈ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* smoother presentation feel */
+        }
 
+        body {
+            background: #2b2b2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'MoolBoran', 'Khmer OS', system-ui, sans-serif;
+            padding: 30px 0;
+        }
+
+        /* main container for slides */
+        .presentation-container {
+            width: 1280px;
+            height: 720px;
+            background: #1e1e2f;
+            border-radius: 0px;          /* sharp corners exactly like PowerPoint */
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* slides wrapper */
+        .slides-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            background: #f5f7fc;
+        }
+
+        .slides-wrapper::-webkit-scrollbar {
+            width: 8px;
+            background: #ddd;
+        }
+        .slides-wrapper::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        /* each slide fixed size 1280x720 */
+        .slide {
+            width: 1280px;
+            height: 720px;
+            scroll-snap-align: start;
+            background: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow-y: auto;
+            font-family: 'Khmer OS Battambang', sans-serif;
+            border-bottom: 1px solid #e0e4ec;
+        }
+
+        /* custom scroll inside slide if content too tall */
+        .slide::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* header style for titles */
+        .slide-header {
+            background: linear-gradient(135deg, #0B2F5E 0%, #0a4b6e 100%);
+            padding: 20px 40px;
+            border-bottom: 4px solid #ffb347;
+        }
+        .slide-title {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS', sans-serif;
+            font-size: 38px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+        }
+        .slide-sub {
+            font-size: 18px;
+            color: #e6f7ff;
+            margin-top: 8px;
+            font-weight: normal;
+        }
+
+        /* content area */
+        .content {
+            padding: 30px 40px;
+            flex: 1;
+            background: #ffffff;
+            font-size: 20px;
+            line-height: 1.5;
+            color: #1e2a3a;
+        }
+
+        /* list and custom styling */
+        .content ul, .content .section-list {
+            margin: 15px 0 15px 25px;
+        }
+        .content li {
+            margin: 10px 0;
+        }
+        .law-ref {
+            background: #f0f2f5;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 18px;
+            display: inline-block;
+            font-family: monospace;
+            color: #0056b3;
+        }
+        .highlight-box {
+            background: #eef4ff;
+            border-left: 8px solid #0B2F5E;
+            padding: 18px 24px;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+        .grid-2col {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #fafcff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            flex: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .card h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            color: #0B2F5E;
+            margin-bottom: 16px;
+            font-size: 26px;
+            border-bottom: 2px solid #ffb347;
+            display: inline-block;
+        }
+        .badge {
+            background: #ffb347;
+            color: #1e2a3a;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        /* image decoration */
+        .img-deco {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+        .img-deco svg, .img-placeholder {
+            max-width: 100px;
+        }
+
+        /* footer */
+        .slide-footer {
+            padding: 12px 40px;
+            font-size: 14px;
+            color: #6c757d;
+            background: #f8f9fc;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        /* navigation buttons */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 16px;
+            z-index: 1000;
+        }
+        .nav-btn, .screenshot-btn {
+            background: #1e466e;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 30px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .screenshot-btn {
+            background: #2c5a2e;
+            width: auto;
+            padding: 0 20px;
+            gap: 8px;
+            font-size: 18px;
+            font-family: 'Khmer OS Battambang', sans-serif;
+        }
+        .nav-btn:hover, .screenshot-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+        .page-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-family: monospace;
+            font-size: 18px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        hr {
+            margin: 16px 0;
+            border-color: #dee2e6;
+        }
+        .small-text {
+            font-size: 18px;
+        }
+        @media (max-width: 1300px) {
+            body { transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body>
+<div class="presentation-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+        <!-- SLIDE 1: និយមន័យ + ការបង្កើតភតិសន្យា overview -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">ភតិសន្យា</div>
+                <div class="slide-sub">ក្រមរដ្ឋប្បវេណី | ជំពូកទី៣ ភតិសន្យា</div>
+            </div>
+            <div class="content">
+                <div style="display: flex; gap: 30px; align-items: flex-start;">
+                    <div style="flex: 2;">
+                        <span class="badge">មាត្រា ៥៩៦</span>
+                        <h2 style="font-family: 'Khmer OS Muol Light'; margin: 15px 0 10px; color:#0B2F5E;">និយមន័យ</h2>
+                        <p style="font-size: 22px; margin-bottom: 20px;">សំដៅលើកិច្ចសន្យាមួយ ដែលភាគីម្ខាងឱ្យភាគីម្ខាងទៀតប្រើប្រាស់ និងអាស្រ័យផលពីវត្ថុណាមួយ ដោយយកថ្លៃ។</p>
+                        <div class="highlight-box">
+                            <strong>📌 ការបង្កើតភតិសន្យា</strong><br>
+                            • ព្រមព្រៀងគ្នារវាងគូភាគី <br>
+                            • ទម្រង់៖ លាយលក្ខណ៍អក្សរ ឬផ្ទាល់មាត់ (ម.៥៩៩ ក២)<br>
+                            • លក្ខខណ្ឌសំខាន់ៗ៖ <strong>វត្ថុជួល, ថ្លៃឈ្នួល, អំឡុងពេល</strong>
+                        </div>
+                        <div class="grid-2col" style="margin-top: 10px;">
+                            <div class="card"><h3>📦 វត្ថុ</h3>ចលនវត្ថុ / អចលនវត្ថុ (ម.៥៩៦)</div>
+                            <div class="card"><h3>💰 ថ្លៃឈ្នួល</h3>តម្រូវឱ្យមានថ្លៃ ឬកាតព្វកិច្ចជំនួស</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <svg width="140" height="140" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity: 0.7;">
+                            <path d="M3 8L12 3L21 8L12 13L3 8Z" stroke="#0B2F5E" stroke-width="1.5" fill="#eef2ff"/>
+                            <path d="M5 12V16L12 20L19 16V12" stroke="#0B2F5E" stroke-width="1.5" fill="none"/>
+                            <rect x="8" y="10" width="8" height="4" fill="#ffb347" opacity="0.5"/>
+                        </svg>
+                        <p style="margin-top: 20px; font-size: 18px;">អចិន្ត្រៃយ៍ បើ≥១៥ឆ្នាំ</p>
+                    </div>
+                </div>
+                <div class="img-deco"></div>
+            </div>
+            <div class="slide-footer">ជំពូកទី៣ • ភតិសន្យា</div>
+        </div>
+
+        <!-- SLIDE 2: លក្ខខណ្ឌតតាំង + សិទ្ធិភតិបតី (ផ្នែកទី១) -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">លក្ខខណ្ឌតតាំង &amp; សិទ្ធិភតិបតី</div>
+                <div class="slide-sub">ការកាន់កាប់ និងការអនុវត្តសិទ្ធិ</div>
+            </div>
+            <div class="content">
+                <div class="grid-2col">
+                    <div class="card">
+                        <h3>⚖️ លក្ខខណ្ឌតតាំង</h3>
+                        <p>ផ្អែកលើការកាន់កាប់ជាក់ស្ដែង ភតិកៈអាចតតាំងជាមួយតតិយជនបាន ប្រសិនប្រើប្រាស់បន្តបន្ទាប់ (ម.៥៩៨ ក១)</p>
+                        <p style="margin-top: 12px;"><span class="law-ref">ម.៥៩៨ ក២</span> សិទ្ធិទាមទារឱ្យប្រគល់វិញ ឬបញ្ឈប់ការរារាំងពីតតិយជន។</p>
+                    </div>
+                    <div class="card">
+                        <h3>🏛️ ភតិបតី៖ ករណីកិច្ចចម្បង</h3>
+                        <p>✓ ធានាឱ្យភតិកៈប្រើប្រាស់ដោយសេរី (ម.៦០០)<br>
+                        ✓ ករណីជួសជុលចាំបាច់៖ ភាពចាំបាច់ + លទ្ធភាពជួសជុល (ម.៦០២, ៦០៧)<br>
+                        ✓ សងសោហ៊ុយចាំបាច់ ឬបង្កើនតម្លៃ (ម.៦០៤)</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>🔧 កាតព្វកិច្ចជួសជុលរបស់ភតិបតី</strong><br>
+                    - ការជ្រាបទឹកភ្លៀង ឬការខូចខាតរំខានដល់ការប្រើប្រាស់ → ភតិបតីត្រូវជួសជុល។<br>
+                    - បើគ្មានលទ្ធភាព ភតិកៈអាចទាមទារបញ្ចុះថ្លៃ ឬបញ្ចប់កិច្ចសន្យា។
+                </div>
+                <div><span class="badge">រយៈពេលទាមទារ</span> សងសោហ៊ុយបង្កើនតម្លៃក្នុងរយៈពេល ១ឆ្នាំ គិតពីពេលប្រគល់វត្ថុជួលវិញ។</div>
+            </div>
+            <div class="slide-footer">សិទ្ធិ និងករណីកិច្ចភតិបតី</div>
+        </div>
+
+        <!-- SLIDE 3: សិទ្ធិ និងករណីកិច្ចរបស់ភតិកៈ (ការបង់ថ្លៃ ការប្រើប្រាស់) -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">សិទ្ធិ និងករណីកិច្ចភតិកៈ</div>
+                <div class="slide-sub">កាតព្វកិច្ចបង់ថ្លៃ និងការប្រើប្រាស់ធម្មតា</div>
+            </div>
+            <div class="content">
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex:1.5">
+                        <div class="badge">💰 ការបង់ថ្លៃឈ្នួល (ម.៦១០)</div>
+                        <ul style="margin-top: 12px;">
+                            <li>តាមពេលកំណត់ក្នុងកិច្ចសន្យា</li>
+                            <li>បើគ្មានកំណត់៖ ចលនវត្ថុ / ផ្ទះ → បង់រាល់ចុងខែ</li>
+                            <li>ដីធ្លី → បង់រាល់ចុងឆ្នាំ</li>
+                            <li>វត្ថុតាមរដូវប្រមូលផល → បង់នៅរដូវនោះ</li>
+                        </ul>
+                        <div class="highlight-box" style="margin-top: 15px;">
+                            <strong>📌 សិទ្ធិប្រើប្រាស់ (ម.៦០០)</strong><br>
+                            ភតិកៈមានសិទ្ធិប្រើប្រាស់ និងអាស្រ័យផលតាមវិធីធម្មតា គ្មានការរំខាន។ ការថយតម្លៃដោយប្រើប្រាស់ធម្មតា មិនទទួលខុសត្រូវ (ម.៦១៨)។
+                        </div>
+                    </div>
+                    <div style="flex:1">
+                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#0B2F5E" stroke-width="1.2">
+                            <rect x="4" y="8" width="16" height="12" rx="1" fill="#f0f4fa"/>
+                            <path d="M8 6V8M16 6V8" stroke="#ffb347" stroke-width="1.8"/>
+                            <circle cx="12" cy="13" r="1.5" fill="#0B2F5E"/>
+                        </svg>
+                        <p style="font-size: 18px; margin-top: 10px;">អនុប្បទានសិទ្ធិជួលបន្តតម្រូវឱ្យមានការយល់ព្រមពីភតិបតី (ម.៦០៨)</p>
+                    </div>
+                </div>
+                <hr>
+                <div><span class="badge">📉 សិទ្ធិបន្ថយថ្លៃ ឬរំលាយ</span> ករណីចំណូលថយ (ម.៦០៦) ឬវត្ថុជួលខូចខាតមួយផ្នែក (ម.៦០៧)</div>
+            </div>
+            <div class="slide-footer">ភតិកៈ៖ កាតព្វកិច្ចថែរក្សា និងសិទ្ធិស្របច្បាប់</div>
+        </div>
+
+        <!-- SLIDE 4: ការរំលាយភតិសន្យា មូលហេតុបញ្ចប់ -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">ការរំលាយភតិសន្យា</div>
+                <div class="slide-sub">មូលហេតុបញ្ចប់កិច្ចសន្យាជួល</div>
+            </div>
+            <div class="content">
+                <div class="grid-2col">
+                    <div class="card">
+                        <h3>⏳ ផុតអំឡុងពេលកំណត់</h3>
+                        <p>(ម.៦១២) ភតិកៈត្រូវសងវត្ថុជួលវិញ ភតិបតីត្រូវបង់ថ្លៃបង្កើនតម្លៃ។</p>
+                    </div>
+                    <div class="card">
+                        <h3>🔄 គ្មានកំណត់អំឡុងពេល</h3>
+                        <p>(ម.៦១៥) រំលាយនៅពេលណាក៏បាន៖<br>
+                        - ចលនវត្ថុ: ១ថ្ងៃ<br>
+                        - អគារ: ៣ខែ<br>
+                        - ដីធ្លី: ១ឆ្នាំ</p>
+                    </div>
+                </div>
+                <div class="grid-2col" style="margin-top: 10px;">
+                    <div class="card">
+                        <h3>💥 បាត់បង់/ខូចខាតធ្ងន់ធ្ងរ</h3>
+                        <p>(ម.៦០៧) បើកើតឡើងដោយកំហុសភាគីណា ត្រូវទទួលខុសត្រូវសំណង (ម.៣៩៨)</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚠️ មិនអនុវត្តកាតព្វកិច្ច</h3>
+                        <p>(ម.៤០៧) បំពានធ្ងន់ធ្ងរ → រំលាយភ្លាមៗ។ វិធីសង្គ្រោះក្រោមមាត្រា ៣៩០។</p>
+                    </div>
+                </div>
+                <div class="highlight-box" style="background: #fef3e2;">
+                    <strong>⚡ អានុភាពមិនប្រតិសកម្ម (ម.៦១៧)</strong> — ការរំលាយភតិសន្យាគ្មានអានុភាពប្រតិសកម្មទេ។
+                </div>
+                <div class="img-deco" style="justify-content: flex-start;">
+                    <span class="law-ref">មាត្រា ៦១២, ៦១៥, ៦០៧</span>
+                </div>
+            </div>
+            <div class="slide-footer">ការបញ្ចប់ទំនាក់ទំនងភតិសន្យា</div>
+        </div>
+
+        <!-- SLIDE 5: សង្ខេប + អនុប្បទាន និងការជួលបន្ត -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">អនុប្បទានសិទ្ធិជួល &amp; ការជួលបន្ត</div>
+                <div class="slide-sub">ការផ្ទេរសិទ្ធិ និងការការពារតាមច្បាប់</div>
+            </div>
+            <div class="content">
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex:1">
+                        <div class="card" style="height: auto;">
+                            <h3>📄 អនុប្បទានសិទ្ធិជួល</h3>
+                            <p>ភតិកៈមិនអាចអនុប្បទាន ឬជួលបន្តវត្ថុជួលបានទេ លុះត្រាតែមានការយល់ព្រមជាលាយលក្ខណ៍អក្សរពីភតិបតី (ម.៦០៨)។ ការបំពាន → ភតិបតីអាចរំលាយកិច្ចសន្យាបាន។</p>
+                        </div>
+                    </div>
+                    <div style="flex:1">
+                        <div class="card">
+                            <h3>🔄 ការជួលបន្ត (ម.៦០៩)</h3>
+                            <p>បើក្រោយផុតកំណត់ពេល ភតិកៈនៅបន្តកាន់កាប់ ហើយភតិបតីមិនជំទាស់ សន្មតថាកិច្ចសន្យាជួលបន្តតាមលក្ខខណ្ឌដដែល។</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-box" style="margin-top: 20px; text-align: center;">
+                    <strong>🏛️ សេចក្តីសង្ខេប៖ ភតិសន្យាគ្រប់គ្រងដោយក្រមរដ្ឋប្បវេណី</strong><br>
+                    ធានាសិទ្ធិប្រើប្រាស់ កាតព្វកិច្ចជួសជុល និងយន្តការរំលាយកិច្ចសន្យាច្បាស់លាស់។
+                </div>
+                <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                    <span>📌 ភតិបតី → ធានាការប្រើប្រាស់</span>
+                    <span>📌 ភតិកៈ → បង់ថ្លៃ ថែរក្សាវត្ថុជួល</span>
+                </div>
+            </div>
+            <div class="slide-footer">អនុលោមតាមមាត្រា ៥៩៦ ដល់ ៦១៨</div>
+        </div>
+    </div>
+</div>
+<div class="nav-buttons">
+    <button class="nav-btn" id="prevSlide">◀</button>
+    <button class="nav-btn" id="nextSlide">▶</button>
+    <button class="screenshot-btn" id="screenshotBtn">📸 Screenshot</button>
+</div>
+<div class="page-indicator" id="pageIndicator">ស្លាយ 1 / 5</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+    (function(){
+        const wrapper = document.getElementById('slidesWrapper');
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const totalSlides = slides.length;
+        const indicator = document.getElementById('pageIndicator');
+
+        function updateIndicator(){
+            const scrollTop = wrapper.scrollTop;
+            const slideHeight = 720;
+            let activeIndex = Math.round(scrollTop / slideHeight);
+            activeIndex = Math.min(totalSlides-1, Math.max(0, activeIndex));
+            indicator.innerText = `ស្លាយ ${activeIndex+1} / ${totalSlides}`;
+        }
+
+        function scrollToSlide(index){
+            if(index < 0) index = 0;
+            if(index >= totalSlides) index = totalSlides-1;
+            wrapper.scrollTo({ top: index * 720, behavior: 'smooth' });
+            setTimeout(updateIndicator, 200);
+        }
+
+        document.getElementById('prevSlide').addEventListener('click', () => {
+            let currentIdx = Math.round(wrapper.scrollTop / 720);
+            scrollToSlide(currentIdx - 1);
+        });
+        document.getElementById('nextSlide').addEventListener('click', () => {
+            let currentIdx = Math.round(wrapper.scrollTop / 720);
+            scrollToSlide(currentIdx + 1);
+        });
+
+        wrapper.addEventListener('scroll', () => {
+            updateIndicator();
+        });
+
+        updateIndicator();
+
+        window.addEventListener('resize', () => {
+            // ensure each slide stays at 1280x720 but container fixed
+            if(wrapper.scrollHeight !== totalSlides * 720){
+                for(let s of slides){
+                    s.style.height = "720px";
+                    s.style.width = "1280px";
+                }
+            }
+        });
+
+        document.getElementById('screenshotBtn').addEventListener('click', async () => {
+            const currentSlideIndex = Math.round(wrapper.scrollTop / 720);
+            const targetSlide = slides[currentSlideIndex];
+            if(!targetSlide) return;
+            try {
+                const canvas = await html2canvas(targetSlide, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    useCORS: false
+                });
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+                link.download = `slide_${currentSlideIndex+1}_ភតិសន្យា.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch(err){
+                alert("Screenshot error: " + err);
+            }
+        });
+    })();
+</script>
+</body>
+                  </html>
