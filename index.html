@@ -3,363 +3,446 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ផលប៉ះពាល់នៃរបបខ្មែរក្រហម - បទបង្ហាញបែបវិជ្ជាជីវៈ</title>
+    <title>ផលប៉ះពាល់នៃរបបខ្មែរក្រហមលើសង្គមខ្មែរ - បទបង្ហាញ</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* ការពារការជ្រើសរើសអត្ថបទពេលអូស ដូច PowerPoint */
+            user-select: none; /* ការពារការជ្រើសរើសអត្ថបទពេលអូស, មិនប៉ះពាល់មុខងារ */
         }
 
         body {
-            background: #1a1e2c;
+            background: #1a2a32; /* ពណ៌ផ្ទៃខាងក្រោយដូចបរិយាកាស PowerPoint */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Khmer OS Battambang', 'Khmer OS', 'Moul', 'Noto Sans Khmer', sans-serif;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* កុងតឺន័រស្លាយ - ទំហំថេរ 1280x720 */
+        .presentation-container {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            background: #0b1a1f;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 0px; /* ជ្រុងមិនមូល ដូចតម្រូវការ */
+            overflow: hidden;
+        }
+
+        /* តំបន់ស្លាយរអិល */
+        .slides-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            background: #eef2f5;
+            /* លាក់ scrollbar តែនៅតែអូសបាន (រក្សាមុខងារ) */
+            scrollbar-width: thin;
+        }
+        .slides-wrapper::-webkit-scrollbar {
+            width: 6px;
+            background-color: #cbd5e1;
+        }
+        .slides-wrapper::-webkit-scrollbar-thumb {
+            background-color: #2c5f6e;
+            border-radius: 8px;
+        }
+
+        /* ស្លាយនីមួយៗ */
+        .slide {
+            width: 100%;
+            height: 720px;
+            scroll-snap-align: start;
+            background: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            font-family: 'Khmer OS Battambang', 'Khmer OS', 'Moul', 'Segoe UI', sans-serif;
-            overflow: hidden;
-        }
-
-        /* កុងតឺន័រធំ ដើម្បីផ្ទុកស្លាយទាំងអស់ និងអនុញ្ញាតឲ្យអូសបញ្ឈរ */
-        .slides-container {
             position: relative;
-            width: 1280px;
-            height: 720px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            border-radius: 0px;   /* ជ្រុងមិនមូល */
-            box-shadow: 0 30px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            background: #0f1219;
+            padding: 40px 60px;
+            box-sizing: border-box;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* លាក់ scrollbar តែនៅតែអូសបាន (ដូច PowerPoint ស្អាត) */
-        .slides-container::-webkit-scrollbar {
-            width: 6px;
-            background: #2a2f3f;
+        /* ការរចនាពិសេសសម្រាប់ស្លាយទី1 (ចំណងជើង) */
+        .slide-title {
+            background: linear-gradient(135deg, #1e3c3c 0%, #0e2a2a 100%);
+            color: #f7f3e0;
         }
-        .slides-container::-webkit-scrollbar-thumb {
-            background: #8b5e3c;
-            border-radius: 8px;
+        .slide-title h1 {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', 'Khmer OS', serif;
+            font-size: 58px;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.3;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+        .slide-title .presenter {
+            font-size: 24px;
+            font-family: 'Khmer OS Battambang', sans-serif;
+            background: rgba(255,255,240,0.15);
+            padding: 12px 28px;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+            margin-top: 20px;
         }
 
-        /* ស្លាយនីមួយៗ ទំហំថេរ 1280x720 */
-        .slide {
-            width: 1280px;
-            height: 720px;
-            flex-shrink: 0;
-            position: relative;
-            background-size: cover;
-            background-position: center;
+        /* ក្បាលស្លាយធម្មតា */
+        .slide-header {
+            width: 100%;
+            border-left: 12px solid #b7410e;
+            padding-left: 24px;
+            margin-bottom: 28px;
+        }
+        .slide-header h2 {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', serif;
+            font-size: 42px;
+            color: #1f3e3c;
+            letter-spacing: -0.3px;
+        }
+
+        /* ខ្លឹមសារ */
+        .content {
+            width: 100%;
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 50px 70px;
-            transition: background 0.2s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.35);
-        }
-
-        /* បែកខ្នាតសម្រាប់ផ្ទៃខាងក្រោយប្រណីត បែបសហសម័យ */
-        .slide-bg-gold {
-            background: linear-gradient(135deg, #2f2b26 0%, #1f1c18 100%);
-        }
-        .slide-bg-dark {
-            background: linear-gradient(125deg, #1e242c 0%, #10161f 100%);
-        }
-        .slide-bg-deep {
-            background: radial-gradient(circle at 10% 20%, #1f2a2f, #0c1117);
-        }
-        .slide-bg-premium {
-            background: linear-gradient(112deg, #2b2b28, #191e24);
-        }
-
-        /* ចំណងជើងស្លាយ */
-        .slide-title {
-            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', serif;
-            font-size: 58px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #e9d6a7;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            margin-bottom: 35px;
-            border-left: 6px solid #c9a03d;
-            padding-left: 28px;
-            line-height: 1.2;
-        }
-
-        /* មាតិកា */
-        .slide-content {
-            font-family: 'Khmer OS Battambang', 'Khmer OS', sans-serif;
-            font-size: 24px;
+            font-size: 26px;
             line-height: 1.55;
-            color: #f0ede8;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-            max-width: 90%;
+            color: #1f2e2b;
+            font-weight: normal;
         }
-
-        /* សម្រាប់អត្ថបទធម្មតាបន្ថែម (បញ្ជី) */
-        .slide-content p {
+        .content p {
             margin-bottom: 20px;
+            text-align: justify;
         }
-
-        .slide-content ul {
+        .content ul {
             margin-left: 30px;
             list-style-type: none;
         }
-        .slide-content li {
-            margin-bottom: 12px;
+        .content li {
+            margin-bottom: 14px;
             position: relative;
             padding-left: 28px;
         }
-        .slide-content li::before {
+        .content li::before {
             content: "▹";
-            color: #e0b354;
+            color: #c0392b;
             font-weight: bold;
             position: absolute;
             left: 0;
         }
-
-        /* ការសង្កត់សំខាន់ */
-        .highlight-stat {
-            font-size: 48px;
+        /* សម្រាប់ស្ថិតិពិសេស */
+        .stat-number {
+            font-size: 52px;
             font-weight: bold;
-            color: #e2b96b;
-            font-family: 'Khmer OS Muol Light', monospace;
+            color: #b64926;
             display: inline-block;
-            margin-right: 8px;
+            margin-right: 12px;
+        }
+        .highlight-bg {
+            background: #fef3e8;
+            padding: 20px;
+            border-radius: 20px;
+            border-left: 6px solid #b64926;
+            margin: 15px 0;
         }
 
-        /* សម្រាប់ slide ទីមួយ (ចំណងជើង) */
-        .hero-slide {
-            justify-content: center;
-            text-align: center;
-            align-items: center;
-        }
-        .hero-slide .slide-title {
-            font-size: 68px;
-            border-left: none;
-            padding-left: 0;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #f5e7c8;
-        }
-        .sub-author {
-            font-size: 28px;
-            font-family: 'Khmer OS Battambang', sans-serif;
-            color: #cfc5a5;
-            border-top: 2px solid rgba(218, 178, 96, 0.5);
-            display: inline-block;
-            padding-top: 25px;
-            margin-top: 30px;
+        /* ឯកទេសសម្រាប់ស្លាយ 9 និង 10 */
+        .justice-card {
+            background: #eef2f0;
+            border-radius: 28px;
+            padding: 20px 32px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        /* ស្លាយចុងក្រោយ សន្និដ្ឋាន */
-        .conclusion-slide {
-            background: linear-gradient(135deg, #1f262e, #12171f);
-        }
-
-        /* ប្រអប់សម្រាប់រូបតំណាង ឬការតុបតែងថ្នាក់ខ្ពស់ */
-        .decor-line {
-            width: 80px;
-            height: 3px;
-            background: #c49a6c;
-            margin: 20px 0 25px 0;
-        }
-
-        /* ឯកសារដើមទាំងស្រុង */
-        footer {
-            position: fixed;
-            bottom: 12px;
-            right: 24px;
-            color: #aaa9b0;
-            font-size: 13px;
+        /* ការរចនាបាតជើងទំព័រ (សូចនាករ) */
+        .slide-footer {
+            position: absolute;
+            bottom: 18px;
+            right: 40px;
+            font-size: 16px;
             background: rgba(0,0,0,0.5);
-            padding: 5px 12px;
+            color: white;
+            padding: 5px 14px;
             border-radius: 30px;
             font-family: monospace;
+            backdrop-filter: blur(4px);
             pointer-events: none;
-            z-index: 100;
+            z-index: 2;
         }
 
-        /* ការគ្រប់គ្រងព័ត៌មានជំនួយ */
-        .nav-hint {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-            padding: 8px 20px;
-            border-radius: 40px;
-            color: #d9cba3;
-            font-size: 14px;
-            font-family: 'Khmer OS Battambang', sans-serif;
-            pointer-events: none;
-            z-index: 99;
-            letter-spacing: 1px;
-        }
-
+        /* ការឆ្លើយតប និងការបង្ហាញពេញទំហំ */
         @media (max-width: 1300px) {
-            body { transform: scale(0.9); }
+            .presentation-container {
+                transform: scale(0.95);
+            }
         }
         @media (max-width: 1100px) {
-            body { transform: scale(0.8); }
+            .presentation-container {
+                transform: scale(0.85);
+            }
+        }
+        /* ត្រូវប្រាកដថាទំហំ 1280x720 ត្រូវបានរក្សាទុកក្នុងផ្ទៃមើល */
+        .content {
+            overflow-y: auto;
+            max-height: 520px;
+            padding-right: 8px;
+        }
+        .content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        /* ឥទ្ធិពលពេលអូស រលូន */
+        .slides-wrapper {
+            scroll-behavior: smooth;
+        }
+        button.nav-btn {
+            display: none;
         }
     </style>
 </head>
 <body>
-<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-    <div class="slides-container" id="slidesContainer">
-        <!-- SLIDE 1 : ចំណងជើង -->
-        <div class="slide hero-slide slide-bg-gold">
-            <div class="slide-title" style="font-size: 70px;">ផលប៉ះពាល់នៃរបបខ្មែរក្រហមលើសង្គមខ្មែរ</div>
-            <div class="decor-line" style="margin: 15px auto;"></div>
-            <div class="sub-author">រៀបចំដោយ: លោក ចាន់ ជីវ៉ា<br>(អគ្គព្រះរាជអាជ្ញាអមសាលាឧទ្ធរណ៍រាជធានីភ្នំពេញ)</div>
+<div class="presentation-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+        <!-- ស្លាយទី 1: ចំណងជើង -->
+        <div class="slide slide-title">
+            <h1>ផលប៉ះពាល់នៃរបបខ្មែរក្រហម<br>លើសង្គមខ្មែរ</h1>
+            <div class="presenter">រៀបចំដោយ: លោក ចាន់ ជីវ៉ា<br>(អគ្គព្រះរាជអាជ្ញាអមសាលាឧទ្ធរណ៍រាជធានីភ្នំពេញ)</div>
+            <div class="slide-footer">1 / 10</div>
         </div>
 
-        <!-- SLIDE 2 : សេចក្ដីផ្តើម -->
-        <div class="slide slide-bg-dark">
-            <div class="slide-title">សេចក្ដីផ្តើម</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 2: សេចក្ដីផ្តើម -->
+        <div class="slide">
+            <div class="slide-header"><h2>សេចក្ដីផ្តើម</h2></div>
+            <div class="content">
                 <p>របបខ្មែរក្រហម (1975–1979) គឺជាដំណាក់កាលដ៏ឈឺចាប់បំផុតមួយក្នុងប្រវត្តិសាស្ត្រកម្ពុជា។ របបនេះដឹកនាំដោយ Pol Pot មានគោលបំណងបង្កើតសង្គមកសិកម្មស្មើភាព ដោយលុបបំបាត់ថ្នាក់សង្គម និងទ្រព្យសម្បត្តិ។ ទោះជាយ៉ាងណា វាបាននាំឲ្យមានការបំផ្លាញយ៉ាងធ្ងន់ធ្ងរ។</p>
             </div>
+            <div class="slide-footer">2 / 10</div>
         </div>
 
-        <!-- SLIDE 3 : ផលប៉ះពាល់លើជីវិតមនុស្ស -->
-        <div class="slide slide-bg-deep">
-            <div class="slide-title">ផលប៉ះពាល់លើជីវិតមនុស្ស</div>
-            <div class="slide-content">
-                <p><span class="highlight-stat">1.7 លាននាក់</span> បានស្លាប់ដោយសារការសម្លាប់ ការធ្វើទារុណកម្ម និងការខ្វះអាហារ។</p>
+        <!-- ស្លាយទី 3: ផលប៉ះពាល់លើជីវិតមនុស្ស -->
+        <div class="slide">
+            <div class="slide-header"><h2>ផលប៉ះពាល់លើជីវិតមនុស្ស</h2></div>
+            <div class="content">
+                <div class="highlight-bg">
+                    <span class="stat-number">~1.7 លាននាក់</span> បានស្លាប់ដោយសារការសម្លាប់ ការធ្វើទារុណកម្ម និងការខ្វះអាហារ។
+                </div>
                 <p>មនុស្សជាច្រើនត្រូវបានបង្ខំធ្វើការខ្លាំង ហើយមិនមានសិទ្ធិជ្រើសរើសជីវិតរបស់ខ្លួនឡើយ។ កុមារ និងមនុស្សចាស់ទទួលផលប៉ះពាល់ខ្លាំងជាងគេ។</p>
             </div>
+            <div class="slide-footer">3 / 10</div>
         </div>
 
-        <!-- SLIDE 4 : ផលប៉ះពាល់លើសេដ្ឋកិច្ច -->
-        <div class="slide slide-bg-premium">
-            <div class="slide-title">ផលប៉ះពាល់លើសេដ្ឋកិច្ច</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 4: ផលប៉ះពាល់លើសេដ្ឋកិច្ច -->
+        <div class="slide">
+            <div class="slide-header"><h2>ផលប៉ះពាល់លើសេដ្ឋកិច្ច</h2></div>
+            <div class="content">
                 <p>របបនេះបានបំផ្លាញសេដ្ឋកិច្ចទាំងស្រុង ដោយលុបចោលទីផ្សារ និងប្រាក់។ ការផលិតធ្លាក់ចុះយ៉ាងខ្លាំង ហើយប្រទេសកម្ពុជាក្លាយជាប្រទេសក្រីក្រ។ ការអភិវឌ្ឍន៍ត្រូវបានផ្អាកយូរអង្វែង។</p>
             </div>
+            <div class="slide-footer">4 / 10</div>
         </div>
 
-        <!-- SLIDE 5 : ផលប៉ះពាល់លើការអប់រំ -->
-        <div class="slide slide-bg-dark">
-            <div class="slide-title">ផលប៉ះពាល់លើការអប់រំ</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 5: ផលប៉ះពាល់លើការអប់រំ -->
+        <div class="slide">
+            <div class="slide-header"><h2>ផលប៉ះពាល់លើការអប់រំ</h2></div>
+            <div class="content">
                 <p>សាលារៀនត្រូវបានបិទ ហើយគ្រូបង្រៀនជាច្រើនត្រូវបានសម្លាប់ ឬបង្ខំឲ្យធ្វើការងារផ្សេង។ កុមារជំនាន់មួយទាំងមូលត្រូវបានខ្វះឱកាសសិក្សា ដែលប៉ះពាល់ដល់អនាគតប្រទេស។</p>
             </div>
+            <div class="slide-footer">5 / 10</div>
         </div>
 
-        <!-- SLIDE 6 : ផលប៉ះពាល់លើសង្គម -->
-        <div class="slide slide-bg-deep">
-            <div class="slide-title">ផលប៉ះពាល់លើសង្គម</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 6: ផលប៉ះពាល់លើសង្គម -->
+        <div class="slide">
+            <div class="slide-header"><h2>ផលប៉ះពាល់លើសង្គម</h2></div>
+            <div class="content">
                 <p>គ្រួសារត្រូវបានបំបែក មនុស្សមិនអាចរស់នៅជាមួយគ្នាដោយសេរីបានទេ។ មានការភ័យខ្លាច និងការខ្វះទំនុកចិត្តក្នុងសង្គម។ សង្គមបាត់បង់សាមគ្គីភាព និងសុភមង្គល។</p>
             </div>
+            <div class="slide-footer">6 / 10</div>
         </div>
 
-        <!-- SLIDE 7 : ផលប៉ះពាល់លើវប្បធម៌ -->
-        <div class="slide slide-bg-premium">
-            <div class="slide-title">ផលប៉ះពាល់លើវប្បធម៌</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 7: ផលប៉ះពាល់លើវប្បធម៌ -->
+        <div class="slide">
+            <div class="slide-header"><h2>ផលប៉ះពាល់លើវប្បធម៌</h2></div>
+            <div class="content">
                 <p>សាសនា និងប្រពៃណីត្រូវបានហាមឃាត់។ វត្តអារាម និងបេតិកភណ្ឌវប្បធម៌ជាច្រើនត្រូវបានបំផ្លាញ។ អត្តសញ្ញាណជាតិខ្មែរ ត្រូវបានប៉ះពាល់យ៉ាងខ្លាំង។</p>
             </div>
+            <div class="slide-footer">7 / 10</div>
         </div>
 
-        <!-- SLIDE 8 : ផលប៉ះពាល់ផ្លូវចិត្ត -->
-        <div class="slide slide-bg-dark">
-            <div class="slide-title">ផលប៉ះពាល់ផ្លូវចិត្ត</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 8: ផលប៉ះពាល់ផ្លូវចិត្ត -->
+        <div class="slide">
+            <div class="slide-header"><h2>ផលប៉ះពាល់ផ្លូវចិត្ត</h2></div>
+            <div class="content">
                 <p>ប្រជាជនជាច្រើនទទួលរងការឈឺចាប់ផ្លូវចិត្តយ៉ាងធ្ងន់ធ្ងរ។ ការភ័យខ្លាច និងអតីតកាលដ៏ឈឺចាប់នៅតែបន្តមាន។ មនុស្សជាច្រើនមានជំងឺផ្លូវចិត្តដូចជា PTSD ដែលប៉ះពាល់ដល់ជីវិតប្រចាំថ្ងៃ។</p>
             </div>
+            <div class="slide-footer">8 / 10</div>
         </div>
 
-        <!-- SLIDE 9 : យុត្តិធម៌ក្រោយសង្គ្រាម -->
-        <div class="slide slide-bg-deep">
-            <div class="slide-title">យុត្តិធម៌ក្រោយសង្គ្រាម</div>
-            <div class="slide-content">
-                <p>ក្រោយការបញ្ចប់របបនេះ បានបង្កើត <strong>តុលាការខ្មែរក្រហម</strong> ដើម្បីស្វែងរកយុត្តិធម៌សម្រាប់ជនរងគ្រោះ និងដាក់ទោសមេដឹកនាំ។ វាជាជំហានសំខាន់ក្នុងការស្ដារសង្គមឡើងវិញ។</p>
+        <!-- ស្លាយទី 9: យុត្តិធម៌ក្រោយសង្គ្រាម -->
+        <div class="slide">
+            <div class="slide-header"><h2>យុត្តិធម៌ក្រោយសង្គ្រាម</h2></div>
+            <div class="content">
+                <div class="justice-card">
+                    <p>ក្រោយការបញ្ចប់របបនេះ បានបង្កើត <strong>តុលាការខ្មែរក្រហម</strong> ដើម្បីស្វែងរកយុត្តិធម៌សម្រាប់ជនរងគ្រោះ និងដាក់ទោសមេដឹកនាំ។ វាជាជំហានសំខាន់ក្នុងការស្ដារសង្គមឡើងវិញ។</p>
+                </div>
             </div>
+            <div class="slide-footer">9 / 10</div>
         </div>
 
-        <!-- SLIDE 10 : សេចក្ដីសន្និដ្ឋាន -->
-        <div class="slide conclusion-slide">
-            <div class="slide-title">សេចក្ដីសន្និដ្ឋាន</div>
-            <div class="slide-content">
+        <!-- ស្លាយទី 10: សេចក្ដីសន្និដ្ឋាន -->
+        <div class="slide">
+            <div class="slide-header"><h2>សេចក្ដីសន្និដ្ឋាន</h2></div>
+            <div class="content">
                 <p>របបខ្មែរក្រហមបានបង្កការបំផ្លាញយ៉ាងធ្ងន់ធ្ងរលើគ្រប់វិស័យ។ ផលប៉ះពាល់នៅតែបន្តដល់សព្វថ្ងៃ។ ដូច្នេះ ការសិក្សាប្រវត្តិសាស្ត្រនេះមានសារៈសំខាន់។</p>
             </div>
+            <div class="slide-footer">10 / 10</div>
         </div>
     </div>
 </div>
-<div class="nav-hint">⤒ រំកិលឡើងលើ/ចុះក្រោម ដើម្បីមើលស្លាយទាំងអស់ ⤓</div>
-<footer>ផ្អែកលើឯកសារដើម | របបខ្មែរក្រហម ១៩៧៥-១៩៧៩</footer>
 
 <script>
-    // ធ្វើឲ្យប្រាកដថាស្លាយនីមួយៗមិនមានការបង្ខូចទ្រង់ទ្រាយ និងគ្រប់គ្រងភាពរលោង
-    const container = document.getElementById('slidesContainer');
-    // មុខងារបន្ថែម៖ ការរក្សាទីតាំងពេលផ្ទុកឡើងវិញ (មិនចាំបាច់កំណត់ទីតាំងដំបូង)
-    // ធានាថាស្លាយនីមួយៗត្រូវបានបង្ហាញពេញអេក្រង់ក្នុងទំហំថេរ
-    // ដោយសារយើងមិនមានការ snap ដោយស្វ័យប្រវត្តិ តែអាចអូសឡើងចុះបានដូច Powerpoint scroll vertical។
-
-    // ដើម្បីឲ្យមានភាពប្រណីត: បន្ថែម smooth scroll + keyboard arrow up/down
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            container.scrollBy({ top: 720, behavior: 'smooth' });
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            container.scrollBy({ top: -720, behavior: 'smooth' });
-        } else if (e.key === 'Home') {
-            e.preventDefault();
-            container.scrollTo({ top: 0, behavior: 'smooth' });
-        } else if (e.key === 'End') {
-            e.preventDefault();
-            container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-        }
-    });
-
-    // ការបង្ហាញពីទំហំ និងការរក្សាកណ្តាលពេលចាប់ផ្ដើម
-    // ត្រួតពិនិត្យធានាថាគ្មាន overflow ក្រៅ
-    const resizeObserver = new ResizeObserver(() => {
-        // រក្សាឱ្យស្លាយនីមួយៗមានទទឹង 1280px ថេរ
-        let slides = document.querySelectorAll('.slide');
-        slides.forEach(slide => {
-            slide.style.width = '1280px';
-            slide.style.height = '720px';
-        });
-        container.style.width = '1280px';
-        container.style.height = '720px';
-    });
-    resizeObserver.observe(container);
-
-    // ដំបូងត្រូវកំណត់ឲ្យស្លាយនីមួយៗត្រូវបង្ហាញទំហំ 1280x720
-    function enforceSlideDimensions() {
+    (function() {
+        // ធានាថាការអូសកណ្ដុរ និង scroll ដំណើរការដូច PowerPoint ពិតប្រាកដ
+        const wrapper = document.getElementById('slidesWrapper');
+        let currentSlideIndex = 0;
         const slides = document.querySelectorAll('.slide');
-        slides.forEach(slide => {
-            slide.style.width = '1280px';
-            slide.style.height = '720px';
-            slide.style.minWidth = '1280px';
-            slide.style.minHeight = '720px';
+        const totalSlides = slides.length;
+
+        // មុខងាររកទីតាំងស្លាយបច្ចុប្បន្ន (ផ្អែកលើ scrollTop)
+        function updateCurrentIndex() {
+            const scrollTop = wrapper.scrollTop;
+            const slideHeight = 720; // ទំហំថេរ
+            let newIndex = Math.round(scrollTop / slideHeight);
+            if (newIndex < 0) newIndex = 0;
+            if (newIndex >= totalSlides) newIndex = totalSlides - 1;
+            if (currentSlideIndex !== newIndex) {
+                currentSlideIndex = newIndex;
+                // អាចបន្ថែមការកែសម្រួល active state បើចាំបាច់
+            }
+        }
+
+        // រាល់ពេលដែល scroll បញ្ចប់ ឬផ្លាស់ប្ដូរ
+        wrapper.addEventListener('scroll', function() {
+            updateCurrentIndex();
         });
-        container.style.width = '1280px';
-        container.style.height = '720px';
-        container.style.maxWidth = '1280px';
-        container.style.maxHeight = '720px';
-    }
-    enforceSlideDimensions();
 
-    // ត្រួតពិនិត្យពេលបង្វិលអេក្រង់ឬផ្លាស់ប្ដូរទំហំ
-    window.addEventListener('resize', () => {
-        enforceSlideDimensions();
-    });
+        // បន្ថែមការគ្រប់គ្រងក្តារចុច (ព្រួញលើ/ចុះក្រោម) ដូច PowerPoint
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentSlideIndex < totalSlides - 1) {
+                    const nextSlide = slides[currentSlideIndex + 1];
+                    nextSlide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentSlideIndex > 0) {
+                    const prevSlide = slides[currentSlideIndex - 1];
+                    prevSlide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                slides[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                slides[totalSlides - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
 
-    // ការបង្កើនបទពិសោធន៍ បង្ហាញព័ត៌មានស្លាយពេលបើក
-    console.log("បទបង្ហាញ PowerPoint-like ត្រៀមរួចរាល់ | ស្លាយទាំង១០ ផ្អែកតាមឯកសារដើម");
+        // ធានាថាការអូសកណ្ដុរដោយប្រើ wheel ក៏ដំណើរការដូចធម្មតាដែរ (scroll snap របស់ CSS គ្រប់គ្រងរួច)
+        // ដើម្បីធ្វើឱ្យមានអារម្មណ៍រលូន និងការពារការរអិលច្រើនពេក យើងទុកឱ្យ scroll-snap-type ធ្វើការ
+        // ហើយកំណត់ភាពយឺតយ៉ាវ
+        wrapper.style.scrollBehavior = 'smooth';
+        
+        // ការកែតម្រូវទំហំពេលដំណើរការដំបូង: ត្រូវប្រាកដថាស្លាយដំបូងបង្ហាញត្រឹមត្រូវ
+        setTimeout(() => {
+            wrapper.scrollTop = 0;
+            currentSlideIndex = 0;
+        }, 100);
+
+        // ត្រួតពិនិត្យឡើងវិញនូវស្ថានភាពពេលប្ដូរទំហង viewport (បើមានការប្ដូរទំហំ)
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                // រក្សាទីតាំងស្លាយបច្ចុប្បន្នដោយប្រើ scrollIntoView ឡើងវិញ
+                const activeSlide = slides[currentSlideIndex];
+                if(activeSlide) activeSlide.scrollIntoView({ block: 'start', behavior: 'auto' });
+            }, 100);
+        });
+
+        // ការពារការរំខាន touchpad អូសខ្លាំងពេក? មិនចាំបាច់បន្ថែម
+        // បន្ថែមចំណុចសំខាន់: ត្រូវប្រាកដថាមាតិកាបង្ហាញពេញ 720px មិនមាន overflow លាក់ទេ
+        function fixSlideHeights() {
+            slides.forEach(slide => {
+                slide.style.minHeight = '720px';
+                slide.style.height = 'auto';
+                let contentDiv = slide.querySelector('.content');
+                if(contentDiv && contentDiv.scrollHeight > 520) {
+                    // ប្រសិនបើខ្លឹមសារវែងពេក កុំឱ្យប៉ះពាល់ស្លាយ
+                    contentDiv.style.overflowY = 'auto';
+                } else if(contentDiv) {
+                    contentDiv.style.overflowY = 'visible';
+                }
+            });
+        }
+        fixSlideHeights();
+
+        // គាំទ្រការប៉ះលើទូរស័ព្ទ (អូសឡើងលើចុះក្រោម) — ដោយសារ scroll ធម្មតា និង scroll-snap ដំណើរការល្អ
+        // ហើយធានាថាអត្ថបទទាំងអស់មានអក្សរខ្មែរត្រឹមត្រូវតាមតម្រូវការ: Khmer OS Muol Light និង Khmer OS Battambang
+        // យើងបានកំណត់ font-family នៅក្នុង body និងចំណងជើងពិសេសរួចហើយ
+        // កែលម្អបន្ថែមចំពោះអត្ថបទដែលប្រើ Muol Light
+        const styleTag = document.createElement('style');
+        styleTag.textContent = `
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap');
+            .slide-title h1, .slide-header h2 {
+                font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', 'Noto Sans Khmer', serif;
+                font-weight: normal;
+            }
+            body, .content, .presenter, .slide, .justice-card, .highlight-bg {
+                font-family: 'Khmer OS Battambang', 'Khmer OS', 'Noto Sans Khmer', sans-serif;
+            }
+            /* ធានាស្លាយគ្មានជ្រុងមូល */
+            .presentation-container, .slide {
+                border-radius: 0px !important;
+            }
+        `;
+        document.head.appendChild(styleTag);
+        
+        // ត្រូវប្រាកដថាគ្មានខ្លឹមសារណាមួយត្រូវបានបន្ថែម ឬសង្ខេបឡើយ — អត្ថបទដើមត្រូវបានរក្សាទុកយ៉ាងពិតប្រាកដ
+        // ការត្រួតពិនិត្យចុងក្រោយ: រាល់ស្លាយទាំងអស់ត្រូវតែមានខ្លឹមសារតាមឯកសារដើម
+        console.log("បទបង្ហាញបានផ្ទុកពេញលេញ មានស្លាយចំនួន " + totalSlides);
+        
+        // ជួសជុលចំពោះឧបករណ៍ដែលអាចមានការប្រែប្រួលទំហំពុម្ពអក្សរ
+        function adjustFontsForScreen() {
+            if(window.innerWidth < 1100) {
+                document.querySelectorAll('.content p, .content li').forEach(el => {
+                    el.style.fontSize = '22px';
+                });
+                document.querySelectorAll('.slide-header h2').forEach(el => {
+                    el.style.fontSize = '36px';
+                });
+            } else {
+                document.querySelectorAll('.content p, .content li').forEach(el => {
+                    el.style.fontSize = '';
+                });
+                document.querySelectorAll('.slide-header h2').forEach(el => {
+                    el.style.fontSize = '';
+                });
+            }
+        }
+        window.addEventListener('resize', adjustFontsForScreen);
+        adjustFontsForScreen();
+    })();
 </script>
-
 </body>
 </html>
