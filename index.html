@@ -3,473 +3,584 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ការរំលាយកិច្ចសន្យា | បទបង្ហាញអាជីព</title>
+    <title>របបខ្មែរក្រហម | បទបង្ហាញបែបអាជីព</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* professional slide feel */
         }
 
         body {
-            background: #1e2a3a;  /* dark grey-blue background like presentation mode */
-            font-family: 'Khmer OS Battambang', 'Khmer OS Muol Light', 'Noto Sans Khmer', 'Moul', 'Battambang', system-ui, sans-serif;
+            background: #0a0a0a;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        /* presentation container: mimics slide deck */
-        .presentation-container {
-            position: relative;
-            width: 1280px;
-            height: 720px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
-            border-radius: 0px;  /* strictly square corners */
-            overflow: hidden;
-            background: #0b2b26; /* fallback */
-        }
-
-        .slides-wrapper {
-            width: 100%;
-            height: 100%;
+            font-family: 'Khmer OS Battambang', 'Khmer OS', 'Inter', system-ui, -apple-system, sans-serif;
             overflow-y: scroll;
-            scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
-            background: #fef9e8;  /* warm paper-like background for slides */
-            border-radius: 0px;
+            padding: 40px 0;
         }
 
-        /* custom scrollbar but hidden for clean look (but functional) */
-        .slides-wrapper::-webkit-scrollbar {
-            width: 6px;
-            background: #ddd;
-        }
-        .slides-wrapper::-webkit-scrollbar-thumb {
-            background: #9b7b4c;
-            border-radius: 0px;
-        }
-
-        /* each slide - fixed dimensions */
+        /* Slide container - exact dimensions 1280x720 */
         .slide {
             width: 1280px;
-            height: 720px;
-            scroll-snap-align: start;
-            background-size: cover;
-            background-position: center;
+            min-height: 720px;
+            height: auto;
+            margin: 30px auto;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 40px 60px;
-            box-sizing: border-box;
-            background-color: #ffffff;
-            background-blend-mode: overlay;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-            font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* decorative overlay for texture and elegance */
-        .slide::before {
-            content: "";
+        .slide:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Premium background styling */
+        .slide-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle at 10% 20%, rgba(210, 180, 140, 0.03) 2%, transparent 2.5%);
-            background-size: 28px 28px;
-            pointer-events: none;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             z-index: 0;
         }
 
-        /* header styling with Khmer touch */
-        .slide-header {
-            border-left: 8px solid #c59a6b;
-            padding-left: 25px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        .slide-title {
-            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', serif;
-            font-size: 38px;
-            font-weight: 600;
-            color: #2c3e2f;
-            letter-spacing: -0.3px;
-            line-height: 1.3;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.02);
-        }
-        .slide-sub {
-            font-size: 18px;
-            color: #b87c4f;
-            margin-top: 8px;
-            font-weight: 500;
-        }
-
-        .content-area {
-            flex: 1;
-            position: relative;
-            z-index: 2;
-            overflow-y: auto;
-            padding-right: 15px;
-            margin: 15px 0;
-        }
-        .content-area::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        /* card style for legal points */
-        .legal-card {
-            background: #fdf9f2;
-            border-left: 4px solid #c5a16e;
-            padding: 18px 24px;
-            margin-bottom: 24px;
-            border-radius: 0px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            transition: transform 0.1s ease;
-        }
-        .legal-card strong {
-            font-family: 'Khmer OS Muol Light', sans-serif;
-            color: #8b5a2b;
-            font-size: 20px;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .legal-text {
-            font-size: 18px;
-            line-height: 1.55;
-            color: #2d3e2b;
-        }
-        .bullet-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        .bullet-list li {
-            margin-bottom: 12px;
-            padding-left: 28px;
-            position: relative;
-            font-size: 17px;
-            line-height: 1.5;
-        }
-        .bullet-list li:before {
-            content: "▪";
-            color: #bc8f6b;
-            font-weight: bold;
+        .slide-bg::after {
+            content: '';
             position: absolute;
-            left: 8px;
-            font-size: 20px;
-        }
-        .law-ref {
-            background: #f3ede3;
-            display: inline-block;
-            padding: 4px 12px;
-            font-family: monospace;
-            font-size: 15px;
-            border-radius: 20px;
-            color: #7a582e;
-            margin-right: 8px;
-        }
-        .quote-note {
-            background: #e9e0d3;
-            padding: 20px 28px;
-            font-style: normal;
-            border-radius: 0px;
-            margin-top: 15px;
-            border-right: 3px solid #c59a6b;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
         }
 
-        .slide-footer {
-            font-size: 13px;
-            border-top: 1px solid #e5d9cc;
-            padding-top: 18px;
-            display: flex;
-            justify-content: space-between;
-            color: #9b8c76;
-            z-index: 2;
+        .slide-bg.light-overlay::after {
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.55) 100%);
+        }
+
+        /* Content container */
+        .slide-content {
             position: relative;
-        }
-
-        /* navigation controls */
-        .nav-controls {
-            margin-top: 20px;
+            z-index: 2;
+            padding: 50px 65px;
+            height: 100%;
+            min-height: 720px;
             display: flex;
-            gap: 20px;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-        }
-        .nav-btn {
-            background: #2c3e2f;
-            border: none;
-            color: white;
-            font-family: 'Khmer OS Battambang', sans-serif;
-            font-size: 18px;
-            padding: 8px 24px;
-            cursor: pointer;
-            border-radius: 40px;
-            transition: 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .nav-btn:hover {
-            background: #b87c4f;
-            transform: scale(0.97);
-        }
-        .page-indicator {
-            background: #f2e5d8;
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-family: monospace;
-            font-weight: bold;
-            color: #5f4c2e;
         }
 
-        /* images integration: subtle background elements */
-        .slide[data-bg="law"] {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" opacity="0.08"><path fill="%23b87c4f" d="M400,100 L500,200 L400,300 L300,200 Z M200,400 L600,400 L550,500 L250,500 Z M150,600 L650,600 L600,700 L200,700 Z"/><circle cx="700" cy="150" r="40"/><rect x="50" y="500" width="100" height="20"/></svg>');
-            background-repeat: no-repeat;
-            background-position: bottom right;
-            background-size: 280px;
+        /* Typography premium */
+        h1 {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Inter', serif;
+            font-size: 68px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, #e8e0c8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 25px;
+            line-height: 1.2;
         }
-        .slide[data-bg="contract"] {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" opacity="0.07"><path fill="%23997b55" d="M60,80 L340,80 L340,420 L60,420 Z M90,130 L310,130 M90,180 L280,180 M90,230 L310,230 M90,280 L270,280"/><text x="120" y="360" font-size="30">⚖️</text></svg>');
-            background-position: 95% 85%;
-            background-size: 200px;
+
+        h2 {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Inter', serif;
+            font-size: 52px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 35px;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.01em;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, #c44536, #e87c5e);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', serif;
+            font-size: 32px;
+            font-weight: 500;
+            color: #f0e6d0;
+            margin-bottom: 25px;
+        }
+
+        /* Premium card design */
+        .premium-card {
+            background: rgba(20, 20, 25, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 30px 35px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .premium-card:hover {
+            background: rgba(25, 25, 32, 0.85);
+            border-color: rgba(196, 69, 54, 0.5);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 28px;
+            border-left: 5px solid #c44536;
+            transition: transform 0.2s;
+        }
+
+        .stat-item:hover {
+            transform: translateX(8px);
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        .stat-number {
+            font-size: 64px;
+            font-weight: 800;
+            font-family: 'Inter', monospace;
+            background: linear-gradient(135deg, #e87c5e, #c44536);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 22px;
+            color: #e0d6c0;
+            font-family: 'Khmer OS Battambang', sans-serif;
+        }
+
+        /* List styling premium */
+        .premium-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .premium-list li {
+            font-size: 23px;
+            font-family: 'Khmer OS Battambang', sans-serif;
+            color: #f5efe0;
+            margin-bottom: 18px;
+            padding-left: 32px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .premium-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #e87c5e;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        /* Two column layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            margin-top: 20px;
+        }
+
+        /* Accent text */
+        .accent-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: #e87c5e;
+            margin-bottom: 15px;
+        }
+
+        .body-text {
+            font-size: 24px;
+            line-height: 1.5;
+            color: #ece3d0;
+        }
+
+        /* Quote or conclusion style */
+        .conclusion-box {
+            background: linear-gradient(135deg, rgba(196, 69, 54, 0.2), rgba(0, 0, 0, 0.6));
+            border: 1px solid rgba(196, 69, 54, 0.4);
+            padding: 40px;
+            text-align: center;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(30, 30, 35, 0.9);
+            border: 1px solid rgba(232, 124, 94, 0.5);
+            color: #e87c5e;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #c44536;
+            color: white;
+            border-color: #c44536;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 12px 28px;
+            border-radius: 40px;
+            color: #e0d6c0;
+            font-family: 'Khmer OS Battambang', monospace;
+            font-size: 18px;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            letter-spacing: 1px;
+        }
+
+        /* Scrollbar premium */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c44536;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e87c5e;
+        }
+
+        @media (max-width: 1320px) {
+            .slide {
+                transform: scale(0.92);
+                margin: 20px auto;
+            }
+            body {
+                padding: 20px 0;
+            }
         }
     </style>
 </head>
 <body>
-<div class="presentation-container">
-    <div class="slides-wrapper" id="slidesWrapper">
-        <!-- SLIDE 1: មូលហេតុនៃការរំលាយកិច្ចសន្យា + overview -->
-        <div class="slide" data-bg="law">
-            <div class="slide-header">
-                <div class="slide-title">ការរំលាយកិច្ចសន្យា</div>
-                <div class="slide-sub">ដោយផ្អែកលើច្បាប់ និងបញ្ញត្តិពាក់ព័ន្ធ (មាត្រា ៤០៨, ៤១៤១១, ៥៣២)</div>
+
+<div class="slide-counter" id="slideCounter">ស្លាយ 01 / 08</div>
+<div class="nav-controls">
+    <div class="nav-btn" id="prevSlide">▲</div>
+    <div class="nav-btn" id="nextSlide">▼</div>
+</div>
+
+<div id="slidesContainer">
+    <!-- SLIDE 1: COVER - សេចក្ដីផ្តើម -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1280&h=720&fit=crop'); background-position: center 30%;"></div>
+        <div class="slide-content" style="justify-content: center; text-align: center;">
+            <div style="margin-bottom: 30px;">
+                <span style="font-size: 22px; color: #e87c5e; letter-spacing: 3px; font-family: 'Inter';">1975 - 1979</span>
             </div>
-            <div class="content-area">
-                <div class="legal-card">
-                    <strong>📜 មូលហេតុសំខាន់ៗនៃការរំលាយកិច្ចសន្យា</strong>
-                    <ul class="bullet-list">
-                        <li>ការបំពានកិច្ចសន្យាយ៉ាងផ្តូវផ្តើម (មាត្រា ៤០៨)</li>
-                        <li>ហេតុដែលកំណត់ទុកក្នុងកិច្ចសន្យា (មាត្រា ៤១៤១១)</li>
-                        <li>ការព្រមព្រៀងរបស់គ្រប់ភាគី (មាត្រា ១៤១១២)</li>
-                        <li>ការរំលាយតាមបញ្ញត្តិច្បាប់ (មាត្រា ៥៣២, ៥៣៣, ៥៨១, ៦០៦)</li>
-                    </ul>
-                </div>
-                <div class="legal-card">
-                    <strong>⚖️ ការបំពានកិច្ចសន្យាយ៉ាងផ្តូវផ្តើម (ម.៤០៨)</strong>
-                    <ul class="bullet-list">
-                        <li><strong>ក.</strong> ភាគីមិនអនុវត្តកាតព្វកិច្ច ទោះបីបានដាស់តឿនដោយកំណត់អំឡុងពេលសមរម្យ។</li>
-                        <li><strong>ខ.</strong> ភាគីមិនអនុវត្តកាតព្វកិច្ចតាមពេលកំណត់ បើគោលបំណងនៃកិច្ចសន្យាមិនសម្រេច។</li>
-                        <li><strong>គ.</strong> ភាគីមិនអាចអនុវត្តករណីកិច្ចផ្តល់គ្នាកាលិកចមបងបាន ដោយសារវត្ថុបាត់បង់។</li>
-                        <li><strong>ឃ.</strong> ការបំពានកិច្ចសន្យាមានភាពហួសហេតុ ធ្វើឱ្យបាត់បង់ទំនុកចិត្ត និងមិនអាចរំពឹងអនុវត្តនាពេលអនាគត។</li>
-                    </ul>
-                </div>
-                <div class="quote-note">
-                    <span style="font-weight:bold;">📌 សេចក្តីសន្និដ្ឋាន៖</span> កិច្ចសន្យាអាចរំលាយដោយការបំពានផ្តូវផ្តើម (កិច្ចសន្យាអញ្ចូមញ្ចូ – មាត្រា ៤០៧)។
-                </div>
-            </div>
-            <div class="slide-footer">
-                <span>📖 ជំពូកទី១៖ មូលហេតុផ្លូវច្បាប់</span>
-                <span>1 / 5</span>
+            <h1 style="font-size: 82px; margin-bottom: 20px;">របបខ្មែរក្រហម</h1>
+            <div style="width: 100px; height: 3px; background: linear-gradient(90deg, #c44536, transparent); margin: 25px auto;"></div>
+            <p style="font-size: 28px; color: #f0e6d0; margin-top: 30px; font-family: 'Khmer OS Battambang';">ដំណាក់កាលដ៏អាក្រក់ក្នុងប្រវត្តិសាស្ត្រកម្ពុជា</p>
+            <div style="margin-top: 50px;">
+                <p style="font-size: 20px; color: #c0b59e;">ដឹកនាំដោយ ប៉ុល ពត</p>
+                <p style="font-size: 18px; color: #a89f86; margin-top: 12px;">គោលបំណងបង្កើតសង្គមកសិកម្មស្មើភាព</p>
             </div>
         </div>
+    </div>
 
-        <!-- SLIDE 2: លក្ខខណ្ឌនៃការបំពាន (លម្អិតចំណុច ក, ខ, គ, ឃ) -->
-        <div class="slide" data-bg="contract">
-            <div class="slide-header">
-                <div class="slide-title">លក្ខខណ្ឌនៃការបំពានយ៉ាងផ្តូវផ្តើម</div>
-                <div class="slide-sub">សម្រាប់ការរំលាយកិច្ចសន្យា (មាត្រា ៤០៨)</div>
-            </div>
-            <div class="content-area">
-                <div class="legal-card">
-                    <strong>🔹 ករណីទី១: ការមិនអនុវត្តកាតព្វកិច្ច ទោះបីមានការដាស់តឿន</strong>
-                    <div class="legal-text">លក្ខខណ្ឌ៖ (១) មិនអនុវត្តតាមកិច្ចសន្យា, (២) បានដាស់តឿនដោយកំណត់អំឡុងពេលសមរម្យ, (៣) អំឡុងពេលនោះកន្លងផុត។</div>
+    <!-- SLIDE 2: ផលប៉ះពាល់លើជីវិតមនុស្ស -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1546587348-d12660c30c50?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content">
+            <h2>១. ផលប៉ះពាល់លើជីវិតមនុស្ស</h2>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-number">១.៧ លាន</div>
+                    <div class="stat-label">ប្រជាជនស្លាប់</div>
+                    <div style="font-size: 16px; color: #b0a68a; margin-top: 8px;">ជិត ២៥% នៃប្រជាជនសរុប</div>
                 </div>
-                <div class="legal-card">
-                    <strong>⏱️ ករណីទី២: ការមិនអនុវត្តតាមពេលកំណត់</strong>
-                    <div class="legal-text">បើគោលបំណងនៃកិច្ចសន្យាមិនអាចសម្រេចបាន បើភាគីខកខានអនុវត្តកាតព្វកិច្ចតាមកំណត់ពេលដែលបានព្រមព្រៀង។</div>
-                </div>
-                <div class="legal-card">
-                    <strong>📦 ករណីទី៣: អសមត្ថភាពអនុវត្តករណីកិច្ចផ្តល់គ្នាកាលិកចមបង</strong>
-                    <div class="legal-text">វត្ថុនៃកិច្ចសន្យាបាត់បង់ ឬភាគីមិនអាចបំពេញកាតព្វកិច្ចសំខាន់បាន ដោយហេតុផលផ្សេងៗ។</div>
-                </div>
-                <div class="legal-card">
-                    <strong>⚠️ ករណីទី៤: ការបំពានហួសហេតុ</strong>
-                    <div class="legal-text">បាត់បង់ទំនុកចិត្ត ហើយច្បាស់ថាភាគីមិនអាចអនុវត្តកិច្ចសន្យានាពេលអនាគត។ នេះជាមូលដ្ឋានគ្រប់គ្រាន់សម្រាប់ការរំលាយ។</div>
+                <div class="stat-item">
+                    <div class="stat-number">២១%</div>
+                    <div class="stat-label">នៃចំនួនប្រជាជនកម្ពុជា</div>
                 </div>
             </div>
-            <div class="slide-footer">
-                <span>⚖️ យោងមាត្រា ៤០៨ នៃក្រមរដ្ឋប្បវេណី</span>
-                <span>2 / 5</span>
+            <div class="premium-card" style="margin-top: 20px;">
+                <ul class="premium-list">
+                    <li>ការប្រព្រឹត្តអំពើហិង្សា ការធ្វើទារុណកម្មយ៉ាងព្រៃផ្សៃ</li>
+                    <li>ការបង្ខំធ្វើការងារហួសកម្លាំង ១២-១៥ ម៉ោងក្នុងមួយថ្ងៃ</li>
+                    <li>ការអត់អាហារ ខ្វះខាតថ្នាំពេទ្យ និងការព្យាបាល</li>
+                    <li>ការសម្លាប់រង្គាលនៅទីតាំងប្រល័យពូជសាសន៍ទូទាំងប្រទេស</li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <!-- SLIDE 3: វិធីអនុវត្តសិទ្ធិរំលាយ និងអានុភាពទូទៅ -->
-        <div class="slide" data-bg="law">
-            <div class="slide-header">
-                <div class="slide-title">វិធីអនុវត្តសិទ្ធិរំលាយ និងអានុភាពផ្លូវច្បាប់</div>
-                <div class="slide-sub">មាត្រា ៤០៨, ៤១១១, ៤១១២, ៤១១៣</div>
-            </div>
-            <div class="content-area">
-                <div class="legal-card">
-                    <strong>📌 វិធីអនុវត្តសិទ្ធិរំលាយ (ម.៤០៨)</strong>
-                    <div class="legal-text">ភាគីដែលរងគ្រោះអាចប្រកាសរំលាយកិច្ចសន្យាតាមរយៈការជូនដំណឹងជាលាយលក្ខណ៍អក្សរ ឬដោយសេចក្តីសម្រេចរបស់តុលាការ អាស្រ័យលើលក្ខខណ្ឌនៃការបំពាន។ ការរំលាយមានប្រសិទ្ធភាពចាប់ពីពេលភាគីម្ខាងទទួលបានដំណឹង។</div>
+    <!-- SLIDE 3: ផលប៉ះពាល់លើសេដ្ឋកិច្ច -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1519974719765-e6559eac2575?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content">
+            <h2>២. ផលប៉ះពាល់លើសេដ្ឋកិច្ច</h2>
+            <div class="two-columns">
+                <div class="premium-card">
+                    <div class="accent-text">ការបំផ្លិចបំផ្លាញ</div>
+                    <ul class="premium-list">
+                        <li>បំផ្លាញទីក្រុង និងទីផ្សារទាំងស្រុង</li>
+                        <li>បញ្ឈប់ពាណិជ្ជកម្ម និងប្រាក់កាស</li>
+                        <li>លុបចោលប្រព័ន្ធធនាគារ និងរូបិយវត្ថុ</li>
+                    </ul>
                 </div>
-                <div class="legal-card">
-                    <strong>💠 អានុភាពនៃការរំលាយកិច្ចសន្យា</strong>
-                    <ul class="bullet-list">
-                        <li>គូភាគីរួចផុតពីករណីកិច្ចក្នុងកិច្ចសន្យា (លើកលែងតែករណីសំណងខូចខាត) – មាត្រា ៤១១១</li>
-                        <li>ភាគីដែលបានទទួលការផ្តល់រួច ត្រូវមានករណីកិច្ចសងវិញ (បដិទាន) ទៅវិញទៅមក (ម.៤១១២)</li>
-                        <li>បើការលិកជាប្រាក់ ត្រូវសងជាមួយការប្រាក់ចាប់ពីថ្ងៃទទួលប្រាក់ដើម (ម.៤១១៣)</li>
-                        <li>បើការលិកជាវត្ថុ ត្រូវសងទាំងផលដែលទទួលបានពីវត្ថុនោះ។</li>
+                <div class="premium-card">
+                    <div class="accent-text">ផលវិបាក</div>
+                    <ul class="premium-list">
+                        <li>ប្រទេសក្រីក្រយ៉ាងខ្លាំងក្រោយសង្គ្រាម</li>
+                        <li>ហេដ្ឋារចនាសម្ព័ន្ធត្រូវបានបំផ្លាញ ៩០%</li>
+                        <li>សេដ្ឋកិច្ចត្រឡប់ទៅសម័យបុរេឧស្សាហកម្ម</li>
                     </ul>
                 </div>
             </div>
-            <div class="slide-footer">
-                <span>🔄 បដិទានជាគោលការណ៍សំខាន់</span>
-                <span>3 / 5</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: ផលប៉ះពាល់លើការអប់រំ -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content">
+            <h2>៣. ផលប៉ះពាល់លើការអប់រំ</h2>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-number">១០០%</div>
+                    <div class="stat-label">សាលារៀនត្រូវបានបិទ</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">៨០%</div>
+                    <div class="stat-label">គ្រូបង្រៀន និងបញ្ញវន្តត្រូវបានសម្លាប់</div>
+                </div>
+            </div>
+            <div class="premium-card">
+                <ul class="premium-list">
+                    <li>ប្រព័ន្ធអប់រំត្រូវបានបំផ្លាញទាំងស្រុង</li>
+                    <li>សាកលវិទ្យាល័យ វិទ្យាស្ថាន បណ្ណាល័យទាំងអស់ត្រូវបានបិទ</li>
+                    <li>អក្ខរកម្មធ្លាក់ចុះយ៉ាងធ្ងន់ធ្ងរ ជំនាន់ទាំងមូលបាត់បង់ឱកាសសិក្សា</li>
+                    <li>អ្នកចេះដឹងត្រូវបានចាត់ទុកជា "ពួកឆ្លាតថ្មី" និងត្រូវប្រហារជីវិត</li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <!-- SLIDE 4: ករណីសិក្សា - ប្រាក់ដែលបានបង់ និងខ្សែសន្យាពិសេស (ឃ្លាប្រាក់បញ្ញើ) -->
-        <div class="slide" data-bg="contract">
-            <div class="slide-header">
-                <div class="slide-title">ករណីសិក្សា៖ ឃ្លាពិសេស និងការបកស្រាយ</div>
-                <div class="slide-sub">បើអ្នកទិញខកខានបង់ប្រាក់ តើអ្នកលក់អាចរក្សាទុកប្រាក់ដែលបានបង់រួចបានដែរឬទេ?</div>
-            </div>
-            <div class="content-area">
-                <div class="legal-card">
-                    <strong>📑 ខ្សែសន្យាពិសេស (ឃ្លារក្សាប្រាក់)</strong>
-                    <div class="legal-text">“បើសិនអ្នកទិញខកខានបង់ប្រាក់ក្នុងដំណាក់កាលណាមួយ ប្រាក់ដែលបានបង់រួច ត្រូវញាយជាដលប្រោធន៍របស់អ្នកលក់”។</div>
-                </div>
-                <div class="quote-note">
-                    <strong>⚖️ ការបកស្រាយតាមច្បាប់៖</strong><br>
-                    អនុភាពនៃការរំលាយកិច្ចសន្យា នាំឱ្យភាគីនីមួយៗមានករណីកិច្ចធ្វើបដិទាន។ ពោលគឺ អ្នកលក់ត្រូវប្រគល់ប្រាក់ថ្លៃលក់ដែលអ្នកទិញបានបង់រួច ត្រឡប់ទៅអ្នកទិញវិញ។
-                </div>
-                <div class="legal-card" style="background:#f7efdf;">
-                    <strong>🏛️ មតិយោបល់៖</strong>
-                    <div class="legal-text">ការកំណត់ក្នុងកិច្ចសន្យាថាប្រាក់ដែលបានបង់រួចត្រូវញាយជាដលប្រោធន៍ អាចផ្ទុយនឹងគោលការណ៍បដិទាន (មាត្រា ៤១១២)។ ចំពោះការរំលាយកិច្ចសន្យា ការរក្សាទុកប្រាក់ដោយគ្មានការសងវិញ មិនអាចធ្វើបានទេ លើកលែងតែមានការព្រមព្រៀងជាក់ស្តែងអំពីប្រាក់បញ្ញើ (អារប៊្រេត)។</div>
-                </div>
-                <div class="legal-text" style="margin-top: 10px; font-size: 16px;">👉 ដូចនេះ អ្នកលក់មិនអាចបដិសេធមិនសងប្រាក់ដែលបានបង់រួចនោះទេ បើកិច្ចសន្យាត្រូវបានរំលាយដោយផ្អែកលើបញ្ញត្តិច្បាប់។</div>
-            </div>
-            <div class="slide-footer">
-                <span>📌 យោងសេចក្តីបកស្រាយលើខចងពិលសស</span>
-                <span>4 / 5</span>
-            </div>
-        </div>
-
-        <!-- SLIDE 5: សង្ខេប + ការអនុវត្តជាក់ស្តែង / គោលការណ៍ចុងក្រោយ -->
-        <div class="slide" data-bg="law">
-            <div class="slide-header">
-                <div class="slide-title">សង្ខេបគោលការណ៍សំខាន់ៗ</div>
-                <div class="slide-sub">ការរំលាយកិច្ចសន្យា និងផលវិបាកតាមផ្លូវច្បាប់</div>
-            </div>
-            <div class="content-area">
-                <div class="legal-card">
-                    <strong>📢 សេចក្តីសង្ខេបពីមូលហេតុ</strong>
-                    <div class="legal-text">ការរំលាយកិច្ចសន្យាកើតឡើងដោយសារ (១) ការបំពានផ្តូវផ្តើម (ម.៤០៨) (២) ការព្រមព្រៀងគ្នា (៣) តាមបញ្ញត្តិច្បាប់។ ការបំពានត្រូវមានលក្ខខណ្ឌច្បាស់លាស់ដូចជា ការដាស់តឿន និងអសមត្ថភាពអនុវត្តកាតព្វកិច្ចសំខាន់។</div>
-                </div>
-                <div class="legal-card">
-                    <strong>💡 អានុភាពសំខាន់ៗ</strong>
-                    <ul class="bullet-list">
-                        <li>ភាគីត្រូវប្រគល់វត្ថុ ឬប្រាក់វិញ (បដិទាន)</li>
-                        <li>សិទ្ធិទាមទារសំណងខូចខាតនៅតែមាន (ម.៤១១១)</li>
-                        <li>ការប្រាក់លើប្រាក់ដែលបានទទួលត្រូវសងចាប់ពីថ្ងៃទទួល</li>
-                        <li>ឃ្លាពិសេសក្នុងកិច្ចសន្យាមិនអាចលើសពីគោលការណ៍ច្បាប់បានទេ (សាធារណៈសណ្តាប់ធ្នាប់)</li>
+    <!-- SLIDE 5: ផលប៉ះពាល់លើសង្គម និងវប្បធម៌ -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1528127269322-53980143f2b5?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content">
+            <h2>៤. ផលប៉ះពាល់លើសង្គម និងវប្បធម៌</h2>
+            <div class="two-columns">
+                <div class="premium-card">
+                    <div class="accent-text">ការបាក់បែកសង្គម</div>
+                    <ul class="premium-list">
+                        <li>បំបែកគ្រួសារ បង្ខំឲ្យរស់នៅបែកគ្នា</li>
+                        <li>លុបបំបាត់ស្ថាប័នគ្រួសារ និងសាសនា</li>
+                        <li>ការភ័យខ្លាច និងការខ្វះទំនុកចិត្តក្នុងសង្គម</li>
                     </ul>
                 </div>
-                <div class="quote-note" style="background:#e2d9ce;">
-                    <span style="font-weight:bold;">🏛️ ការណែនាំជាក់ស្តែង៖</span> មុននឹងរំលាយកិច្ចសន្យា ភាគីគួរតែផ្ញើការដាស់តឿនជាលាយលក្ខណ៍អក្សរ និងផ្តល់ពេលវេលាសមរម្យ។ ក្នុងករណីមានវិវាទ អាចប្តឹងទៅតុលាការ ឬអាជ្ញាកណ្តាល។
+                <div class="premium-card">
+                    <div class="accent-text">វប្បធម៌ត្រូវវិនាស</div>
+                    <ul class="premium-list">
+                        <li>បាត់បង់វប្បធម៌ប្រពៃណី របាំ តន្ត្រី សិល្បៈ</li>
+                        <li>សិល្បករ អ្នកនិពន្ធ បញ្ញវន្តត្រូវបានសម្លាប់</li>
+                        <li>កេរដំណែលវប្បធម៌ជាតិត្រូវបានបំផ្លាញស្ទើរទាំងស្រុង</li>
+                    </ul>
                 </div>
             </div>
-            <div class="slide-footer">
-                <span>✅ បញ្ចប់បទបង្ហាញ ស្តីពីការរំលាយកិច្ចសន្យា</span>
-                <span>5 / 5</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: ផលប៉ះពាល់ផ្លូវចិត្ត -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1545178238-9f6a9b9a8b7c?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content">
+            <h2>៥. ផលប៉ះពាល់ផ្លូវចិត្ត</h2>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-number">PTSD</div>
+                    <div class="stat-label">អតីតជនរងគ្រោះជាង ៧០% មានរោគសញ្ញា</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">៣ជំនាន់</div>
+                    <div class="stat-label">របួសផ្លូវចិត្តឆ្លងដល់កូនចៅ</div>
+                </div>
+            </div>
+            <div class="premium-card">
+                <ul class="premium-list">
+                    <li>ប្រជាជនជាច្រើនមានបញ្ហាស្ត្រេសក្រោយរបួសផ្លូវចិត្ត (PTSD)</li>
+                    <li>ការរស់នៅជាមួយអតីតកាលដ៏ឈឺចាប់ ការបាត់បង់សមាជិកគ្រួសារ</li>
+                    <li>វិបត្តិធ្លាក់ទឹកចិត្ត ការថប់បារម្ភ និងការលំបាកក្នុងការកសាងទំនាក់ទំនង</li>
+                    <li>ការបាត់បង់អត្តសញ្ញាណ និងការជឿទុកចិត្តលើសង្គម</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: យុត្តិធម៌ក្រោយសង្គ្រាម -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content">
+            <h2>⚖️ យុត្តិធម៌ក្រោយសង្គ្រាម</h2>
+            <div class="premium-card" style="margin-bottom: 20px;">
+                <div class="accent-text">តុលាការខ្មែរក្រហម (ECCC)</div>
+                <ul class="premium-list">
+                    <li>បង្កើតឡើងក្នុងឆ្នាំ ២០០៦ ដោយមានការគាំទ្រពីអង្គការសហប្រជាជាតិ</li>
+                    <li>ស្វែងរកយុត្តិធម៌ និងដាក់ទោសមេដឹកនាំជាន់ខ្ពស់</li>
+                    <li>ការកាត់ទោស កាំង ហ្គេក អៀវ សុខ នួន ជា ជាដើម</li>
+                    <li>ផ្តល់ឱកាសឱ្យជនរងគ្រោះផ្តល់សក្ខីកម្ម និងស្វែងរកសេចក្តីពិត</li>
+                </ul>
+            </div>
+            <div class="premium-card">
+                <p class="body-text" style="font-size: 20px;">ការផ្តល់យុត្តិធម៌ និងការផ្សះផ្សាជាតិ គឺជាមូលដ្ឋានគ្រឹះសម្រាប់សង្គមជាតិប្រកបដោយសន្តិភាព</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: សេចក្ដីសន្និដ្ឋាន -->
+    <div class="slide">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1504051771394-dd2f66b2e08f?w=1280&h=720&fit=crop'); background-position: center;"></div>
+        <div class="slide-content" style="justify-content: center;">
+            <h2 style="text-align: center; display: block;">សេចក្ដីសន្និដ្ឋាន</h2>
+            <div class="conclusion-box" style="margin-top: 35px;">
+                <p class="body-text" style="font-size: 28px; font-weight: 500; line-height: 1.6; margin-bottom: 30px;">
+                    របបខ្មែរក្រហមបានបង្កផលប៉ះពាល់យ៉ាងធ្ងន់ធ្ងរលើគ្រប់វិស័យនៃសង្គមខ្មែរ។
+                </p>
+                <p class="body-text" style="font-size: 26px; line-height: 1.5;">
+                    ទោះបីជាបានកន្លងផុតទៅហើយ ក៏ប៉ុន្តែអនុស្សាវរីយ៍ និងផលប៉ះពាល់នៅតែបន្តមានរហូតដល់សព្វថ្ងៃ។
+                </p>
+                <div style="margin-top: 45px; padding-top: 25px; border-top: 1px solid rgba(232, 124, 94, 0.3);">
+                    <p style="font-size: 22px; color: #e87c5e; font-family: 'Inter';">យើងចងចាំ និងកសាងអនាគតដោយសន្តិភាព</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="nav-controls">
-    <button class="nav-btn" id="prevSlide">◀ មុន</button>
-    <span class="page-indicator" id="pageIndicator">ស្លាយ 1 នៃ 5</span>
-    <button class="nav-btn" id="nextSlide">បន្ទាប់ ▶</button>
-</div>
 
 <script>
-    const wrapper = document.getElementById('slidesWrapper');
     const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const slideCounter = document.getElementById('slideCounter');
     const prevBtn = document.getElementById('prevSlide');
     const nextBtn = document.getElementById('nextSlide');
-    const indicator = document.getElementById('pageIndicator');
-    let currentIndex = 0;
-    const totalSlides = slides.length;
 
-    function updateIndicator() {
-        indicator.innerText = `ស្លាយ ${currentIndex+1} នៃ ${totalSlides}`;
+    function updateCounter() {
+        let currentIndex = 0;
+        let maxVisibleArea = 0;
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        
+        slides.forEach((slide, idx) => {
+            const rect = slide.getBoundingClientRect();
+            const slideTop = rect.top + scrollY;
+            const slideBottom = slideTop + rect.height;
+            const visibleTop = Math.max(slideTop, scrollY);
+            const visibleBottom = Math.min(slideBottom, scrollY + viewportHeight);
+            const visibleArea = Math.max(0, visibleBottom - visibleTop);
+            
+            if (visibleArea > maxVisibleArea) {
+                maxVisibleArea = visibleArea;
+                currentIndex = idx;
+            }
+        });
+        
+        slideCounter.innerText = `ស្លាយ ${String(currentIndex + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
     }
 
     function scrollToSlide(index) {
         if (index < 0) index = 0;
         if (index >= totalSlides) index = totalSlides - 1;
-        const slideElement = slides[index];
-        if (slideElement) {
-            slideElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            currentIndex = index;
-            updateIndicator();
-        }
+        slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(updateCounter, 200);
     }
 
-    function getCurrentSlideIndex() {
-        const scrollTop = wrapper.scrollTop;
-        const slideHeight = 720;
-        let approx = Math.round(scrollTop / slideHeight);
-        if (approx < 0) approx = 0;
-        if (approx >= totalSlides) approx = totalSlides - 1;
-        return approx;
+    function nextSlide() {
+        let current = getCurrentIndex();
+        if (current < totalSlides - 1) scrollToSlide(current + 1);
     }
 
-    wrapper.addEventListener('scroll', () => {
-        // update current index based on scroll position
-        const newIndex = getCurrentSlideIndex();
-        if (newIndex !== currentIndex) {
-            currentIndex = newIndex;
-            updateIndicator();
-        }
-    });
+    function prevSlide() {
+        let current = getCurrentIndex();
+        if (current > 0) scrollToSlide(current - 1);
+    }
 
-    prevBtn.addEventListener('click', () => {
-        let newIdx = currentIndex - 1;
-        if (newIdx >= 0) {
-            scrollToSlide(newIdx);
-        }
-    });
+    function getCurrentIndex() {
+        let bestIdx = 0;
+        let bestDist = Infinity;
+        const scrollY = window.scrollY;
+        slides.forEach((slide, idx) => {
+            const rect = slide.getBoundingClientRect();
+            const slideTop = rect.top + scrollY;
+            const dist = Math.abs(scrollY - slideTop);
+            if (dist < bestDist) {
+                bestDist = dist;
+                bestIdx = idx;
+            }
+        });
+        return bestIdx;
+    }
 
-    nextBtn.addEventListener('click', () => {
-        let newIdx = currentIndex + 1;
-        if (newIdx < totalSlides) {
-            scrollToSlide(newIdx);
-        }
-    });
-
-    // keyboard support
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('scroll', updateCounter);
+    window.addEventListener('resize', updateCounter);
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            prevBtn.click();
-        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-            e.preventDefault();
-            nextBtn.click();
-        }
+        if (e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); nextSlide(); }
     });
-
-    // initial sync
-    scrollToSlide(0);
+    
+    updateCounter();
 </script>
 </body>
     </html>
