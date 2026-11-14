@@ -2,409 +2,75 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ឧបករណ៍វាស់សីតុណ្ហភាព និងអាកាសធាតុ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ទាញយក Files</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Khmer OS', 'Noto Sans', sans-serif;
-        }
-
         body {
-            min-height: 100vh;
-            background: linear-gradient(145deg, #1a2a6c, #b21f1f, #fdbb4d);
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
             padding: 20px;
-        }
-
-        .weather-card {
-            max-width: 550px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(12px);
-            border-radius: 48px;
-            padding: 28px 24px 36px;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            color: #fff;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         h1 {
-            font-size: 1.9rem;
             text-align: center;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: -0.3px;
+            color: #333;
         }
 
-        .sub {
-            text-align: center;
-            font-size: 0.85rem;
-            opacity: 0.85;
-            margin-bottom: 28px;
-            border-bottom: 1px dashed rgba(255,255,255,0.4);
-            display: inline-block;
-            width: auto;
-            margin-left: auto;
-            margin-right: auto;
-            padding-bottom: 6px;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 14px 18px;
-            border: none;
-            border-radius: 60px;
-            font-size: 1rem;
-            background: rgba(255,255,255,0.9);
-            color: #1f2a44;
-            font-weight: 500;
-            outline: none;
-            transition: 0.2s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .search-box input:focus {
+        .file {
             background: white;
-            transform: scale(1.01);
-        }
-
-        .search-box button {
-            background: #ff8c42;
-            border: none;
-            padding: 0 26px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
-        }
-
-        .search-box button:hover {
-            background: #ff6e1f;
-            transform: scale(0.97);
-        }
-
-        .location-info {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .city-name {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .date-time {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        .weather-main {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            margin: 20px 0 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 60px;
-            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .temp-section {
-            text-align: center;
+        .file span {
+            font-size: 16px;
+            color: #333;
         }
 
-        .temp-value {
-            font-size: 4.2rem;
-            font-weight: 800;
-            line-height: 1;
+        .file a {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
-        .temp-unit {
-            font-size: 1.8rem;
-            vertical-align: super;
-        }
-
-        .feels-like {
-            font-size: 0.9rem;
-            margin-top: 8px;
-        }
-
-        .weather-icon {
-            text-align: center;
-        }
-
-        .weather-icon img {
-            width: 80px;
-            height: 80px;
-            filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));
-        }
-
-        .condition {
-            font-size: 1.3rem;
-            font-weight: 500;
-            text-transform: capitalize;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin: 24px 0 20px;
-        }
-
-        .detail-card {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(4px);
-            border-radius: 28px;
-            padding: 12px 10px;
-            text-align: center;
-        }
-
-        .detail-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-        }
-
-        .detail-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 6px;
-        }
-
-        .extra-row {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.2);
-            border-radius: 40px;
-            padding: 14px 20px;
-            margin-top: 12px;
-            font-size: 0.9rem;
-        }
-
-        .error-message {
-            background: #d32f2fcc;
-            backdrop-filter: blur(8px);
-            padding: 12px;
-            border-radius: 40px;
-            text-align: center;
-            margin-top: 16px;
-            font-weight: 500;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-        }
-
-        footer {
-            font-size: 0.7rem;
-            text-align: center;
-            margin-top: 24px;
-            opacity: 0.7;
-        }
-
-        @media (max-width: 480px) {
-            .weather-card {
-                padding: 20px 16px;
-            }
-            .temp-value {
-                font-size: 3rem;
-            }
-            .city-name {
-                font-size: 1.7rem;
-            }
-            .details-grid {
-                gap: 12px;
-            }
+        .file a:hover {
+            background: #45a049;
         }
     </style>
 </head>
 <body>
-<div class="weather-card" id="weatherApp">
-    <h1>🌤️ អាកាសធាតុកម្ពុជា</h1>
-    <div style="text-align: center;">
-        <div class="sub">សីតុណ្ហភាព & ព័ត៌មានអាកាស</div>
+
+    <h1>📥 ទាញយក Files</h1>
+
+    <div class="file">
+        <span>📄 ឯកសារ PDF</span>
+        <a href="files/document.pdf" download>ទាញយក</a>
     </div>
 
-    <div class="search-box">
-        <input type="text" id="cityInput" placeholder="វាយឈ្មោះទីក្រុងជាអក្សរឡាតាំង... ឧទាហរណ៍: Phnom Penh, Siem Reap" value="Phnom Penh">
-        <button id="searchBtn">🔍 ស្វែងរក</button>
+    <div class="file">
+        <span>🖼️ រូបភាព ZIP</span>
+        <a href="files/images.zip" download>ទាញយក</a>
     </div>
 
-    <div id="weatherContent">
-        <div class="loading">កំពុងផ្ទុកទិន្នន័យអាកាសធាតុ...</div>
+    <div class="file">
+        <span>🎵 បទចម្រៀង MP3</span>
+        <a href="files/song.mp3" download>ទាញយក</a>
     </div>
-    <footer>ប្រភពទិន្នន័យ៖ OpenWeatherMap | បច្ចុប្បន្នភាពតាមពេលវេលា</footer>
-</div>
 
-<script>
-    // ---------- CONFIGURATION ----------
-    // API Key របស់អ្នក (បានបញ្ចូលរួច)
-    const API_KEY = "a320e64e64fb9cd3f5c2b2ca92326cb4";
-    
-    let currentCity = "Phnom Penh";
+    <div class="file">
+        <span>📊 តារាង Excel</span>
+        <a href="files/data.xlsx" download>ទាញយក</a>
+    </div>
 
-    const cityInput = document.getElementById('cityInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const weatherContentDiv = document.getElementById('weatherContent');
-
-    function showLoading() {
-        weatherContentDiv.innerHTML = `<div class="loading">🌀 កំពុងទាញទិន្នន័យ... សូមមេត្តារង់ចាំបន្តិច</div>`;
-    }
-
-    function showError(message) {
-        weatherContentDiv.innerHTML = `<div class="error-message">⚠️ ${message} <br> សូមពិនិត្យឈ្មោះទីក្រុង ឬបណ្តាញអ៊ីនធឺណិត</div>`;
-    }
-
-    function formatDateTime(timestamp, timezoneOffsetSec) {
-        const utcDate = new Date(timestamp * 1000);
-        const localTime = new Date(utcDate.getTime() + timezoneOffsetSec * 1000);
-        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        return localTime.toLocaleDateString('km-KH', options);
-    }
-
-    function getWindDirection(deg) {
-        const directions = ['ខាងជើង', 'ឦសាន', 'ខាងកើត', 'អាគ្នេយ៍', 'ខាងត្បូង', 'និរតី', 'ខាងលិច', 'ពាយ័ព្យ'];
-        const index = Math.round(deg / 45) % 8;
-        return directions[index];
-    }
-
-    async function fetchWeather(cityName) {
-        if (!cityName.trim()) {
-            showError("សូមបញ្ចូលឈ្មោះទីក្រុង");
-            return;
-        }
-
-        showLoading();
-
-        try {
-            const geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cityName)}&appid=${API_KEY}&units=metric`;
-            const response = await fetch(geoUrl);
-            
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error("រកមិនឃើញទីក្រុងនេះទេ");
-                } else if (response.status === 401) {
-                    throw new Error("API key មិនត្រឹមត្រូវ សូមពិនិត្យ");
-                } else {
-                    throw new Error("មានបញ្ហាបច្ចេកទេស (ស្ថានភាព " + response.status + ")");
-                }
-            }
-
-            const data = await response.json();
-            
-            const {
-                name: city,
-                main: { temp, feels_like, humidity, pressure, temp_min, temp_max },
-                weather,
-                wind: { speed, deg },
-                sys: { country, sunrise, sunset },
-                dt,
-                timezone
-            } = data;
-            
-            const description = weather[0].description;
-            const iconCode = weather[0].icon;
-            const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-            
-            const localDateTime = formatDateTime(dt, timezone);
-            const windKmh = (speed * 3.6).toFixed(1);
-            const windDir = getWindDirection(deg);
-            
-            // Format sunrise/sunset
-            const sunriseTime = new Date((sunrise + timezone) * 1000).toLocaleTimeString('km-KH', {hour:'2-digit', minute:'2-digit'});
-            const sunsetTime = new Date((sunset + timezone) * 1000).toLocaleTimeString('km-KH', {hour:'2-digit', minute:'2-digit'});
-            
-            const weatherHtml = `
-                <div class="location-info">
-                    <div class="city-name">${city}, ${country}</div>
-                    <div class="date-time">📅 ${localDateTime}</div>
-                </div>
-                <div class="weather-main">
-                    <div class="temp-section">
-                        <div class="temp-value">${Math.round(temp)}<span class="temp-unit">°C</span></div>
-                        <div class="feels-like">អារម្មណ៍ដូច ${Math.round(feels_like)}°C</div>
-                    </div>
-                    <div class="weather-icon">
-                        <img src="${iconUrl}" alt="${description}">
-                        <div class="condition">${description}</div>
-                    </div>
-                </div>
-                <div class="details-grid">
-                    <div class="detail-card">
-                        <div class="detail-label">💧 សំណើម</div>
-                        <div class="detail-value">${humidity}%</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label">🌬️ ខ្យល់</div>
-                        <div class="detail-value">${windKmh} km/h</div>
-                        <div style="font-size:0.7rem;">${windDir}</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label">📊 សម្ពាធ</div>
-                        <div class="detail-value">${pressure} hPa</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label">🌡️ សីតុណ្ហភាព</div>
-                        <div class="detail-value" style="font-size:1.2rem;">អតិបរមា ${Math.round(temp_max)}° / អប្បបរមា ${Math.round(temp_min)}°</div>
-                    </div>
-                </div>
-                <div class="extra-row">
-                    <span>☀️ ថ្ងៃរះ: ${sunriseTime}</span>
-                    <span>🌙 ថ្ងៃលិច: ${sunsetTime}</span>
-                </div>
-            `;
-            
-            weatherContentDiv.innerHTML = weatherHtml;
-            
-        } catch (err) {
-            console.error(err);
-            let errorMsg = err.message;
-            if (errorMsg.includes("API key")) {
-                errorMsg = "សូមបញ្ចូល API Key ត្រឹមត្រូវ";
-            } else if (errorMsg.includes("រកមិនឃើញ")) {
-                errorMsg = `ទីក្រុង "${cityName}" មិនមានក្នុងប្រព័ន្ធ។ សូមសាកល្បងឈ្មោះផ្សេង។`;
-            }
-            showError(errorMsg);
-        }
-    }
-
-    function handleSearch() {
-        const newCity = cityInput.value.trim();
-        if (newCity === "") return;
-        currentCity = newCity;
-        fetchWeather(currentCity);
-    }
-
-    searchBtn.addEventListener('click', handleSearch);
-    cityInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch();
-    });
-
-    // ទាញទិន្នន័យដំបូងសម្រាប់ភ្នំពេញ
-    fetchWeather(currentCity);
-</script>
 </body>
 </html>
